@@ -421,3 +421,6 @@
 			delete_date                | timestamp with time zone | 
 		  ~~~
 
+* 流程图
+ 
+  ![design](images/design.png)
