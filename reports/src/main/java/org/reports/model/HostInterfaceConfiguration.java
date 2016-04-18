@@ -4,26 +4,26 @@ import java.util.Date;
 import java.util.UUID;
 
 public class HostInterfaceConfiguration {
-	private UUID host_interface_id;
-	private UUID host_id;
+	private UUID vm_interface_id;
+	private UUID vm_id;
 	private Date create_date;
 	private Date update_date;
 	private Date delete_date;
-
-	public UUID getHost_interface_id() {
-		return host_interface_id;
+	
+	public UUID getVm_interface_id() {
+		return vm_interface_id;
 	}
 
-	public void setHost_interface_id(UUID host_interface_id) {
-		this.host_interface_id = host_interface_id;
+	public void setVm_interface_id(UUID vm_interface_id) {
+		this.vm_interface_id = vm_interface_id;
 	}
 
-	public UUID getHost_id() {
-		return host_id;
+	public UUID getVm_id() {
+		return vm_id;
 	}
 
-	public void setHost_id(UUID host_id) {
-		this.host_id = host_id;
+	public void setVm_id(UUID vm_id) {
+		this.vm_id = vm_id;
 	}
 
 	public Date getCreate_date() {

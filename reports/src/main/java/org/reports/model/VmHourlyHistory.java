@@ -4,28 +4,10 @@ import java.util.Date;
 import java.util.UUID;
 
 public class VmHourlyHistory {
-	private Date history_datetime;
-	private UUID vm_id;
 	private int cpu_usage_percent;
 	private int max_cpu_usage;
 	private int memory_usage_percent;
 	private int max_memory_usage;
-
-	public Date getHistory_datetime() {
-		return history_datetime;
-	}
-
-	public void setHistory_datetime(Date history_datetime) {
-		this.history_datetime = history_datetime;
-	}
-
-	public UUID getVm_id() {
-		return vm_id;
-	}
-
-	public void setVm_id(UUID vm_id) {
-		this.vm_id = vm_id;
-	}
 
 	public int getCpu_usage_percent() {
 		return cpu_usage_percent;

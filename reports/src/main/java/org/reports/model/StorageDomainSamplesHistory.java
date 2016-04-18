@@ -1,19 +1,8 @@
 package org.reports.model;
 
-import java.util.UUID;
-
 public class StorageDomainSamplesHistory {
-	private UUID storage_domain_id;
 	private int available_disk_size_gb;
 	private int used_disk_size_gb;
-
-	public UUID getStorage_domain_id() {
-		return storage_domain_id;
-	}
-
-	public void setStorage_domain_id(UUID storage_domain_id) {
-		this.storage_domain_id = storage_domain_id;
-	}
 
 	public int getAvailable_disk_size_gb() {
 		return available_disk_size_gb;

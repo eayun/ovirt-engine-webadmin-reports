@@ -1,20 +1,9 @@
 package org.reports.model;
 
-import java.util.UUID;
-
 public class HostSamplesHistory {
-	private UUID host_id;
 	private int memory_usage_percent;
 	private int cpu_usage_percent;
 	private int ksm_cpu_percent;
-
-	public UUID getHost_id() {
-		return host_id;
-	}
-
-	public void setHost_id(UUID host_id) {
-		this.host_id = host_id;
-	}
 
 	public int getMemory_usage_percent() {
 		return memory_usage_percent;

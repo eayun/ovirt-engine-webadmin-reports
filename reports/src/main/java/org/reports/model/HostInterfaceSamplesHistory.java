@@ -1,21 +1,9 @@
 package org.reports.model;
 
-import java.util.UUID;
-
 public class HostInterfaceSamplesHistory {
-	private UUID host_interface_id;
 	private String host_interface_name;
-
 	private int receive_rate_percent;
 	private int transmit_rate_percent;
-
-	public UUID getHost_interface_id() {
-		return host_interface_id;
-	}
-
-	public void setHost_interface_id(UUID host_interface_id) {
-		this.host_interface_id = host_interface_id;
-	}
 	
 	public String getHost_interface_name() {
 		return host_interface_name;

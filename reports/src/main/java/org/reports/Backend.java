@@ -1,7 +1,6 @@
 package org.reports;
 
 import java.io.IOException;
-import java.net.NoRouteToHostException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
@@ -11,11 +10,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.conn.HttpHostConnectException;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import org.ovirt.engine.sdk.exceptions.UnsecuredConnectionAttemptError;
-import org.reports.utils.ConfigProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +23,6 @@ public class Backend {
     private static Api api = null;
     private static DataSource ds;
 
-    @SuppressWarnings("deprecation")
 	@PostConstruct
     public void init()
             throws ClientProtocolException, ServerException, UnsecuredConnectionAttemptError, IOException, InterruptedException {
