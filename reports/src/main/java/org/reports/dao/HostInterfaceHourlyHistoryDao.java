@@ -14,7 +14,7 @@ public class HostInterfaceHourlyHistoryDao extends BaseDao{
 	private static HostInterfaceHourlyHistoryDao instance;
 	private static Connection conn;
 	
-	public HostInterfaceHourlyHistoryDao(Connection conn) {
+	public HostInterfaceHourlyHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -60,7 +60,7 @@ public class HostInterfaceHourlyHistoryDao extends BaseDao{
 		return lhihh;
 	}
 
-	public static HostInterfaceHourlyHistoryDao getInstance() {
+	public static HostInterfaceHourlyHistoryDao getInstance() throws SQLException {
 		if (instance == null) {
 			instance = new HostInterfaceHourlyHistoryDao(conn);
 			return instance;

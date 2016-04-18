@@ -2,9 +2,6 @@ package org.reports;
 
 import java.io.IOException;
 import java.net.NoRouteToHostException;
-import java.util.List;
-import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
@@ -16,9 +13,6 @@ import javax.sql.DataSource;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.ovirt.engine.sdk.Api;
-import org.ovirt.engine.sdk.decorators.VMNIC;
-import org.ovirt.engine.sdk.decorators.VMNICs;
-import org.ovirt.engine.sdk.entities.VM;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import org.ovirt.engine.sdk.exceptions.UnsecuredConnectionAttemptError;
 import org.reports.utils.ConfigProvider;
@@ -41,8 +35,8 @@ public class Backend {
         } catch (NamingException e) {
             log.error("Error locating datasource.");
         }
-        int interval = Integer.parseInt(ConfigProvider.getConfig().getProperty(ConfigProvider.QUERY_INTERVAL_M));
-        api = getApi(interval);
+//        int interval = Integer.parseInt(ConfigProvider.getConfig().getProperty(ConfigProvider.QUERY_INTERVAL_M));
+//        api = getApi(interval);
     }
 
     @PreDestroy
@@ -54,28 +48,33 @@ public class Backend {
 		}
     }
 
-    @SuppressWarnings("deprecation")
-	public static Api getApi(int interval)
-            throws ClientProtocolException, ServerException, UnsecuredConnectionAttemptError, IOException, InterruptedException{
-        try {
-            return new Api(
-                    ConfigProvider.getConfig().getProperty(ConfigProvider.SDK_BASE_URL),
-                    ConfigProvider.getConfig().getProperty(ConfigProvider.SDK_USER),
-                    ConfigProvider.getConfig().getProperty(ConfigProvider.SDK_PASSWORD),
-                    null, 443, 10, true, true, false, false);
-        } catch (HttpHostConnectException|NoRouteToHostException|ServerException e) {
-            log.error("Refused while getting the api connection, retrying in " + interval/1000 + " seconds...");
-            Thread.sleep(interval);
-            return getApi(interval + 10000);
-        }
-    }
+//    @SuppressWarnings("deprecation")
+//	public static Api getApi(int interval)
+//            throws ClientProtocolException, ServerException, UnsecuredConnectionAttemptError, IOException, InterruptedException{
+//        try {
+//            return new Api(
+//                    ConfigProvider.getConfig().getProperty(ConfigProvider.SDK_BASE_URL),
+//                    ConfigProvider.getConfig().getProperty(ConfigProvider.SDK_USER),
+//                    ConfigProvider.getConfig().getProperty(ConfigProvider.SDK_PASSWORD),
+//                    null, 443, 10, true, true, false, false);
+//        } catch (HttpHostConnectException|NoRouteToHostException|ServerException e) {
+//            log.error("Refused while getting the api connection, retrying in " + interval/1000 + " seconds...");
+//            Thread.sleep(interval);
+//            return getApi(interval + 10000);
+//        }
+//    }
     
     public static DataSource locateDataSource() throws NamingException {
         InitialContext cxt = new InitialContext();
-        ds = (DataSource) cxt.lookup( "java:/VmBackupSchedulerDataSource" );
+        ds = (DataSource) cxt.lookup( "java:/ReportsDataSource" );
         if ( ds == null ) {
            throw new RuntimeException("Data source not found!");
         }
+        System.out.println("---------------------------" + ds + "-----------------------------");
         return ds;
     }
+
+	public static DataSource getDs() {
+		return ds;
+	}
 }

@@ -14,7 +14,7 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 	private static HostInterfaceDailyHistoryDao instance;
 	private static Connection conn;
 	
-	public HostInterfaceDailyHistoryDao(Connection conn) {
+	public HostInterfaceDailyHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -60,7 +60,7 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 		return lvidh;
 	}
 	
-	public static HostInterfaceDailyHistoryDao getInstance() {
+	public static HostInterfaceDailyHistoryDao getInstance() throws SQLException {
         if (instance == null) {
             instance = new HostInterfaceDailyHistoryDao(conn);
             return instance;

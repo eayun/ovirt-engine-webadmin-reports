@@ -76,16 +76,8 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:datasources:1.0">
             <datasources>
-                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>engine</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
                 <datasource jndi-name="java:/ReportsDataSource" pool-name="ReportsDataSource" enabled="true" use-ccm="false">
-                    <connection-url>jdbc:postgresql://localhost:5432/ovirt_engine_history?sslfactory=org.postgresql.ssl.NonValidatingFactory</connection-url>
+                    <connection-url>jdbc:postgresql://192.168.9.167:5432/ovirt_engine_history?sslfactory=org.postgresql.ssl.NonValidatingFactory</connection-url>
                     <driver>postgresql</driver>
                     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
                     <pool>
@@ -95,7 +87,7 @@
                     </pool>
                     <security>
                         <user-name>ovirt_engine_history</user-name>
-                        <password>changeme</password>
+                        <password>history</password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>select 1</check-valid-connection-sql>

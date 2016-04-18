@@ -2,6 +2,7 @@ package org.reports.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,8 @@ import org.reports.model.VmSampleHistory;
 
 public class VmSampleHistoryDao extends BaseDao {
 	private static VmSampleHistoryDao instance;
-	private static Connection conn;
 	
-	public VmSampleHistoryDao(Connection conn) {
+	public VmSampleHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -29,6 +29,7 @@ public class VmSampleHistoryDao extends BaseDao {
 		VmSampleHistory vsh = null;
 		while (rs.next()) {
 			vsh = new VmSampleHistory();
+			System.out.println("```````````````````````" + rs.getInt("cpu_usage_percent"));
 			vsh.setCpu_usage_percent(rs.getInt("cpu_usage_percent"));
 			lv.add(vsh);
 		}
@@ -50,7 +51,7 @@ public class VmSampleHistoryDao extends BaseDao {
 		return lv;
 	}
 	
-	public static VmSampleHistoryDao getInstance() {
+	public static VmSampleHistoryDao getInstance() throws SQLException {
         if (instance == null) {
             instance = new VmSampleHistoryDao(conn);
             return instance;

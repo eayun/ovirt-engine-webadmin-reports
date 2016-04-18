@@ -14,7 +14,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 	private static HostInterfaceSamplesHistoryDao instance;
 	private static Connection conn;
 	
-	public HostInterfaceSamplesHistoryDao(Connection conn) {
+	public HostInterfaceSamplesHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -56,7 +56,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 		return lhish;
 	}
 
-	public static HostInterfaceSamplesHistoryDao getInstance() {
+	public static HostInterfaceSamplesHistoryDao getInstance() throws SQLException {
 		if (instance == null) {
 			instance = new HostInterfaceSamplesHistoryDao(conn);
 			return instance;

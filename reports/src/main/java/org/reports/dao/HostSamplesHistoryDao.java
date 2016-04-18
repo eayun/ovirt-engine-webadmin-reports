@@ -2,6 +2,7 @@ package org.reports.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class HostSamplesHistoryDao extends BaseDao {
 	private static HostSamplesHistoryDao instance;
 	private static Connection conn;
 	
-	public HostSamplesHistoryDao(Connection conn) {
+	public HostSamplesHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -51,7 +52,7 @@ public class HostSamplesHistoryDao extends BaseDao {
 		return lhsh;
 	}
 	
-	public static HostSamplesHistoryDao getInstance(){
+	public static HostSamplesHistoryDao getInstance() throws SQLException{
 		if (instance == null) {
             instance = new HostSamplesHistoryDao(conn);
             return instance;

@@ -11,16 +11,17 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.json.JSONArray;
-import org.reports.DBUtil;
+import org.reports.Backend;
 
 public class BaseDao {
-	private static Connection conn;
+	protected static Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
 	
-	public BaseDao(Connection conn) {
+	public BaseDao(Connection conn) throws SQLException {
 		super();
-		conn = DBUtil.getConn();
+		BaseDao.conn = Backend.getDs().getConnection();
+		System.out.println("===============" + conn);
 	}
     
 	// disks_usage ：[{"path":"/","total":"51605344256","used":"3711524864","fs	":"ext4"}]

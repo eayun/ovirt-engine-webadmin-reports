@@ -2,6 +2,7 @@ package org.reports.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 	private static StorageDomainSamplesHistoryDao instance;
 	private static Connection conn;
 	
-    public StorageDomainSamplesHistoryDao(Connection conn) {
+    public StorageDomainSamplesHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -35,7 +36,7 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 		return lsdsh;
 	}
 	
-	public static StorageDomainSamplesHistoryDao getInstance() {
+	public static StorageDomainSamplesHistoryDao getInstance() throws SQLException {
         if (instance == null) {
             instance = new StorageDomainSamplesHistoryDao(conn);
             return instance;

@@ -2,6 +2,7 @@ package org.reports.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class VmDisksUsageSamplesHistoryDao extends BaseDao{
 	private static VmDisksUsageSamplesHistoryDao instance;
 	private static Connection conn;
 	
-	public VmDisksUsageSamplesHistoryDao(Connection conn) {
+	public VmDisksUsageSamplesHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -34,7 +35,7 @@ public class VmDisksUsageSamplesHistoryDao extends BaseDao{
 		return lvdush;
 	}
 	
-	public static VmDisksUsageSamplesHistoryDao getInstance() {
+	public static VmDisksUsageSamplesHistoryDao getInstance() throws SQLException {
         if (instance == null) {
             instance = new VmDisksUsageSamplesHistoryDao(conn);
             return instance;

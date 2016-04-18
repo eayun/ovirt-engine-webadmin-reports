@@ -14,7 +14,7 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 	private static VmInterfaceDailyHistoryDao instance;
 	private static Connection conn;
 	
-	public VmInterfaceDailyHistoryDao(Connection conn) {
+	public VmInterfaceDailyHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
@@ -64,7 +64,7 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 		return lvidh;
 	}
 	
-	public static VmInterfaceDailyHistoryDao getInstance() {
+	public static VmInterfaceDailyHistoryDao getInstance() throws SQLException {
         if (instance == null) {
             instance = new VmInterfaceDailyHistoryDao(conn);
             return instance;

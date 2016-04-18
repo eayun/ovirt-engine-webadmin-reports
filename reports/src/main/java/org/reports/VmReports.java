@@ -31,6 +31,7 @@ public class VmReports {
 			 										@QueryParam("period") String period, 
 			 										@QueryParam("startingTime") String startingTime,
 			 										@QueryParam("terminalTime") String terminalTime) throws Exception{
+		System.out.println(vmId + "--" + contentViewed + "--" + period + "--" + startingTime);
 		if (contentViewed.equals("CPU")){
 			// 获取一个小时内的数据？
 			if (period.equals("HOUR")){
@@ -60,7 +61,7 @@ public class VmReports {
 			}
 			else {
 				return null;
-			}
+ 			}
 		} 
 		else if (contentViewed.equals("Network")) {
 			// 将 vm 中所有的网络接口封装成一个 List 传给前端。
