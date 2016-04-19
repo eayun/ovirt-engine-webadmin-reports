@@ -26,7 +26,7 @@ public class VmInterfaceHourlyHistoryDao extends BaseDao{
 		rs = stmt.executeQuery("select vihh.vm_interface_id from vm_interface_configuration vic, vm_interface_hourly_history vihh"
 				+ " where vic.vm_interface_id = vihh.vm_interface_id and vic.vm_id = '" + vm_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
 				+ "' group by vihh.vm_interface_id;");
 		while (rs.next()) {
 			vmInterfaceIdsOfOneVm.add(UUID.fromString(rs.getString("vm_interface_id")));

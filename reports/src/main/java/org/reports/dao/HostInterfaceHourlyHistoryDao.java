@@ -26,7 +26,7 @@ public class HostInterfaceHourlyHistoryDao extends BaseDao{
 				+ " where hic.host_interface_id = hihh.host_interface_id"
 				+ " and hic.host_id = '" + host_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
 				+ "' group by hihh.host_interface_id;");
 		while (rs.next()) {
 			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("host_interface_id")));

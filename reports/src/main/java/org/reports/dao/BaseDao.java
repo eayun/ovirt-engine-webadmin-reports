@@ -31,6 +31,9 @@ public class BaseDao {
 		List<Double> used = new ArrayList<Double>();
 		Double usage_percent = 0.0;
  		//String data = "[{'path':'/','total':'100','used':'20','fs':'xfs'},{'path':'/boot','total':'100','used':'50','fs':'xfs'}]";
+		if (null == disks_usage_from_db) {
+			disks_usage_from_db = "[{'path':'','total':'0','used':'0', 'fs':''}]";
+		}
 		JSONArray arr = new JSONArray(disks_usage_from_db);
 		for (int i = 0; i < arr.length(); i ++){
 			String pathName_ = (String) arr.getJSONObject(i).get("path");

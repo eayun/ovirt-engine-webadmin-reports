@@ -24,9 +24,9 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 		rs = stmt.executeQuery("select hidh.host_interface_id from host_interface_configuration hic, host_interface_daily_history hidh"
 				+ " where hic.host_interface_id = hidh.host_interface_id and"
 				+ " hic.host_id = '" + host_id
-				+ " and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
-				+ " and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
-				+ " group by hidh.host_interface_id;");
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
+				+ "' group by hidh.host_interface_id;");
 		while (rs.next()) {
 			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("host_interface_id")));
 		}

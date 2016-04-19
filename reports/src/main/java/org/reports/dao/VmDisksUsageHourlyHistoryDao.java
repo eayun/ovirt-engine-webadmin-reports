@@ -25,15 +25,15 @@ public class VmDisksUsageHourlyHistoryDao extends BaseDao{
 				+ " from vm_disks_usage_hourly_history"
 				+ " where vm_id = '" + vm_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
 				+ "' order by history_datetime asc;");
-		List<Map<String, Double>> lvduhh = new ArrayList<Map<String, Double>>();
+		List<Map<String, Double>> lmsd = new ArrayList<Map<String, Double>>();
 		while (rs.next()) {
 			// 从 disks_usage 字符串中算出某虚拟机(1 ~ n)个磁盘的使用率
 			Map<String, Double> disks_usage = countDiskUsage(rs.getString("disks_usage"));
-			lvduhh.add(disks_usage);
+			lmsd.add(disks_usage);
 		}
-		return lvduhh;
+		return lmsd;
 	}
 	
 	public static VmDisksUsageHourlyHistoryDao getInstance() throws SQLException {

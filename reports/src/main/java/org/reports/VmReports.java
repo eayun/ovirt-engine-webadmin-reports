@@ -31,7 +31,7 @@ public class VmReports {
 			 										@QueryParam("period") String period, 
 			 										@QueryParam("startingTime") String startingTime,
 			 										@QueryParam("terminalTime") String terminalTime) throws Exception{
-		System.out.println(vmId + "--" + contentViewed + "--" + period + "--" + startingTime);
+		System.out.println(vmId + "--" + contentViewed + "--" + period + "--" + startingTime + "--" + terminalTime);
 		if (contentViewed.equals("CPU")){
 			// 获取一个小时内的数据？
 			if (period.equals("HOUR")){

@@ -22,14 +22,14 @@ public class VmDisksUsageSamplesHistoryDao extends BaseDao{
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select disks_usage"
 				+ " from vm_disks_usage_samples_history where vm_id = '" + vm_id + "' and position('" + hourOfDay
-				+ "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0" + " order by history_datetime asc;");
-		List<Map<String, Double>> lvdush = new ArrayList<Map<String, Double>>();
+				+ "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0 order by history_datetime asc;");
+		List<Map<String, Double>> lmsd = new ArrayList<Map<String, Double>>();
 		while (rs.next()) {
 			// 从 disks_usage 字符串中算出某虚拟机(1 ~ n)个磁盘的使用率
 			Map<String, Double> disks_usage = countDiskUsage(rs.getString("disks_usage"));
-			lvdush.add(disks_usage);
+			lmsd.add(disks_usage);
 		}
-		return lvdush;
+		return lmsd;
 	}
 	
 	public static VmDisksUsageSamplesHistoryDao getInstance() throws SQLException {

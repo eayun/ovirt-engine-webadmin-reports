@@ -21,7 +21,7 @@ public class StorageDomainHourlyHistoryDao extends BaseDao {
 		ResultSet rs = stmt.executeQuery("select available_disk_size_gb, used_disk_size_gb from storage_domain_hourly_history"
 				+ " where storage_domain_id = '" + storage_domain_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
 				+ "' order by history_datetime asc;");
 		
 		List<Double> lsdhh = new ArrayList<Double>();

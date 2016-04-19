@@ -1,6 +1,5 @@
 package org.reports.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,7 +21,7 @@ public class VmDailyHistoryDao extends BaseDao {
 	// 获取虚拟机一周，一月，一个季度，一年的 CPU 使用率的数据
 	public List<VmDailyHistory> queryCpuByDays(String startDate, String endDate, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage from vm_hourly_history"
+		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage from vm_daily_history"
 				+ " where to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
@@ -40,7 +39,7 @@ public class VmDailyHistoryDao extends BaseDao {
 	// 获取虚拟机一周，一月，一个季度，一年的 Memory 使用率的数据
 	public List<VmDailyHistory> queryMemoryByDays(String startDate, String endDate, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage from vm_hourly_history"
+		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage from vm_daily_history"
 				+ " where to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");

@@ -27,13 +27,13 @@ public class VmDisksUsageDailyHistoryDao extends BaseDao {
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
 				+ "' order by history_datetime asc;");
-		List<Map<String, Double>> lvdudh = new ArrayList<Map<String, Double>>();
+		List<Map<String, Double>> lmsd = new ArrayList<Map<String, Double>>();
 		while (rs.next()) {
 			// 从 disks_usage 字符串中算出某虚拟机(1 ~ n)个磁盘的使用率
 			Map<String, Double> disks_usage = countDiskUsage(rs.getString("disks_usage"));
-			lvdudh.add(disks_usage);
+			lmsd.add(disks_usage);
 		}
-		return lvdudh;
+		return lmsd;
 	}
 	
 	public static VmDisksUsageDailyHistoryDao getInstance() throws SQLException {
