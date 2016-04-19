@@ -442,6 +442,7 @@
         [zhangyaqi@localhost ~]$ curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=CPU\&period=DAY\&startingTime=2016-04-19%2002%3A00%3A00
         [{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":1,"memory_usage_percent":0,"max_memory_usage":0}]
         ~~~
+
       * DAY
       * WEEK / MONTH / QUARTER / YEAR
     * Memory
