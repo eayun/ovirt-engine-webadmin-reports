@@ -1,10 +1,5 @@
 package org.reports.model;
 
-import java.util.Date;
-
-import java.util.UUID;
-
-
 public class VmDisksUsageSamplesHistory {
 	private String disks_usage;
 		

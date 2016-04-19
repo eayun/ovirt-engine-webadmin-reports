@@ -19,7 +19,7 @@ import org.reports.model.HostInterfaceDailyHistory;
 import org.reports.model.HostInterfaceHourlyHistory;
 import org.reports.model.HostInterfaceSamplesHistory;
 
-@Path("/hostReports")
+@Path("/HOSTREPORTS")
 public class HostReports extends HandleReports {
 	// 最后用 List 接收说有的 List
 
@@ -64,6 +64,7 @@ public class HostReports extends HandleReports {
 				}
 				return llhish;
 			} else if (period.equals("DAY")) {
+				interfaceIdsOfOneHost = HostInterfaceHourlyHistoryDao.getInstance().queryHostInterfaceIdsByHostIdAndPeriod(startingTime, terminalTime, hostId);
 				for (int i = 0; i < interfaceIdsOfOneHost.size(); i++) {
 					llhihh.add(HostInterfaceHourlyHistoryDao.getInstance().queryNetworkRateByHours(startingTime,
 							terminalTime, interfaceIdsOfOneHost.get(i)));
@@ -71,6 +72,7 @@ public class HostReports extends HandleReports {
 				return llhihh;
 			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
 					|| period.equals("YEAR")) {
+				interfaceIdsOfOneHost = HostInterfaceDailyHistoryDao.getInstance().queryHostInterfaceIdsByHostIdAndPeriod(startingTime, terminalTime, hostId);
 				for (int i = 0; i < interfaceIdsOfOneHost.size(); i++) {
 					llhidh.add(HostInterfaceDailyHistoryDao.getInstance().queryNetworkRateByDays(startingTime,
 							terminalTime, interfaceIdsOfOneHost.get(i)));

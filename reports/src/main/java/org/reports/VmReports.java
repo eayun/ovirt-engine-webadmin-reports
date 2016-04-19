@@ -21,7 +21,7 @@ import org.reports.model.VmInterfaceDailyHistory;
 import org.reports.model.VmInterfaceHourlyHistory;
 import org.reports.model.VmInterfaceSamplesHistory;
 
-@Path("/vmReports")
+@Path("/VMREPORTS")
 public class VmReports {
 	@GET
 	@Path("{vm_id}")
@@ -50,7 +50,7 @@ public class VmReports {
 		} 
 		else if (contentViewed.equals("Memory")){
 			// 获取一个小时内的数据？（每分钟变化一次）
-			if (period.equals("时")){
+			if (period.equals("HOUR")){
 				return VmSampleHistoryDao.getInstance().queryMemoryByTime(startingTime, vmId);
 			}
 			else if (period.equals("DAY")){

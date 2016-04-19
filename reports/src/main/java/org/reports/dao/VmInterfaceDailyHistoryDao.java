@@ -1,6 +1,5 @@
 package org.reports.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,21 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.reports.Backend;
 import org.reports.model.VmInterfaceDailyHistory;
 
 public class VmInterfaceDailyHistoryDao extends BaseDao {
 	private static VmInterfaceDailyHistoryDao instance;
-	private static Connection conn;
-	
+/*	
 	public VmInterfaceDailyHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
-	}
+	}*/
 	
 	// 获取一个虚拟机在某几天内的所有网络接口 ID
 	public List<UUID> queryVmInterfaceIdsByVmIdAndPeriod(String startDate, String endDate, UUID vm_id) throws SQLException{
 		List<UUID> vmInterfaceIdsOfOneVm = new ArrayList<UUID>();
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = null;
 		rs = stmt.executeQuery("select vidh.vm_interface_id from vm_interface_configuration vic, vm_interface_daily_history vidh"
 				+ " where vic.vm_interface_id = vidh.vm_interface_id and"
@@ -39,7 +38,7 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 	// 查询虚拟机在一周，一月，一季度，一年的网络传入/传出数据
 	public List<VmInterfaceDailyHistory> queryNetworkRateByDays(String startDate, String endDate, UUID vm_interface_id)
 			throws Exception {
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery(
 				"select receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
 						+ " from vm_interface_daily_history"
@@ -66,7 +65,7 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 	
 	public static VmInterfaceDailyHistoryDao getInstance() throws SQLException {
         if (instance == null) {
-            instance = new VmInterfaceDailyHistoryDao(conn);
+            instance = new VmInterfaceDailyHistoryDao();
             return instance;
         }
         return instance;

@@ -1,8 +1,5 @@
 package org.reports.model;
 
-import java.util.Date;
-import java.util.UUID;
-
 public class VmInterfaceHourlyHistory {
 	private String vm_interface_name;
 	private int receive_rate_percent;

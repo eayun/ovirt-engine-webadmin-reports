@@ -1,6 +1,5 @@
 package org.reports.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,23 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.reports.Backend;
 import org.reports.model.VmInterfaceHourlyHistory;
 
 public class VmInterfaceHourlyHistoryDao extends BaseDao{
 	private static VmInterfaceHourlyHistoryDao instance;
-	private static Connection conn;
 	
-	public VmInterfaceHourlyHistoryDao(Connection conn) throws SQLException {
+/*	public VmInterfaceHourlyHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
-
+*/
 	// 获取一个虚拟机在某天的某几个小时内的所有网络接口 ID
 	public List<UUID> queryVmInterfaceIdsByVmIdAndPeriod(String startHour, String endHour, UUID vm_id) throws SQLException{
 		List<UUID> vmInterfaceIdsOfOneVm = new ArrayList<UUID>();
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = null;
-		rs = stmt.executeQuery("select vihh.vm_interface_id from vm_interface_configuration vic, vm_interface_hourly_history vihh‘"
+		rs = stmt.executeQuery("select vihh.vm_interface_id from vm_interface_configuration vic, vm_interface_hourly_history vihh"
 				+ " where vic.vm_interface_id = vihh.vm_interface_id and vic.vm_id = '" + vm_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour
@@ -38,7 +37,7 @@ public class VmInterfaceHourlyHistoryDao extends BaseDao{
 	// 查询一天内某几个小时虚拟机网络传入/传出速率
 	public List<VmInterfaceHourlyHistory> queryNetworkRateByHours(String startHour, String endHour,
 			UUID vm_interface_id) throws Exception {
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery(
 				"select receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
 						+ " from vm_interface_hourly_history"
@@ -62,7 +61,7 @@ public class VmInterfaceHourlyHistoryDao extends BaseDao{
 	
 	public static VmInterfaceHourlyHistoryDao getInstance() throws SQLException {
         if (instance == null) {
-            instance = new VmInterfaceHourlyHistoryDao(conn);
+            instance = new VmInterfaceHourlyHistoryDao();
             return instance;
         }
         return instance;

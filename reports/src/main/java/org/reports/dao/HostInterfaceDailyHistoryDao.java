@@ -1,6 +1,5 @@
 package org.reports.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,21 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.reports.Backend;
 import org.reports.model.HostInterfaceDailyHistory;
 
 public class HostInterfaceDailyHistoryDao extends BaseDao {
 	private static HostInterfaceDailyHistoryDao instance;
-	private static Connection conn;
-	
-	public HostInterfaceDailyHistoryDao(Connection conn) throws SQLException {
-		super(conn);
-		// TODO Auto-generated constructor stub
-	}
+//	public HostInterfaceDailyHistoryDao(Connection conn) throws SQLException {
+//		super(conn);
+//	}
 	
 	// 获取一个主机在某个小时内的所有网络接口 ID
 	public List<UUID> queryHostInterfaceIdsByHostIdAndPeriod(String startDate, String endDate, UUID host_id) throws SQLException{
 		List<UUID> hostInterfaceIdsOfOneHost = new ArrayList<UUID>();
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = null;
 		rs = stmt.executeQuery("select hidh.host_interface_id from host_interface_configuration hic, host_interface_daily_history hidh"
 				+ " where hic.host_interface_id = hidh.host_interface_id and"
@@ -31,7 +28,7 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 				+ " and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
 				+ " group by hidh.host_interface_id;");
 		while (rs.next()) {
-			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("vm_interface_id")));
+			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("host_interface_id")));
 		}
 		return hostInterfaceIdsOfOneHost;
 	}
@@ -39,7 +36,7 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 	// 查询虚拟机在一周，一月，一季度，一年的网络传入/传出数据
 	public List<HostInterfaceDailyHistory> queryNetworkRateByDays(String startDate, String endDate, UUID host_interface_id)
 			throws Exception {
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
 				+ " from host_interface_daily_history where host_interface_id = '" + host_interface_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
@@ -62,7 +59,7 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 	
 	public static HostInterfaceDailyHistoryDao getInstance() throws SQLException {
         if (instance == null) {
-            instance = new HostInterfaceDailyHistoryDao(conn);
+            instance = new HostInterfaceDailyHistoryDao();
             return instance;
         }
         return instance;

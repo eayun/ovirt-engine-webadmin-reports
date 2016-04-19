@@ -432,3 +432,29 @@
      4. 7 ~ 9：服务器端接收到前端发送过来的数据后，会采取分流的方式将数据发送给相应的实体接口（例如：如果用户选择的是某个存储域，就会将数据发送给 getListOnStorageDomainInfo 接口）。
      5. 10 ~ 12：通过上面提到的接口，会调用相应的 DAO 类，将数据从数据库中提取出来。
      6. 这时前端就可以通过接口返回的数据，利用 chartjs 做出报表展示。
+
+* 初步测试：
+
+  * VM
+    * CPU
+      * HOUR
+        ~~~ bash
+        [zhangyaqi@localhost ~]$ curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=CPU\&period=DAY\&startingTime=2016-04-19%2002%3A00%3A00
+        [{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":0,"memory_usage_percent":0,"max_memory_usage":0},{"cpu_usage_percent":0,"max_cpu_usage":1,"memory_usage_percent":0,"max_memory_usage":0}]
+        ~~~
+      * DAY
+      * WEEK / MONTH / QUARTER / YEAR
+    * Memory
+      * HOUR
+      * DAY
+      * WEEK / MONTH / QUARTER / YEAR
+    * Disks
+    * Network
+
+  * HOST
+    * CPU
+    * Memory
+    * Network
+
+  * Storage Domain
+    * Disks

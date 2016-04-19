@@ -1,8 +1,10 @@
 package org.reports;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.naming.InitialContext;
@@ -10,7 +12,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.http.client.ClientProtocolException;
-import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import org.ovirt.engine.sdk.exceptions.UnsecuredConnectionAttemptError;
 import org.slf4j.Logger;
@@ -20,12 +21,38 @@ import org.slf4j.LoggerFactory;
 @Startup
 public class Backend {
     private static Logger log = LoggerFactory.getLogger(Backend.class);
-    private static Api api = null;
+    // private Api api = null;
     private static DataSource ds;
+    public static Connection conn;
+    public static Connection locateDataSource() throws NamingException, SQLException {
+    	InitialContext cxt = new InitialContext();
+    	ds = (DataSource) cxt.lookup( "java:/ReportsDataSource" );
+    	if ( ds == null ) {
+    		throw new RuntimeException("Data source not found!");
+    	}
+    	conn = ds.getConnection();
+    	return conn;
+    }
+    
+    public static Connection getConn() {
+		return conn;
+	}
+
+	public static void setConn(Connection conn) {
+		Backend.conn = conn;
+	}
+
+	public static void setDs(DataSource ds) {
+		Backend.ds = ds;
+	}
+
+	public static DataSource getDs() {
+    	return ds;
+    }
 
 	@PostConstruct
     public void init()
-            throws ClientProtocolException, ServerException, UnsecuredConnectionAttemptError, IOException, InterruptedException {
+            throws ClientProtocolException, ServerException, UnsecuredConnectionAttemptError, IOException, InterruptedException, SQLException {
         try {
             locateDataSource();
         } catch (NamingException e) {
@@ -34,15 +61,15 @@ public class Backend {
 //        int interval = Integer.parseInt(ConfigProvider.getConfig().getProperty(ConfigProvider.QUERY_INTERVAL_M));
 //        api = getApi(interval);
     }
-
-    @PreDestroy
-    public void beforeShutdown() {
-        try {
-			api.close();
-		} catch (Exception e) {
-			log.error("Error closing api object", e);
-		}
-    }
+//
+//    @PreDestroy
+//    public void beforeShutdown() {
+//        try {
+//			api.close();
+//		} catch (Exception e) {
+//			log.error("Error closing api object", e);
+//		}
+//    }
 
 //    @SuppressWarnings("deprecation")
 //	public static Api getApi(int interval)
@@ -60,17 +87,4 @@ public class Backend {
 //        }
 //    }
     
-    public static DataSource locateDataSource() throws NamingException {
-        InitialContext cxt = new InitialContext();
-        ds = (DataSource) cxt.lookup( "java:/ReportsDataSource" );
-        if ( ds == null ) {
-           throw new RuntimeException("Data source not found!");
-        }
-        System.out.println("---------------------------" + ds + "-----------------------------");
-        return ds;
-    }
-
-	public static DataSource getDs() {
-		return ds;
-	}
 }

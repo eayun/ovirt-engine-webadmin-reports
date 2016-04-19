@@ -8,21 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.reports.Backend;
 import org.reports.model.HostInterfaceSamplesHistory;
 
 public class HostInterfaceSamplesHistoryDao extends BaseDao{
 	private static HostInterfaceSamplesHistoryDao instance;
-	private static Connection conn;
 	
-	public HostInterfaceSamplesHistoryDao(Connection conn) throws SQLException {
-		super(conn);
-		// TODO Auto-generated constructor stub
-	}
+//	public HostInterfaceSamplesHistoryDao(Connection conn) throws SQLException {
+//		super(conn);
+//	}
 
 	// 获取一个主机在某个小时内的所有网络接口 ID
 	public List<UUID> queryHostInterfaceIdsByHostIdAndPeriod(String hourOfDay, UUID host_id) throws SQLException{
 		List<UUID> hostInterfaceIdsOfOneHost = new ArrayList<UUID>();
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = null;
 		rs = stmt.executeQuery("select hish.host_interface_id from host_interface_configuration hic, host_interface_samples_history hish"
 				+ " where hic.host_interface_id = hish.host_interface_id"
@@ -30,7 +29,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0"
 				+ " group by hish.host_interface_id;");
 		while (rs.next()) {
-			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("vm_interface_id")));
+			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("host_interface_id")));
 		}
 		return hostInterfaceIdsOfOneHost;
 	}
@@ -38,7 +37,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 	// 主机在某一个小时内的网络接口的传入/传出的速率
 	public List<HostInterfaceSamplesHistory> queryNetworkRateByMinutes(String hourOfDay, UUID host_interface_id)
 			throws Exception {
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt
 				.executeQuery("select receive_rate_percent, transmit_rate_percent from host_interface_samples_history"
 						+ " where host_interface_id = '" + host_interface_id + "' and position('" + hourOfDay
@@ -58,7 +57,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 
 	public static HostInterfaceSamplesHistoryDao getInstance() throws SQLException {
 		if (instance == null) {
-			instance = new HostInterfaceSamplesHistoryDao(conn);
+			instance = new HostInterfaceSamplesHistoryDao();
 			return instance;
 		}
 		return instance;

@@ -1,6 +1,5 @@
 package org.reports.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,20 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.reports.model.VmDisksUsageHourlyHistory;
+import org.reports.Backend;
 
 //查询一天内某几个小时虚拟机各个磁盘的使用率
 public class VmDisksUsageHourlyHistoryDao extends BaseDao{
 	private static VmDisksUsageHourlyHistoryDao instance;
-	private static Connection conn;
-	
+	/*
 	public VmDisksUsageHourlyHistoryDao(Connection conn) throws SQLException {
 		super(conn);
 		// TODO Auto-generated constructor stub
-	}
+	}*/
 	
 	public List<Map<String, Double>> queryDisksByHours(String startHour, String endHour, UUID vm_id) throws Exception {
-		Statement stmt = conn.createStatement();
+		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select disks_usage"
 				+ " from vm_disks_usage_hourly_history"
 				+ " where vm_id = '" + vm_id
@@ -40,7 +38,7 @@ public class VmDisksUsageHourlyHistoryDao extends BaseDao{
 	
 	public static VmDisksUsageHourlyHistoryDao getInstance() throws SQLException {
         if (instance == null) {
-            instance = new VmDisksUsageHourlyHistoryDao(conn);
+            instance = new VmDisksUsageHourlyHistoryDao();
             return instance;
         }
         return instance;
