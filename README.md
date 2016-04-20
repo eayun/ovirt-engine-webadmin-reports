@@ -472,6 +472,9 @@
       * HOUR
         ~~~ bash
         [zhangyaqi@localhost ~]$ curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=Disks\&period=HOUR\&startingTime=2016-04-18%2008%3A
+        ~~~
+  
+        ~~~ bash 
         [{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.11787465816497},{"/boot":50.27330570127491,"/":51.11787465816497},{"/boot":50.27330570127491,"/":51.11787465816497},{"/boot":50.27330570127491,"/":51.11787465816497}, ...]
         ~~~
          
@@ -494,6 +497,9 @@
       * DAY
         ~~~ bash
 		  curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=Network\&period=DAY\&startingTime=2016-04-20%2007%3A00%3A00\&terminalTime=2016-04-20%2010%3A00%3A00
+        ~~~
+ 
+        ~~~ bash
 		  [[{"vm_interface_name":"nic1","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic1","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic1","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0}],[{"vm_interface_name":"nic2","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic2","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic2","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0}],[{"vm_interface_name":"nic3","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic3","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic3","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0}]][zhangyaqi@localhost target]
         ~~~
   
