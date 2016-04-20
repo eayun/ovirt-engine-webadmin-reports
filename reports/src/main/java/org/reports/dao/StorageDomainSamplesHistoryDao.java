@@ -21,7 +21,7 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select available_disk_size_gb, used_disk_size_gb from storage_domain_samples_history"
 				+ " where storage_domain_id = '" + storage_domain_id
-				+ "' and position('" + storage_domain_id + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:')) > 0"
+				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:')) > 0"
 				+ " order by history_datetime asc;");
 		List<Double> lsdsh = new ArrayList<Double>();
 		Double available_disk_size_gb = 0.0;

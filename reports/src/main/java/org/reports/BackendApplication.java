@@ -19,6 +19,7 @@ public class BackendApplication extends Application {
     public BackendApplication() {
         singletons.add(new VmReports());
         singletons.add(new HostReports());
+        singletons.add(new StorageDomainReports());
     }
 
 }

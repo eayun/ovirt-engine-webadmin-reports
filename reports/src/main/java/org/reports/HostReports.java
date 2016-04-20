@@ -20,7 +20,7 @@ import org.reports.model.HostInterfaceHourlyHistory;
 import org.reports.model.HostInterfaceSamplesHistory;
 
 @Path("/HOSTREPORTS")
-public class HostReports extends HandleReports {
+public class HostReports {
 	// 最后用 List 接收说有的 List
 
 	@GET
@@ -30,7 +30,7 @@ public class HostReports extends HandleReports {
 			@QueryParam("terminalTime") String terminalTime) throws Exception {
 		if (contentViewed.equals("CPU")) {
 			if (period.equals("HOUR")) {
-				return HostSamplesHistoryDao.getInstance().queryCpuByDays(startingTime, hostId);
+				return HostSamplesHistoryDao.getInstance().queryCpuByMinutes(startingTime, hostId);
 			} else if (period.equals("DAY")) {
 				return HostHourlyHistoryDao.getInstance().queryCpuByHours(startingTime, terminalTime, hostId);
 			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
@@ -41,7 +41,7 @@ public class HostReports extends HandleReports {
 			}
 		} else if (contentViewed.equals("Memory")) {
 			if (period.equals("HOUR")) {
-				return HostSamplesHistoryDao.getInstance().queryMemoryByTime(startingTime, hostId);
+				return HostSamplesHistoryDao.getInstance().queryMemoryByMinutes(startingTime, hostId);
 			} else if (period.equals("DAY")) {
 				return HostHourlyHistoryDao.getInstance().queryMemoryByHours(startingTime, terminalTime, hostId);
 			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")

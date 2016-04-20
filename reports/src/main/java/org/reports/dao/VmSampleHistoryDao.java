@@ -36,7 +36,7 @@ public class VmSampleHistoryDao extends BaseDao {
 		return lv;
 	}
 
-	public List<VmSampleHistory> queryMemoryByTime(String hourOfDay, UUID vm_id) throws Exception {
+	public List<VmSampleHistory> queryMemoryByMinutes(String hourOfDay, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select memory_usage_percent from vm_samples_history where vm_id = '" + vm_id
 				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0"

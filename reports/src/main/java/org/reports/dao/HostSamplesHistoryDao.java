@@ -18,7 +18,7 @@ public class HostSamplesHistoryDao extends BaseDao {
 //	}
 
 	// 主机在某个小时内的 60 条 cpu / memory 使用率的数据
-	public List<HostSamplesHistory> queryCpuByDays(String hourOfDay, UUID host_id) throws Exception {
+	public List<HostSamplesHistory> queryCpuByMinutes(String hourOfDay, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select cpu_usage_percent"
 				+ " from host_samples_history where host_id = '" + host_id
@@ -34,7 +34,7 @@ public class HostSamplesHistoryDao extends BaseDao {
 		return lhsh;
 	}
 	
-	public List<HostSamplesHistory> queryMemoryByTime(String hourOfDay, UUID host_id) throws Exception {
+	public List<HostSamplesHistory> queryMemoryByMinutes(String hourOfDay, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select memory_usage_percent"
 				+ " from host_samples_history where host_id = '" + host_id

@@ -472,8 +472,9 @@
       * HOUR
         ~~~ bash
         [zhangyaqi@localhost ~]$ curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=Disks\&period=HOUR\&startingTime=2016-04-18%2008%3A
+        [{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.12068694887822},{"/boot":50.27330570127491,"/":51.11787465816497},{"/boot":50.27330570127491,"/":51.11787465816497},{"/boot":50.27330570127491,"/":51.11787465816497},{"/boot":50.27330570127491,"/":51.11787465816497}, ...]
         ~~~
-
+         
       * DAY
         ~~~ bash
         curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=Disks\&period=DAY\&startingTime=2016-04-18%2008%3A00%3A00\&terminalTime=2016-04-18%2020%3A00%3A00
@@ -492,7 +493,8 @@
 
       * DAY
         ~~~ bash
-        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=Network\&period=DAY\&startingTime=2016-04-18%2008%3A00%3A00\&terminalTime=2016-04-18%2010%3A00%3A00
+		  curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/VMREPORTS/a744e7dd-2563-4919-909c-fc0d99d645e3?contentViewed=Network\&period=DAY\&startingTime=2016-04-20%2007%3A00%3A00\&terminalTime=2016-04-20%2010%3A00%3A00
+		  [[{"vm_interface_name":"nic1","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic1","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic1","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0}],[{"vm_interface_name":"nic2","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic2","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic2","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0}],[{"vm_interface_name":"nic3","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic3","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0},{"vm_interface_name":"nic3","receive_rate_percent":0,"max_receive_rate_percent":0,"transmit_rate_percent":0,"max_transmit_rate_percent":0}]][zhangyaqi@localhost target]
         ~~~
   
       * WEEK / MONTH / QUARTER / YEAR
@@ -502,12 +504,36 @@
 
   * HOST
     * CPU
-      ~~~ bash
-      ~~~
+      * HOUR
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/HOSTREPORTS/fee05fe7-9964-4794-8ddf-e564b8c864d6?contentViewed=C    PU\&period=HOUR\&startingTime=2016-04-20%2001%3A
+        ~~~
+
+      * DAY
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/HOSTREPORTS/fee05fe7-9964-    4794-8ddf-e564b8c864d6?contentViewed=CPU\&period=DAY\&startingTime=2016-04-18%2001%3A00%3A00\&terminalTime=2016-04-18%2011%3A00%3A00
+        ~~~
+
+      * WEEK / MONTH / QUARTER / YEAR
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/HOSTREPORTS/fee05fe7-9964-4794-8ddf-e564b8c864d6?contentViewed=CPU\&period=YEAR\&startingTime=2016-04-10\&terminalTime=2016-04-18
+        ~~~
 
     * Memory
-      ~~~ bash
-      ~~~
+      * HOUR
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/HOSTREPORTS/fee05fe7-9964-4794-8ddf-e564b8c864d6?contentViewed=Memory\&period=HOUR\&startingTime=2016-04-20%2001%3A
+        ~~~
+
+      * DAY
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/HOSTREPORTS/fee05fe7-9964-4794-8ddf-e564b8c864d6?contentViewed=Memory\&period=DAY\&startingTime=2016-04-18%2001%3A00%3A00\&terminalTime=2016-04-18%2011%3A00%3A00		  
+        ~~~
+
+      * WEEK / MONTH / QUARTER / YEAR
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/HOSTREPORTS/fee05fe7-9964-4794-8ddf-e564b8c864d6?contentViewed=Memory\&period=MONTH\&startingTime=2016-04-01\&terminalTime=2016-04-18
+        ~~~
 
     * Network
       * HOUR
@@ -527,3 +553,17 @@
 
   * Storage Domain
     * Disks
+      * HOUR
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/STORAGEDOMAINREPORTS/21f842a2-6c4a-4f12-a7cb-363b4b617265?contentViewed=Disks\&period=HOUR\&startingTime=2016-04-20%2010%3A
+        ~~~
+
+      * DAY
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/STORAGEDOMAINREPORTS/21f842a2-6c4a-4f12-a7cb-363b4b617265?contentViewed=Disks\&period=DAY\&startingTime=2016-04-18%2008%3A00%3A00\&terminalTime=2016-04-18%2011%3A00%3A00
+        ~~~
+
+      * WEEK / MONTH / QUARTER / YEAR
+        ~~~ bash
+        curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/STORAGEDOMAINREPORTS/21f842a2-6c4a-4f12-a7cb-363b4b617265?contentViewed=Disks\&period=WEEK\&startingTime=2016-04-01\&terminalTime=2016-04-18
+        ~~~

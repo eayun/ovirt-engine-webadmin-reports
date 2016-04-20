@@ -13,29 +13,31 @@ import org.reports.dao.StorageDomainHourlyHistoryDao;
 import org.reports.dao.StorageDomainSamplesHistoryDao;
 
 @Path("/STORAGEDOMAINREPORTS")
-public class StorageDomainReports extends HandleReports {
-	// 最后用 List 接收说有的 List
-
+public class StorageDomainReports {
 	@GET
 	@Path("{storage_domain_id}")
-	public List<Double> getListOnHostInfo(@PathParam("storage_domain_id") UUID storageDomainId, @QueryParam("contentViewed") String contentViewed,
-			@QueryParam("period") String period, @QueryParam("startingTime") String startingTime,
-			@QueryParam("terminalTime") String terminalTime) throws Exception {
-		if (contentViewed.equals("DISKS")) {
-			if (period.equals("HOUR")){
-				return StorageDomainSamplesHistoryDao.getInstance().queryStorageDomainByMinutes(startingTime, storageDomainId);
-			}
-			else if (period.equals("DAY")) {
-				return StorageDomainHourlyHistoryDao.getInstance().queryStorageDomainByHours(startingTime, terminalTime, storageDomainId);
-			}
-			else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER") || period.equals("YEAR")) {
-				return StorageDomainDailyHistoryDao.getInstance().queryStorageDomainByDays(startingTime, terminalTime, storageDomainId);
-			}
-			else {
+	// 最后用 List 接收所有的 List
+	public List<Double> getListOnHostInfo(@PathParam("storage_domain_id") UUID storageDomainId,
+			@QueryParam("contentViewed") String contentViewed, @QueryParam("period") String period,
+			@QueryParam("startingTime") String startingTime, @QueryParam("terminalTime") String terminalTime)
+			throws Exception {
+		System.out.println(
+				storageDomainId + "--" + contentViewed + "--" + period + "--" + startingTime + "--" + terminalTime);
+		if (contentViewed.equals("Disks")) {
+			if (period.equals("HOUR")) {
+				return StorageDomainSamplesHistoryDao.getInstance().queryStorageDomainByMinutes(startingTime,
+						storageDomainId);
+			} else if (period.equals("DAY")) {
+				return StorageDomainHourlyHistoryDao.getInstance().queryStorageDomainByHours(startingTime, terminalTime,
+						storageDomainId);
+			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
+					|| period.equals("YEAR")) {
+				return StorageDomainDailyHistoryDao.getInstance().queryStorageDomainByDays(startingTime, terminalTime,
+						storageDomainId);
+			} else {
 				return null;
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

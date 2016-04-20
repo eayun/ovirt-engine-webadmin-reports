@@ -33,7 +33,8 @@ public class StorageDomainDailyHistoryDao extends BaseDao {
 		Double usage = 0.0;
 		while (rs.next()) {
 			available_disk_size_gb = rs.getInt("available_disk_size_gb") + 0.0;
-			available_disk_size_gb = rs.getInt("used_disk_size_gb") + 0.0;
+			used_disk_size_gb = rs.getInt("used_disk_size_gb") + 0.0;
+			System.out.println(available_disk_size_gb + "===" + used_disk_size_gb);
 			if (available_disk_size_gb + used_disk_size_gb == 0.0) {
 				usage = 0.0;
 			}else {

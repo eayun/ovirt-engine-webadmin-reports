@@ -51,7 +51,7 @@ public class VmReports {
 		else if (contentViewed.equals("Memory")){
 			// 获取一个小时内的数据？（每分钟变化一次）
 			if (period.equals("HOUR")){
-				return VmSampleHistoryDao.getInstance().queryMemoryByTime(startingTime, vmId);
+				return VmSampleHistoryDao.getInstance().queryMemoryByMinutes(startingTime, vmId);
 			}
 			else if (period.equals("DAY")){
 				return VmHourlyHistoryDao.getInstance().queryMemoryByHours(startingTime, terminalTime, vmId);

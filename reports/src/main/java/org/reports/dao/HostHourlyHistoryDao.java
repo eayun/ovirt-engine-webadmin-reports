@@ -39,7 +39,7 @@ public class HostHourlyHistoryDao extends BaseDao {
 		ResultSet rs = stmt.executeQuery(
 				"select memory_usage_percent, max_memory_usage" + " from host_hourly_history where host_id = '" + host_id
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour
+						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
 						+ "' order by history_datetime asc;");
 		List<HostHourlyHistory> lhhh = new ArrayList<HostHourlyHistory>();
 		HostHourlyHistory hhh = null;

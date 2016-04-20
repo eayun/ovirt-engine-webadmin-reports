@@ -42,7 +42,7 @@ public class VmHourlyHistoryDao extends BaseDao {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage from vm_hourly_history"
 				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') <= '" + endHour + "' and vm_id = '" + vm_id
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;
