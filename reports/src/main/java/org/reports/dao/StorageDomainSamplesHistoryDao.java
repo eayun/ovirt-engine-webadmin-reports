@@ -32,7 +32,7 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 			used_disk_size_gb = rs.getInt("used_disk_size_gb") + 0.0;
 			if (available_disk_size_gb + used_disk_size_gb == 0.0) {
 				usage = 0.0;
-			}else {
+			} else {
 				usage = used_disk_size_gb / (used_disk_size_gb + available_disk_size_gb);
 			}
 			lsdsh.add(usage);

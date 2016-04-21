@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<script type='text/javascript'>
+   var api = parent.pluginApi('report');
+    
+   api.register({
+      UiInit: function() {
+         api.addSubTab('VirtualMachine', '虚拟机资源报表', 'vm-report', 'plugin/report/VmReports.html');
+         api.addSubTab('Host', '主机资源报表', 'host-report', 'plugin/report/HostReports.html');
+         api.addSubTab('Storage', '存储域资源报表', 'storage-domain-report', 'plugin/report/StorageDomainReports.html');
+         api.setTabAccessible('vm-report', true);
+	 api.setTabAccessible('host-report', true);
+         api.setTabAccessible('storage-domain-report', true);
+      },
+      VirtualMachineSelectionChange: function() {
+	 if (arguments.length != 1){
+            api.setTabAccessible('vm-report', false);
+         }
+	 else{
+	    api.setTabContentUrl('vm-report', 'plugin/report/VmReports.html#' + argument[0].id);
+	    api.setTabAccessible('vm-report', true)
+	 }
+      },
+      HostSelectionChange: function() {
+         if (arguments.length != 1) {
+            api.setTabAccessible('host-report', false);
+	 }
+	 else {
+            api.setTabContentUrl('host-report', 'plugin/report/HostReports.html#' + argument[0].id);
+            api.setTabAccessible('host-report', true);
+         }
+      },
+      StorageSelectionChange: function() {
+         if (arguments.length != 1) {
+            api.setTabAccessible('storage-domain-report', false);
+         }
+         else {
+            api.setTabContentUrl('storage-domain-report', 'plugin/report/StorageDomainReports.html#' + argument[0].id);
+            api.setTabAccessible('storage-domain-report', true);
+         }
+      },
+      SystemTreeSelectionChange: function(selectedNode) {
+         api.setTabAccessible('vm-backup-main-tab', selectedNode.type == 'System');
+      }
+   });
+   api.ready();
+</script>
+</body>
+</html>
+

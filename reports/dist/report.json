@@ -1,0 +1,11 @@
+{
+  // Unique name of the plugin 
+  "name": "report", 
+
+  // Url of plugin host page that bootstraps plugin code 
+  "url": "plugin/report/index.html", 
+
+  // Path to plugin resource files relative to descriptor 
+  "resourcePath": "report-resources" 
+}
+
