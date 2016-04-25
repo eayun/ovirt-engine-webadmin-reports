@@ -17,12 +17,13 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 //		// TODO Auto-generated constructor stub
 //	}
     
-	public List<Double> queryStorageDomainByMinutes(String hourOfDay, UUID storage_domain_id) throws Exception {
+	public List<Double> queryStorageDomainByMinutes(String startMinute, String endMinute, UUID storage_domain_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select available_disk_size_gb, used_disk_size_gb from storage_domain_samples_history"
 				+ " where storage_domain_id = '" + storage_domain_id
-				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:')) > 0"
-				+ " order by history_datetime asc;");
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
+				+ "' order by history_datetime asc;");
 		List<Double> lsdsh = new ArrayList<Double>();
 		Double available_disk_size_gb = 0.0;
 		Double used_disk_size_gb = 0.0;

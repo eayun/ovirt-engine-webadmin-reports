@@ -31,17 +31,16 @@ public class VmReports {
 			 										@QueryParam("period") String period, 
 			 										@QueryParam("startingTime") String startingTime,
 			 										@QueryParam("terminalTime") String terminalTime) throws Exception{
-		System.out.println(vmId + "--" + contentViewed + "--" + period + "--" + startingTime + "--" + terminalTime);
 		if (contentViewed.equals("CPU")){
 			// 获取一个小时内的数据？
-			if (period.equals("HOUR")){
-				return VmSampleHistoryDao.getInstance().queryCpuByMinutes(startingTime, vmId);
+			if (period.equals("MINUTE")){
+				return VmSampleHistoryDao.getInstance().queryCpuByMinutes(startingTime, terminalTime, vmId);
 			}
 			// 获取一天内所有每小时的数据（或者几个小时内的数据）
-			else if (period.equals("DAY")){
+			else if (period.equals("HOUR")){
 				return VmHourlyHistoryDao.getInstance().queryCpuByHours(startingTime, terminalTime, vmId);
 			}
-			else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER") || period.equals("YEAR")){
+			else if (period.equals("DAY")){
 				return VmDailyHistoryDao.getInstance().queryCpuByDays(startingTime, terminalTime, vmId);
 			}
 			else{
@@ -50,13 +49,13 @@ public class VmReports {
 		} 
 		else if (contentViewed.equals("Memory")){
 			// 获取一个小时内的数据？（每分钟变化一次）
-			if (period.equals("HOUR")){
-				return VmSampleHistoryDao.getInstance().queryMemoryByMinutes(startingTime, vmId);
+			if (period.equals("MINUTE")){
+				return VmSampleHistoryDao.getInstance().queryMemoryByMinutes(startingTime, terminalTime, vmId);
 			}
-			else if (period.equals("DAY")){
+			else if (period.equals("HOUR")){
 				return VmHourlyHistoryDao.getInstance().queryMemoryByHours(startingTime, terminalTime, vmId);
 			}
-			else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER") || period.equals("YEAR")) {
+			else if (period.equals("DAY")) {
 				return VmDailyHistoryDao.getInstance().queryMemoryByDays(startingTime, terminalTime, vmId);
 			}
 			else {
@@ -69,21 +68,21 @@ public class VmReports {
 			List<List<VmInterfaceSamplesHistory>> llvish = new ArrayList<List<VmInterfaceSamplesHistory>>();
 			List<List<VmInterfaceHourlyHistory>> llvihh = new ArrayList<List<VmInterfaceHourlyHistory>>();
 			List<List<VmInterfaceDailyHistory>> llvidh = new ArrayList<List<VmInterfaceDailyHistory>>();
- 			if (period.equals("HOUR")) {
- 				interfaceIdsOfOneVm = VmInterfaceSamplesHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, vmId);
+ 			if (period.equals("MINUTE")) {
+ 				interfaceIdsOfOneVm = VmInterfaceSamplesHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
 				for (int i = 0; i < interfaceIdsOfOneVm.size(); i ++) {
-					llvish.add(VmInterfaceSamplesHistoryDao.getInstance().queryNetworkRateByMinutes(startingTime, interfaceIdsOfOneVm.get(i)));
+					llvish.add(VmInterfaceSamplesHistoryDao.getInstance().queryNetworkRateByMinutes(startingTime, terminalTime, interfaceIdsOfOneVm.get(i)));
 				}
 				return llvish;
 			}
-			else if (period.equals("DAY")) {
+			else if (period.equals("HOUR")) {
 				interfaceIdsOfOneVm = VmInterfaceHourlyHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
 				for (int i = 0; i < interfaceIdsOfOneVm.size(); i ++) {
 					llvihh.add(VmInterfaceHourlyHistoryDao.getInstance().queryNetworkRateByHours(startingTime, terminalTime, interfaceIdsOfOneVm.get(i)));
 				}
 				return llvihh;
 			}
-			else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER") || period.equals("YEAR")) {
+			else if (period.equals("DAY")) {
 				interfaceIdsOfOneVm = VmInterfaceHourlyHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
 				for (int i = 0; i < interfaceIdsOfOneVm.size(); i ++) {
 					 llvidh.add(VmInterfaceDailyHistoryDao.getInstance().queryNetworkRateByDays(startingTime, terminalTime, interfaceIdsOfOneVm.get(i)));
@@ -96,13 +95,13 @@ public class VmReports {
 		}
 		else if (contentViewed.equals("Disks")) {
 			// 将 vm 中所有的磁盘的使用率封装成一个 List 传给前端。
-			if (period.equals("HOUR")){
-				return VmDisksUsageSamplesHistoryDao.getInstance().queryDisksByMinutes(startingTime, vmId);
+			if (period.equals("MINUTE")){
+				return VmDisksUsageSamplesHistoryDao.getInstance().queryDisksByMinutes(startingTime, terminalTime, vmId);
 			}
-			else if (period.equals("DAY")) {
+			else if (period.equals("HOUR")) {
 				return VmDisksUsageHourlyHistoryDao.getInstance().queryDisksByHours(startingTime, terminalTime, vmId);
 			}
-			else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER") || period.equals("YEAR")) {
+			else if (period.equals("DAY")) {
 				return VmDisksUsageDailyHistoryDao.getInstance().queryDisksByDays(startingTime, terminalTime, vmId);
 			}
 			else {

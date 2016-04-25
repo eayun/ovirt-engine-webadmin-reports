@@ -1,6 +1,5 @@
 package org.reports.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,15 +18,16 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 //	}
 
 	// 获取一个主机在某个小时内的所有网络接口 ID
-	public List<UUID> queryHostInterfaceIdsByHostIdAndPeriod(String hourOfDay, UUID host_id) throws SQLException{
+	public List<UUID> queryHostInterfaceIdsByHostIdAndPeriod(String startMinute, String endMinute, UUID host_id) throws SQLException{
 		List<UUID> hostInterfaceIdsOfOneHost = new ArrayList<UUID>();
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = null;
 		rs = stmt.executeQuery("select hish.host_interface_id from host_interface_configuration hic, host_interface_samples_history hish"
 				+ " where hic.host_interface_id = hish.host_interface_id"
 				+ " and hic.host_id = '" + host_id
-				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0"
-				+ " group by hish.host_interface_id;");
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
+				+ "' group by hish.host_interface_id;");
 		while (rs.next()) {
 			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("host_interface_id")));
 		}
@@ -35,14 +35,15 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 	}
 	
 	// 主机在某一个小时内的网络接口的传入/传出的速率
-	public List<HostInterfaceSamplesHistory> queryNetworkRateByMinutes(String hourOfDay, UUID host_interface_id)
+	public List<HostInterfaceSamplesHistory> queryNetworkRateByMinutes(String startMinute, String endMinute, UUID host_interface_id)
 			throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt
 				.executeQuery("select receive_rate_percent, transmit_rate_percent from host_interface_samples_history"
-						+ " where host_interface_id = '" + host_interface_id + "' and position('" + hourOfDay
-						+ "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0"
-						+ " order by history_datetime asc;");
+						+ " where host_interface_id = '" + host_interface_id
+						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
+						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
+						+ "' order by history_datetime asc;");
 		List<HostInterfaceSamplesHistory> lhish = new ArrayList<HostInterfaceSamplesHistory>();
 		HostInterfaceSamplesHistory hish = null;
 		while (rs.next()) {

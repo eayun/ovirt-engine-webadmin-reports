@@ -29,23 +29,21 @@ public class HostReports {
 			@QueryParam("period") String period, @QueryParam("startingTime") String startingTime,
 			@QueryParam("terminalTime") String terminalTime) throws Exception {
 		if (contentViewed.equals("CPU")) {
-			if (period.equals("HOUR")) {
-				return HostSamplesHistoryDao.getInstance().queryCpuByMinutes(startingTime, hostId);
-			} else if (period.equals("DAY")) {
+			if (period.equals("MINUTE")) {
+				return HostSamplesHistoryDao.getInstance().queryCpuByMinutes(startingTime, terminalTime, hostId);
+			} else if (period.equals("HOUR")) {
 				return HostHourlyHistoryDao.getInstance().queryCpuByHours(startingTime, terminalTime, hostId);
-			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
-					|| period.equals("YEAR")) {
+			} else if (period.equals("DAY")) {
 				return HostDailyHistoryDao.getInstance().queryCpuByDays(startingTime, terminalTime, hostId);
 			} else {
 				return null;
 			}
 		} else if (contentViewed.equals("Memory")) {
-			if (period.equals("HOUR")) {
-				return HostSamplesHistoryDao.getInstance().queryMemoryByMinutes(startingTime, hostId);
-			} else if (period.equals("DAY")) {
+			if (period.equals("MINUTE")) {
+				return HostSamplesHistoryDao.getInstance().queryMemoryByMinutes(startingTime, terminalTime, hostId);
+			} else if (period.equals("HOUR")) {
 				return HostHourlyHistoryDao.getInstance().queryMemoryByHours(startingTime, terminalTime, hostId);
-			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
-					|| period.equals("YEAR")) {
+			} else if (period.equals("DAY")) {
 				return HostDailyHistoryDao.getInstance().queryMemoryByDays(startingTime, terminalTime, hostId);
 			} else {
 				return null;
@@ -55,23 +53,21 @@ public class HostReports {
 			List<List<HostInterfaceSamplesHistory>> llhish = new ArrayList<List<HostInterfaceSamplesHistory>>();
 			List<List<HostInterfaceHourlyHistory>> llhihh = new ArrayList<List<HostInterfaceHourlyHistory>>();
 			List<List<HostInterfaceDailyHistory>> llhidh = new ArrayList<List<HostInterfaceDailyHistory>>();
-			if (period.equals("HOUR")) {
+			if (period.equals("MINUTE")) {
 				interfaceIdsOfOneHost = HostInterfaceSamplesHistoryDao.getInstance()
-						.queryHostInterfaceIdsByHostIdAndPeriod(startingTime, hostId);
+						.queryHostInterfaceIdsByHostIdAndPeriod(startingTime, terminalTime, hostId);
 				for (int i = 0; i < interfaceIdsOfOneHost.size(); i++) {
-					llhish.add(HostInterfaceSamplesHistoryDao.getInstance().queryNetworkRateByMinutes(startingTime,
-							interfaceIdsOfOneHost.get(i)));
+					llhish.add(HostInterfaceSamplesHistoryDao.getInstance().queryNetworkRateByMinutes(startingTime, terminalTime, interfaceIdsOfOneHost.get(i)));
 				}
 				return llhish;
-			} else if (period.equals("DAY")) {
+			} else if (period.equals("HOUR")) {
 				interfaceIdsOfOneHost = HostInterfaceHourlyHistoryDao.getInstance().queryHostInterfaceIdsByHostIdAndPeriod(startingTime, terminalTime, hostId);
 				for (int i = 0; i < interfaceIdsOfOneHost.size(); i++) {
 					llhihh.add(HostInterfaceHourlyHistoryDao.getInstance().queryNetworkRateByHours(startingTime,
 							terminalTime, interfaceIdsOfOneHost.get(i)));
 				}
 				return llhihh;
-			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
-					|| period.equals("YEAR")) {
+			} else if (period.equals("DAY")) {
 				interfaceIdsOfOneHost = HostInterfaceDailyHistoryDao.getInstance().queryHostInterfaceIdsByHostIdAndPeriod(startingTime, terminalTime, hostId);
 				for (int i = 0; i < interfaceIdsOfOneHost.size(); i++) {
 					llhidh.add(HostInterfaceDailyHistoryDao.getInstance().queryNetworkRateByDays(startingTime,

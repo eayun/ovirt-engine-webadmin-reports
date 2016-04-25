@@ -18,12 +18,13 @@ public class HostSamplesHistoryDao extends BaseDao {
 //	}
 
 	// 主机在某个小时内的 60 条 cpu / memory 使用率的数据
-	public List<HostSamplesHistory> queryCpuByMinutes(String hourOfDay, UUID host_id) throws Exception {
+	public List<HostSamplesHistory> queryCpuByMinutes(String startMinute, String endMinute, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select cpu_usage_percent"
 				+ " from host_samples_history where host_id = '" + host_id
-				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0"
-				+ " order by history_datetime asc;");
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
+				+ "' order by history_datetime asc;");
 		List<HostSamplesHistory> lhsh = new ArrayList<HostSamplesHistory>();
 		HostSamplesHistory hsh = null;
 		while (rs.next()) {
@@ -34,12 +35,13 @@ public class HostSamplesHistoryDao extends BaseDao {
 		return lhsh;
 	}
 	
-	public List<HostSamplesHistory> queryMemoryByMinutes(String hourOfDay, UUID host_id) throws Exception {
+	public List<HostSamplesHistory> queryMemoryByMinutes(String startMinute, String endMinute, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select memory_usage_percent"
 				+ " from host_samples_history where host_id = '" + host_id
-				+ "' and position('" + hourOfDay + "' in to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS')) > 0"
-				+ " order by history_datetime asc;");
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
+				+ "' order by history_datetime asc;");
 		List<HostSamplesHistory> lhsh = new ArrayList<HostSamplesHistory>();
 		HostSamplesHistory hsh = null;
 		while (rs.next()) {

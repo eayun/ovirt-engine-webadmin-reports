@@ -61,7 +61,20 @@
 		 month.push(startDay);
 		 startDay += 7; //7 天后的日期
 	   }*/
-	  
+      /*
+         AJAX
+      */	  
+
+      $.ajax({
+            type: "GET",
+            url: "/ovirt_engine_webadmin_reports/VMREPORTS",
+            headers: {"Content-Type":"application/json"},
+            data: JSON.stringify(data),
+            success: function(data) {
+              alert(data);
+            }
+      });
+
 	   // 查看某年每个月的数据。
 	   var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	   var data = {

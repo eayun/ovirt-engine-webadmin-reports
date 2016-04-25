@@ -21,17 +21,13 @@ public class StorageDomainReports {
 			@QueryParam("contentViewed") String contentViewed, @QueryParam("period") String period,
 			@QueryParam("startingTime") String startingTime, @QueryParam("terminalTime") String terminalTime)
 			throws Exception {
-		System.out.println(
-				storageDomainId + "--" + contentViewed + "--" + period + "--" + startingTime + "--" + terminalTime);
 		if (contentViewed.equals("Disks")) {
-			if (period.equals("HOUR")) {
-				return StorageDomainSamplesHistoryDao.getInstance().queryStorageDomainByMinutes(startingTime,
-						storageDomainId);
-			} else if (period.equals("DAY")) {
+			if (period.equals("MINUTE")) {
+				return StorageDomainSamplesHistoryDao.getInstance().queryStorageDomainByMinutes(startingTime, terminalTime,	storageDomainId);
+			} else if (period.equals("HOUR")) {
 				return StorageDomainHourlyHistoryDao.getInstance().queryStorageDomainByHours(startingTime, terminalTime,
 						storageDomainId);
-			} else if (period.equals("WEEK") || period.equals("MONTH") || period.equals("QUARTER")
-					|| period.equals("YEAR")) {
+			} else if (period.equals("DAY")) {
 				return StorageDomainDailyHistoryDao.getInstance().queryStorageDomainByDays(startingTime, terminalTime,
 						storageDomainId);
 			} else {
