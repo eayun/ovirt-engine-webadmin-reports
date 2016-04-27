@@ -3,112 +3,156 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <link href="resource/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="resource/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
+   <link href="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
    <script src="resource/jquery-2.2.2.js"></script>
    <script src="resource/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+   <script src="resource/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+   <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+   <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
    <script src="resource/Chart.js"></script>
    <script type="text/javascript">
       window.onload=function(){
-	   // 查看某一个小时内的数据
-	   var hour = new Array();
-	   for(var i = 0; i < 60; i ++){
-		 if (i < 10){
-		    hour.push("6:0" + i);
-		 }
-		     else{
-			hour.push("6:" + i);
-		 }
-	   }
-		 
-	   // 查看某一天内某几个小时内的数据，也包括一整天的数据，也就是 12 个小时。
-	   var day = new Array();
-	   var hourOfstartTime; // 从界面上获取数据
-	   var hourOfendTime; // 同上
-	   /*
-	   for (var i = startTime; i <= endTime; i ++){
-		 day.push(i + ":00");
-	   }*/
-	  
-	   // 查看某一周（从周日至周六）的数据。
-	   var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
-	  
-	   // 查看某个月的数据，如果该月的第一天是周一，那么只将该月每个星期一标记出来。??? 未完???
-	   /*
-	   function getWeekByDate(date_){
-	  return week_;
-	   }
-	   function getDateByWeek(week_){
-		     return date_;
-	   }
-	   var month = new Array();
-	   // month 1 日，就是 startDay
-	   var startDay;
-	   var endDay;
-	   var daysOfMonth;
-	   var week_ = getWeekByDate(startDay);
-	   // 该月中有多少个 week_ (eg: 星期一)
-	   var numOfWeek_InMonth = get_numOfWeek_InMonth();
-	   function get_numOfWeek_InMonth(){
-		 var preNumOfWeek_InMonth = daysOfMonth % 7;
-		 if (preNumOfWeek_InMonth % 7 > 0){
-		    numOfWeek_InMonth = preNumOfWeek_InMonth + 1;
-		     }
-		 else{
-		    numOfWeek_InMonth = prenumOfWeek_InMonth;
-		     }
-		 return numOfWeek_InMonth;
-	   }
-	   for (var i = 0; i < numOfWeek_InMonth; i ++){
-		 month.push(startDay);
-		 startDay += 7; //7 天后的日期
-	   }*/
-	  
-	   // 查看某年每个月的数据。
-	   var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	   var data = {
-		     labels: week,
-		     datasets: [
-			 {   
-	 		 label: "My First dataset",
-			     fillColor: "rgba(220,220,220,0.2)",
-			     strokeColor: "rgba(220,220,220,1)",
-			     pointColor: "rgba(220,220,220,1)",
-			     pointStrokeColor: "#fff",
-			     pointHighlightFill: "#fff",
-			     pointHighlightStroke: "rgba(220,220,220,1)",
-			     data: [65, 59, 80, 81, 56, 55, 40]
-			 },
-			 {
-			     label: "My Second dataset",
-			     fillColor: "rgba(151,187,205,0.2)",
-			     strokeColor: "rgba(151,187,205,1)",
-			     pointColor: "rgba(151,187,205,1)",
-			     pointStrokeColor: "#fff",
-			     pointHighlightFill: "#fff",
-			     pointHighlightStroke: "rgba(151,187,205,1)",
-			     data: [28, 48, 40, 19, 86, 27, 90]
-			 }
-		     ]
-	   };
-	   data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
-	   data.datasets[1].data=[10,20,30,40,50,60,70]
-	   var canvas = document.getElementById("myChart");
-           var col_left = document.getElementById("col-left");
-	   var col9 = document.getElementById("col9");
-	   var cw = col9.clientWidth; // number
-           var ch = col_left.clientHeight;
-	   canvas.setAttribute('width', cw);
-	   canvas.setAttribute('height', ch);
-	   canvas.style.width = String(cw) + "px";
-	   canvas.style.height = String(ch) + "px";
-           var ctx = canvas.getContext("2d");
-	   var myLineChart = new Chart(ctx).Line(data);
-           var button = document.getElementById("sure");
-           button.style.width = parseInt(col_left.clientWidth * 11 / 12 - 30) + "px";
+	 var col_left = document.getElementById("col-left");
+	 var col9 = document.getElementById("col9");
+	 var cw = col9.clientWidth; // number
+	 var ch = col_left.clientHeight;
+	 var button = document.getElementById("sure");
+	 button.style.width = parseInt(col_left.clientWidth * 11 / 12 - 30) + "px";
+
+         $(".container").css("height", $(window).height());
+
+         <!--每当日期变化时，会调用如下函数-->
+	 $("#period").change(function(){
+	    var checkIndex=$("#period").get(0).selectedIndex;
+            for (var i = 0; i < 3; i ++){
+	       if (checkIndex == i){
+	          $(".time" + i).css('display','inline'); 
+	       }
+               else{
+		  $(".time" + i).css('display','none'); 
+	       }
+            }
+            if(checkIndex === 0){
+               $('.form_datetime').datetimepicker({
+		  weekStart: 0,
+		  todayBtn:  1,
+		  autoclose: 1,
+		  todayHighlight: 1,
+		  startView: 4,
+		  forceParse: 0,
+		  minuteStep: 1,
+		  startDate: "2015-10-20 12:00:02",
+		  endDate: "2016-04-25 10:00:00"
+	       });
+	    }
+            if(checkIndex === 1){
+               $('.form_date').datetimepicker({
+		  weekStart: 0,
+		  todayBtn:  1,
+		  autoclose: 1,
+		  todayHighlight: 1,
+		  startView: 4,
+		  minView: 1,
+		  forceParse: 0,
+		  minuteStep: 1,
+		  startDate: "2015-10-20 12",
+		  endDate: "2016-04-25 10"
+               });
+            }
+	    if(checkIndex === 2){
+	       $('#sandbox-container .input-group.date').datepicker({
+		  format: "yyyy-mm-dd",
+		  weekStart: 0,
+		  startDate: "2015-10-20",
+		  endDate: "2016-04-25",
+		  startView: 2,
+		  minViewMode: 0,
+		  todayBtn: "linked",
+		  orientation: "auto",
+	 	  autoclose: true
+	       });
+	    }
+	 });
+      /*
+      $.ajax({
+            type: "GET",
+            url: "/ovirt_engine_webadmin_reports/VMREPORTS",
+            headers: {"Content-Type":"application/json"},
+            data: JSON.stringify(data),
+            success: function(data) {
+              alert(data);
+            }
+      });*/
+
+	 // 报表
+	 var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
+	 var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	 var data = {
+	    labels: week,
+	    datasets: [
+	       {   
+		  label: "My First dataset",
+		  fillColor: "rgba(220,220,220,0.2)",
+		  strokeColor: "rgba(220,220,220,1)",
+		  pointColor: "rgba(220,220,220,1)",
+		  pointStrokeColor: "#fff",
+		  pointHighlightFill: "#fff",
+		  pointHighlightStroke: "rgba(220,220,220,1)",
+		  data: [65, 59, 80, 81, 56, 55, 40]
+	       },
+	       {
+		  label: "My Second dataset",
+		  fillColor: "rgba(151,187,205,0.2)",
+		  strokeColor: "rgba(151,187,205,1)",
+		  pointColor: "rgba(151,187,205,1)",
+		  pointStrokeColor: "#fff",
+		  pointHighlightFill: "#fff",
+		  pointHighlightStroke: "rgba(151,187,205,1)",
+		  data: [28, 48, 40, 19, 86, 27, 90]
+	       }
+	    ]
+	 };
+	 data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
+	 data.datasets[1].data=[10,20,30,40,50,60,70]
+	 var canvas = document.getElementsByTagName("canvas");
+         var ctx = new Array();
+         var myChart = new Array();
+	 for (var i = 0; i < canvas.length; i ++){
+	    canvas[i].setAttribute('width', cw);
+	    canvas[i].setAttribute('height', ch);
+	    canvas[i].style.width = String(cw) + "px";
+	    canvas[i].style.height = String(ch) + "px";
+	    ctx[i] = canvas[i].getContext("2d");
+            if (i === 0){
+               myChart[i] = new Chart(ctx[i]).Line(data);
+            }
+            else if (i === 1){
+               myChart[i] = new Chart(ctx[i]).Bar(data);
+	       canvas[i].style.display = "none";
+	    }
+	    else{
+	       myChart[i] = new Chart(ctx[i]).Radar(data);
+               canvas[i].style.display = "none";
+            }
+	 }
+         $("#method").change(function(){
+	    var method_selected = $("#method").get(0).selectedIndex;
+	    for (var i = 0; i < canvas.length; i ++){
+	       if (method_selected === i){
+ 	          canvas[i].style.display = "inline";
+	       }
+	       else {
+                  canvas[i].style.display = "none";
+	       }
+	    }
+         });
       }
    </script>
    <style type="text/css">
       body .container{
          width: 100%;
+         height: 100%;
       }
       #divLabel {
          vertical-align: text-bottom;
@@ -123,11 +167,12 @@
          color: #898989;
       }
       .row {
+         margin-top: 2px;
          margin-bottom: 8px;
       }
       .container {
-         padding-left: 35px;
-         padding-top: 20px;
+	 padding-top: 0px;
+	 padding-left: 16px;
          margin-left: 0px;
          margin-right: 0px;
       }
@@ -138,10 +183,10 @@
       <div class="row">
          <div class="col-xs-3" id="col-left">
             <div class="row">
-               <div class="col-xs-5" id="divLabel">
+               <div class="col-xs-4" id="divLabel">
                   <label for="name">选择查看对象</label>
                </div>
-               <div class="col-xs-6">
+               <div class="col-xs-7">
                   <select class="form-control">
                      <option>CPU</option>
                      <option>内存</option>
@@ -150,40 +195,104 @@
                </div>
             </div>
             <div class="row">
-               <div class="col-xs-5" id="divLabel">
+               <div class="col-xs-4" id="divLabel">
                   <label for="name">选择日期范围</label>
                </div>
-               <div class="col-xs-6">
-                  <select class="form-control">
+               <div class="col-xs-7">
+                  <select id="period" class="form-control">
+                     <option>按分</option>
+                     <option>按时</option>
                      <option>按日</option>
-                     <option>按周</option>
-                     <option>按月</option>
-                     <option>按季度</option>
-                     <option>按年</option>
                   </select>
                </div>
             </div>
             <div class="row">
-               <div class="col-xs-5" id="divLabel">
-                  <label for="name">日期</label>
+               <div class="col-xs-4" id="divLabel">
+                  <label for="name">起始时间</label>
                </div>
-               <div class="col-xs-6">
-                  <select class="form-control">
-                     <option></option>
-                  </select>
+               <!--按分钟-->
+	       <div class="col-xs-7 time0" style="display: inline">
+                  <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                     <input class="form-control" size="16" type="text" value="" readonly>
+                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+               </div>  
+               <script>
+		  $('.form_datetime').datetimepicker({
+		     weekStart: 0,
+		     todayBtn:  1,
+		     autoclose: 1,
+		     todayHighlight: 1,
+		     startView: 4,
+		     forceParse: 0,
+		     minuteStep: 1,
+		     startDate: "2015-10-20 12:00:02",
+		     endDate: "2016-04-25 10:00:00"
+		  });
+               </script>
+ 	       <!--按时-->
+               <div class="col-xs-7 time1" style="display: none">
+		  <div class="input-group date form_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
+		     <input class="form-control" size="16" type="text" value="" readonly>
+		     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+		  </div>
+	       </div>
+               <!--按日-->
+	       <div class="span5 col-xs-7 time2" id="sandbox-container" style="display: none">
+		  <div class="input-group date">
+		    <input type="text" class="form-control">
+	            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+		  </div>
+	       </div>
+            </div>
+            <div class="row">
+               <div class="col-xs-4" id="divLabel">
+                  <label for="name">终止时间</label>
+	       </div>
+               <!--按分钟-->
+               <div class="col-xs-7 time0" style="display: inline">
+                  <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                     <input class="form-control" size="16" type="text" value="" readonly>
+                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+               </div>
+               <script>
+                  $('.form_datetime').datetimepicker({
+                     weekStart: 0,
+                     todayBtn:  1,
+                     autoclose: 1,
+                     todayHighlight: 1,
+                     startView: 4,
+                     forceParse: 0,
+                     minuteStep: 1,
+                     startDate: "2015-10-20 12:00:02",
+                     endDate: "2016-04-25 10:00:00"
+                  });
+               </script>
+               <!--按时-->
+               <div class="col-xs-7 time1" style="display: none">
+                  <div class="input-group date form_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
+                     <input class="form-control" size="16" type="text" value="" readonly>
+                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+               </div>
+               <!--按日-->
+               <div class="span5 col-xs-7 time2" id="sandbox-container" style="display: none">
+                  <div class="input-group date">
+                    <input type="text" class="form-control">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                  </div>
                </div>
             </div>
             <div class="row">
-               <div class="col-xs-5" id="divLabel">
+               <div class="col-xs-4" id="divLabel">
                   <label for="name">选择查看方式</label>
                </div>
-               <div class="col-xs-6">
-                  <select class="form-control">
+               <div class="col-xs-7">
+                  <select id="method" class="form-control">
                      <option>曲线图</option>
                      <option>柱状图</option>
                      <option>雷达图</option>
-                     <option>饼图</option>
-                     <option>环形图</option>
                   </select>
                </div>
             </div>
@@ -194,7 +303,9 @@
             </div>
          </div>
 	 <div class="col-xs-7" id="col9">
-	    <canvas id="myChart"></canvas>
+	    <canvas id="myLineChart"></canvas>
+            <canvas id="myBarChart"></canvas>
+            <canvas id="myRadarChart"></canvas>
 	 </div>
       </div>
    </div>
