@@ -73,7 +73,92 @@
 	 	  autoclose: true
 	       });
 	    }
-	 });
+         });
+         // 用户在选择日期这个动作结束时，才触发该方法----------------------------------
+	 function valuechange(element,callback) {
+	    var timer = 0,
+	    prevVal = $(element).val();
+	    timer = 0;
+	    if(timer){
+	       clearInterval(timer);
+	       timer = 0;
+	    }    
+	    timer = setInterval(function(){
+	       if(prevVal != $(element).val()) {
+		   if(prevVal == '') {
+		       prevVal = undefined;
+		   }
+		   callback(prevVal,$(element).val());
+		   prevVal = $(element).val();
+	       }
+	    },100);
+
+	    $(element).bind("propertychange input",function(e){
+	       if(prevVal != $(e.target).val()) {
+		   if(prevVal == '') {
+		       prevVal = undefined;
+		   }
+		   callback(prevVal,$(e.target).val());
+		   prevVal = $(e.target).val();
+	       }
+	    });
+	 }
+	 valuechange('#endingToMinute',function(prev,cur){
+	    var checkIndex=$("#period").get(0).selectedIndex;
+	    if (checkIndex === 0 && $("#startingToMinute").val().length != 0) {
+               if ($("#startingToMinute").val() > $("#endingToMinute").val()){
+		  alert("起始时间不能晚于终止时间");
+                  $("#endingToMinute").val("");
+               }
+	    }
+         });
+         valuechange('#endingToHour',function(prev,cur){
+            var checkIndex=$("#period").get(0).selectedIndex;
+            if (checkIndex === 1 && $("#startingToHour").val().length != 0) {
+               if ($("#startingToHour").val() > $("#endingToHour").val()){
+                  alert("起始时间不能晚于终止时间");
+                  $("#endingToHour").val("");
+               }
+            }
+         });
+	 valuechange('#endingToDate',function(prev,cur){
+            var checkIndex=$("#period").get(0).selectedIndex;
+            if (checkIndex === 2 && $("#startingToDate").val().length != 0) {
+               if ($("#startingToDate").val() > $("#endingToDate").val()){
+                  alert("起始时间不能晚于终止时间");
+                  $("#endingToDate").val("");
+               }
+            }
+         });
+
+         valuechange('#startingToMinute',function(prev,cur){
+            var checkIndex=$("#period").get(0).selectedIndex;
+            if (checkIndex === 0 && $("#endingToMinute").val().length != 0) {
+               if ($("#startingToMinute").val() > $("#endingToMinute").val()){
+                  alert("起始时间不能晚于终止时间");
+                  $("#startingToMinute").val("");
+               }
+            }
+         });
+         valuechange('#startingToHour',function(prev,cur){
+            var checkIndex=$("#period").get(0).selectedIndex;
+            if (checkIndex === 1 && $("#endingToHour").val().length != 0) {
+               if ($("#startingToHour").val() > $("#endingToHour").val()){
+                  alert("起始时间不能晚于终止时间");
+                  $("#startingToHour").val("");
+               }
+            }
+         });
+         valuechange('#startingToDate',function(prev,cur){
+            var checkIndex=$("#period").get(0).selectedIndex;
+            if (checkIndex === 2 && $("#endingToDate").val().length != 0) {
+               if ($("#startingToDate").val() > $("#endingToDate").val()){
+                  alert("起始时间不能晚于终止时间");
+                  $("#startingToDate").val("");
+               }
+            }
+         });
+         //----------------------------------------------------------------------------
       /*
       $.ajax({
             type: "GET",
@@ -214,7 +299,7 @@
                <!--按分钟-->
 	       <div class="col-xs-7 time0" style="display: inline">
                   <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
-                     <input class="form-control" size="16" type="text" value="" readonly>
+                     <input class="form-control" id="startingToMinute" size="16" type="text" value="" readonly>
                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                </div>  
@@ -228,20 +313,20 @@
 		     forceParse: 0,
 		     minuteStep: 1,
 		     startDate: "2015-10-20 12:00:02",
-		     endDate: "2016-04-25 10:00:00"
+		     endDate: "2016-05-25 10:00:00"
 		  });
                </script>
  	       <!--按时-->
                <div class="col-xs-7 time1" style="display: none">
 		  <div class="input-group date form_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
-		     <input class="form-control" size="16" type="text" value="" readonly>
+		     <input class="form-control" id="startingToHour" size="16" type="text" value="" readonly>
 		     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		  </div>
 	       </div>
                <!--按日-->
 	       <div class="span5 col-xs-7 time2" id="sandbox-container" style="display: none">
 		  <div class="input-group date">
-		    <input type="text" class="form-control">
+		    <input type="text" id="startingToDate" class="form-control">
 	            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 		  </div>
 	       </div>
@@ -253,11 +338,12 @@
                <!--按分钟-->
                <div class="col-xs-7 time0" style="display: inline">
                   <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
-                     <input class="form-control" size="16" type="text" value="" readonly>
+                     <input class="form-control" id="endingToMinute" size="16" type="text" value="" readonly>
                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                </div>
                <script>
+                  //var startingTimeEndDate = $("");
                   $('.form_datetime').datetimepicker({
                      weekStart: 0,
                      todayBtn:  1,
@@ -267,20 +353,20 @@
                      forceParse: 0,
                      minuteStep: 1,
                      startDate: "2015-10-20 12:00:02",
-                     endDate: "2016-04-25 10:00:00"
+                     endDate: "2016-05-25 10:00:00"
                   });
                </script>
                <!--按时-->
                <div class="col-xs-7 time1" style="display: none">
-                  <div class="input-group date form_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
-                     <input class="form-control" size="16" type="text" value="" readonly>
+                  <div class="input-group date form_date terminal_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
+                     <input class="form-control" id="endingToHour" size="16" type="text" value="" readonly>
                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                </div>
                <!--按日-->
-               <div class="span5 col-xs-7 time2" id="sandbox-container" style="display: none">
+               <div class="span5 col-xs-7 time2 terminal_date" id="sandbox-container" style="display: none">
                   <div class="input-group date">
-                    <input type="text" class="form-control">
+                    <input type="text" id="endingToDate" class="form-control">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                   </div>
                </div>
