@@ -14,7 +14,7 @@ import org.reports.dao.VHSConfigurationDao;
 public class GetCreatedDate {
 	@GET
 	@Path("{id}") // vm_id, host_id, storage domain id
-	public String getCreatedDate(@PathParam("id") UUID Id, @QueryParam("entity") String Entity) throws SQLException{
-		return VHSConfigurationDao.getInstance().queryVmOrHostOrStorageDomainCreatedDate(Id, Entity);
+	public String getCreatedDate(@PathParam("id") UUID Id, @QueryParam("entity") String Entity, @QueryParam("period") String period) throws SQLException{
+		return VHSConfigurationDao.getInstance().queryVmOrHostOrStorageDomainCreatedDate(Id, Entity, period);
 	}		
 }

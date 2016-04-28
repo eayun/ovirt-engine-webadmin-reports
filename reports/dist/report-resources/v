@@ -159,6 +159,17 @@
             }
          });
          //----------------------------------------------------------------------------
+      /*
+      $.ajax({
+            type: "GET",
+            url: "/ovirt_engine_webadmin_reports/VMREPORTS",
+            headers: {"Content-Type":"application/json"},
+            data: JSON.stringify(data),
+            success: function(data) {
+              alert(data);
+            }
+      });*/
+
 	 // 报表
 	 var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
 	 var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -221,7 +232,6 @@
 	       }
 	    }
          });
-         // 提交
       }
    </script>
    <style type="text/css">
@@ -262,7 +272,7 @@
                   <label for="name">选择查看对象</label>
                </div>
                <div class="col-xs-7">
-                  <select id="contentViewed" class="form-control">
+                  <select class="form-control">
                      <option>CPU</option>
                      <option>内存</option>
                      <option>磁盘空间</option>
@@ -375,55 +385,7 @@
             </div>
             <div class="row">
                <div class="col-xs-11">
-               	  <button id="sure" type="submit" class="btn btn-default" onclick="submitSure()">确定</button>
-		  <script>
-		  function submitSure(){
-		     var data = {};
-                     data["vm_id"] = window.location.href.split("#")[1];
-		     var contentViewed = $("#contentViewed").get(0).selectedIndex;
-		     var checkIndex = $("#period").get(0).selectedIndex;
-	             if (contentViewed === 0){
-		        data["contentViewed"] = "CPU";
-                     }
-                     else if (contentViewed === 1){
-                        data["contentViewed"] = "Memory";
-                     }
-                     else if (contentViewed === 2){
-                        data["contentViewed"] = "Network";
-		     }
-                     else {
-                        data["contentViewed"] = "Disks";
-		     }
-		     if(checkIndex === 0){
-		        data["period"] = "MINUTE";
-			data["startingTime"] = $("#startingToMinute").val();
-			data["terminalTime"] = $("#endingToMinute").val();
-		     }
-		     else if (checkIndex === 1){
-                        data["period"] = "HOUR";
-			data["startingTime"] = $("#startingToHour").val();
-			data["terminalTime"] = $("#endingToHour").val();
-		     }
-		     else{
-                        data["period"] = "DAY";
-			data["startingTime"] = $("#startingToDate").val();
-			data["terminalTime"] = $("#endingToDate").val();
-		     }
-		     alert(data["vm_id"]);
-                     alert(data["contentViewed"]);
-                     alert(data["period"]);
-	             alert(data["startingTime"]);
-		     alert(data["terminalTime"]);
-		     $.ajax({
-			type: "POST",
-			url: "/ovirt_engine_webadmin_reports/VMREPORTS",
-			headers: {"Content-Type":"application/json"},
-			data: JSON.stringify(data),
-			success: function(data) {
-			}
-		     });
-		  }
-		  </script>
+               	  <button id="sure" type="submit" class="btn btn-default">确定</button>
                </div>
             </div>
          </div>

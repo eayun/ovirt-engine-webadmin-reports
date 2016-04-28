@@ -24,8 +24,8 @@ public class VmDisksUsageHourlyHistoryDao extends BaseDao{
 		ResultSet rs = stmt.executeQuery("select disks_usage"
 				+ " from vm_disks_usage_hourly_history"
 				+ " where vm_id = '" + vm_id
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24') < '" + endHour
 				+ "' order by history_datetime asc;");
 		List<Map<String, Double>> lmsd = new ArrayList<Map<String, Double>>();
 		while (rs.next()) {

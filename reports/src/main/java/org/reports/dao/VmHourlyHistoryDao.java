@@ -24,8 +24,8 @@ public class VmHourlyHistoryDao extends BaseDao {
 	public List<VmHourlyHistory> queryCpuByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage from vm_hourly_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour + "' and vm_id = '" + vm_id
+				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24') < '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;
@@ -41,8 +41,8 @@ public class VmHourlyHistoryDao extends BaseDao {
 	public List<VmHourlyHistory> queryMemoryByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage from vm_hourly_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour + "' and vm_id = '" + vm_id
+				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24') < '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;

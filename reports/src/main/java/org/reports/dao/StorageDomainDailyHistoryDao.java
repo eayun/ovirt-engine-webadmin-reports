@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.reports.Backend;
-import org.reports.model.StorageDomainDailyHistory;
 
 public class StorageDomainDailyHistoryDao extends BaseDao {
 	private static StorageDomainDailyHistoryDao instance;

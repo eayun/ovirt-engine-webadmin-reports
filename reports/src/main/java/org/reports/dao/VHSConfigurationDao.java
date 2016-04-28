@@ -11,13 +11,24 @@ import org.reports.Backend;
 public class VHSConfigurationDao {
 	private static VHSConfigurationDao instance;
 	
-	public String queryVmOrHostOrStorageDomainCreatedDate(UUID id, String Entity) throws SQLException{
+	public String queryVmOrHostOrStorageDomainCreatedDate(UUID id, String Entity, String period) throws SQLException{
+		// id: vm_id host_id storage_domain_id
+		// Entity: vm host storage_domain
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select create_date from " + Entity + "_configuration where " + Entity + "_id = '"
 				+ id + "'group by create_date;");
 		String created_date = null;
 		while(rs.next()) {
-			created_date = new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate("create_date"));
+			System.out.println(period);
+			if (period.equals("MINUTE")) {
+			   created_date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(rs.getDate("create_date"));
+			}
+			else if (period.equals("HOUR")) {
+			   created_date = new SimpleDateFormat("yyyy-MM-dd HH").format(rs.getDate("create_date"));
+			}
+			else {
+			   created_date = new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate("create_date"));
+			}
 		}
 		
 		return created_date;
