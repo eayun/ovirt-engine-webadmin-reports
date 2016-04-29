@@ -3,7 +3,9 @@ package org.reports.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,6 +54,27 @@ public class HostHourlyHistoryDao extends BaseDao {
 		return lhhh;
 	}
 
+	public List<String> queryHostStartTimeAndEndTimeByHours(UUID host_id) throws SQLException{
+		Statement stmt0 = Backend.conn.createStatement();
+		Statement stmt1 = Backend.conn.createStatement();
+		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24') from host_hourly_history where host_id = '" + host_id
+				+ "' order by history_datetime asc limit 1;");
+		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24') from host_hourly_history where host_id = '" + host_id
+				+ "' order by history_datetime desc limit 1;");
+		List<String> Time = new ArrayList<String>();
+		Date start_time = null;
+		Date end_time = null;
+		while(startTime.next()){
+			start_time = startTime.getDate("history_datetime");
+			Time.add((new SimpleDateFormat("yyyy-MM-dd HH")).format(start_time));
+		}
+		while(endTime.next()){
+			end_time = endTime.getDate("history_datetime");
+			Time.add((new SimpleDateFormat("yyyy-MM-dd HH")).format(end_time));
+		}
+		return Time;
+	}
+	
 	public static HostHourlyHistoryDao getInstance() throws SQLException {
 		if (instance == null) {
 			instance = new HostHourlyHistoryDao();

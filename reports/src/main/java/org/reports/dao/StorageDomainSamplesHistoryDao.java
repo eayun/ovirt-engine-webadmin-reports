@@ -3,7 +3,9 @@ package org.reports.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +41,27 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 			lsdsh.add(usage);
 		}
 		return lsdsh;
+	}
+	
+	public List<String> queryStorageDomainStartTimeAndEndTimeByMinutes(UUID storage_domain_id) throws SQLException{
+		Statement stmt0 = Backend.conn.createStatement();
+		Statement stmt1 = Backend.conn.createStatement();
+		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI') from storage_domain_samples_history where storage_domain_id = '" + storage_domain_id
+				+ "' order by history_datetime asc limit 1;");
+		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI') from storage_domain_samples_history where storage_domain_id = '" + storage_domain_id
+				+ "' order by history_datetime desc limit 1;");
+		List<String> Time = new ArrayList<String>();
+		Date start_time = null;
+		Date end_time = null;
+		while(startTime.next()){
+			start_time = startTime.getDate("history_datetime");
+			Time.add((new SimpleDateFormat("yyyy-MM-dd HH:mm")).format(start_time));
+		}
+		while(endTime.next()){
+			end_time = endTime.getDate("history_datetime");
+			Time.add((new SimpleDateFormat("yyyy-MM-dd HH:mm")).format(end_time));
+		}
+		return Time;
 	}
 	
 	public static StorageDomainSamplesHistoryDao getInstance() throws SQLException {

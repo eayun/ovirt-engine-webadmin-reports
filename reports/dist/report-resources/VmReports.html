@@ -13,10 +13,6 @@
    <script src="resource/Chart.js"></script>
    <script type="text/javascript">
       window.onload=function(){
-	 var col_left = document.getElementById("col-left");
-	 var col9 = document.getElementById("col9");
-	 var cw = col9.clientWidth; // number
-	 var ch = col_left.clientHeight;
 	 var button = document.getElementById("sure");
 	 button.style.width = parseInt(col_left.clientWidth * 11 / 12 - 30) + "px";
 
@@ -85,11 +81,11 @@
 	    }    
 	    timer = setInterval(function(){
 	       if(prevVal != $(element).val()) {
-		   if(prevVal == '') {
-		       prevVal = undefined;
-		   }
-		   callback(prevVal,$(element).val());
-		   prevVal = $(element).val();
+		  if(prevVal == '') {
+		      prevVal = undefined;
+		  }
+		  callback(prevVal,$(element).val());
+		  prevVal = $(element).val();
 	       }
 	    },100);
 
@@ -158,71 +154,8 @@
                }
             }
          });
-         //----------------------------------------------------------------------------
-	 // 报表
-	 var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
-	 var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	 var data = {
-	    labels: week,
-	    datasets: [
-	       {   
-		  label: "My First dataset",
-		  fillColor: "rgba(220,220,220,0.2)",
-		  strokeColor: "rgba(220,220,220,1)",
-		  pointColor: "rgba(220,220,220,1)",
-		  pointStrokeColor: "#fff",
-		  pointHighlightFill: "#fff",
-		  pointHighlightStroke: "rgba(220,220,220,1)",
-		  data: [65, 59, 80, 81, 56, 55, 40]
-	       },
-	       {
-		  label: "My Second dataset",
-		  fillColor: "rgba(151,187,205,0.2)",
-		  strokeColor: "rgba(151,187,205,1)",
-		  pointColor: "rgba(151,187,205,1)",
-		  pointStrokeColor: "#fff",
-		  pointHighlightFill: "#fff",
-		  pointHighlightStroke: "rgba(151,187,205,1)",
-		  data: [28, 48, 40, 19, 86, 27, 90]
-	       }
-	    ]
-	 };
-	 data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
-	 data.datasets[1].data=[10,20,30,40,50,60,70]
-	 var canvas = document.getElementsByTagName("canvas");
-         var ctx = new Array();
-         var myChart = new Array();
-	 for (var i = 0; i < canvas.length; i ++){
-	    canvas[i].setAttribute('width', cw);
-	    canvas[i].setAttribute('height', ch);
-	    canvas[i].style.width = String(cw) + "px";
-	    canvas[i].style.height = String(ch) + "px";
-	    ctx[i] = canvas[i].getContext("2d");
-            if (i === 0){
-               myChart[i] = new Chart(ctx[i]).Line(data);
-            }
-            else if (i === 1){
-               myChart[i] = new Chart(ctx[i]).Bar(data);
-	       canvas[i].style.display = "none";
-	    }
-	    else{
-	       myChart[i] = new Chart(ctx[i]).Radar(data);
-               canvas[i].style.display = "none";
-            }
-	 }
-         $("#method").change(function(){
-	    var method_selected = $("#method").get(0).selectedIndex;
-	    for (var i = 0; i < canvas.length; i ++){
-	       if (method_selected === i){
- 	          canvas[i].style.display = "inline";
-	       }
-	       else {
-                  canvas[i].style.display = "none";
-	       }
-	    }
-         });
-         // 提交
       }
+          
    </script>
    <style type="text/css">
       body .container{
@@ -320,6 +253,32 @@
 	            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 		  </div>
 	       </div>
+               <script>
+                  $(".time0").change(function(){
+                     var data = {};
+                     data["vm_id"] = window.location.href.split("#")[1];
+                     var checkIndex = $("#period").get(0).selectedIndex;
+                     if(checkIndex === 0){
+			data["period"] = "MINUTE";
+		     }
+		     else if (checkIndex === 1){
+			data["period"] = "HOUR";
+		     }
+		     else{
+			data["period"] = "DAY";
+		     }
+
+		     $.ajax({
+			type: "POST",
+			url: "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME",
+			headers: {"Content-Type":"application/json"},
+			data: JSON.stringify(data),
+			success: function(data) {
+			   alert(data);
+			}
+                     })
+		  });
+	       </script>
             </div>
             <div class="row">
                <div class="col-xs-4" id="divLabel">
@@ -376,54 +335,6 @@
             <div class="row">
                <div class="col-xs-11">
                	  <button id="sure" type="submit" class="btn btn-default" onclick="submitSure()">确定</button>
-		  <script>
-		  function submitSure(){
-		     var data = {};
-                     data["vm_id"] = window.location.href.split("#")[1];
-		     var contentViewed = $("#contentViewed").get(0).selectedIndex;
-		     var checkIndex = $("#period").get(0).selectedIndex;
-	             if (contentViewed === 0){
-		        data["contentViewed"] = "CPU";
-                     }
-                     else if (contentViewed === 1){
-                        data["contentViewed"] = "Memory";
-                     }
-                     else if (contentViewed === 2){
-                        data["contentViewed"] = "Network";
-		     }
-                     else {
-                        data["contentViewed"] = "Disks";
-		     }
-		     if(checkIndex === 0){
-		        data["period"] = "MINUTE";
-			data["startingTime"] = $("#startingToMinute").val();
-			data["terminalTime"] = $("#endingToMinute").val();
-		     }
-		     else if (checkIndex === 1){
-                        data["period"] = "HOUR";
-			data["startingTime"] = $("#startingToHour").val();
-			data["terminalTime"] = $("#endingToHour").val();
-		     }
-		     else{
-                        data["period"] = "DAY";
-			data["startingTime"] = $("#startingToDate").val();
-			data["terminalTime"] = $("#endingToDate").val();
-		     }
-		     alert(data["vm_id"]);
-                     alert(data["contentViewed"]);
-                     alert(data["period"]);
-	             alert(data["startingTime"]);
-		     alert(data["terminalTime"]);
-		     $.ajax({
-			type: "POST",
-			url: "/ovirt_engine_webadmin_reports/VMREPORTS",
-			headers: {"Content-Type":"application/json"},
-			data: JSON.stringify(data),
-			success: function(data) {
-			}
-		     });
-		  }
-		  </script>
                </div>
             </div>
          </div>
@@ -434,5 +345,114 @@
 	 </div>
       </div>
    </div>
+   <script>
+      // 报表
+      var col_left = document.getElementById("col-left");
+      var col9 = document.getElementById("col9");
+      var cw = col9.clientWidth; // number
+      var ch = col_left.clientHeight;
+      var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
+      var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      var data = {
+	 labels: week,
+	 datasets: [
+	    {   
+	       label: "My First dataset",
+	       fillColor: "rgba(220,220,220,0.2)",
+	       strokeColor: "rgba(220,220,220,1)",
+	       pointColor: "rgba(220,220,220,1)",
+	       pointStrokeColor: "#fff",
+	       pointHighlightFill: "#fff",
+	       pointHighlightStroke: "rgba(220,220,220,1)",
+	       data: [65, 59, 80, 81, 56, 55, 40]
+	    },
+	    {
+	       label: "My Second dataset",
+	       fillColor: "rgba(151,187,205,0.2)",
+	       strokeColor: "rgba(151,187,205,1)",
+	       pointColor: "rgba(151,187,205,1)",
+	       pointStrokeColor: "#fff",
+	       pointHighlightFill: "#fff",
+	       pointHighlightStroke: "rgba(151,187,205,1)",
+	       data: [28, 48, 40, 19, 86, 27, 90]
+	    }
+	 ]
+      };
+      data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
+      data.datasets[1].data=[10,20,30,40,50,60,70]
+      var canvas = document.getElementsByTagName("canvas");
+      var ctx = new Array();
+      var myChart = new Array();
+      for (var i = 0; i < canvas.length; i ++){
+	 canvas[i].setAttribute('width', cw);
+	 canvas[i].setAttribute('height', ch);
+	 canvas[i].style.width = String(cw) + "px";
+	 canvas[i].style.height = String(ch) + "px";
+	 ctx[i] = canvas[i].getContext("2d");
+	 if (i === 0){
+	    myChart[i] = new Chart(ctx[i]).Line(data);
+	 }
+	 else if (i === 1){
+	    myChart[i] = new Chart(ctx[i]).Bar(data);
+	    canvas[i].style.display = "none";
+	 }
+	 else{
+	    myChart[i] = new Chart(ctx[i]).Radar(data);
+	    canvas[i].style.display = "none";
+	 }
+      }
+      
+      function submitSure(){
+	 var data = {};
+	 data["vm_id"] = window.location.href.split("#")[1];
+	 var contentViewed = $("#contentViewed").get(0).selectedIndex;
+	 var checkIndex = $("#period").get(0).selectedIndex;
+	 if (contentViewed === 0){
+	    data["contentViewed"] = "CPU";
+	 }
+	 else if (contentViewed === 1){
+	    data["contentViewed"] = "Memory";
+	 }
+	 else if (contentViewed === 2){
+	    data["contentViewed"] = "Network";
+	 }
+	 else {
+	    data["contentViewed"] = "Disks";
+	 }
+	 if(checkIndex === 0){
+	    data["period"] = "MINUTE";
+	    data["startingTime"] = $("#startingToMinute").val();
+	    data["terminalTime"] = $("#endingToMinute").val();
+	 }
+	 else if (checkIndex === 1){
+	    data["period"] = "HOUR";
+	    data["startingTime"] = $("#startingToHour").val();
+	    data["terminalTime"] = $("#endingToHour").val();
+	 }
+	 else{
+	    data["period"] = "DAY";
+	    data["startingTime"] = $("#startingToDate").val();
+	    data["terminalTime"] = $("#endingToDate").val();
+	 }
+	 var method_selected = $("#method").get(0).selectedIndex;
+	 for (var i = 0; i < canvas.length; i ++){
+	    if (method_selected === i){
+	       canvas[i].style.display = "inline";
+	    }
+	    else {
+	       canvas[i].style.display = "none";
+	    }
+	 }
+	 $.ajax({
+	    type: "POST",
+	    url: "/ovirt-engine-webadmin-reports/VMREPORTS",
+	    headers: {"Content-Type":"application/json"},
+	    data: JSON.stringify(data),
+	    success: function(data) {
+               alert(data + "------------");
+	    }
+	 });
+      }
+   </script>
 </body>
 </html>

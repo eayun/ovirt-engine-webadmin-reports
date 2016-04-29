@@ -573,3 +573,21 @@
         ~~~ bash
         curl -H "Accept: application/json" 192.168.9.56:8080/ovirt-engine-webadmin-reports/STORAGEDOMAINREPORTS/21f842a2-6c4a-4f12-a7cb-363b4b617265?contentViewed=Disks\&period=WEEK\&startingTime=2016-04-01\&terminalTime=2016-04-18
         ~~~
+  * GetCreatedTime
+    ~~~ bash
+    curl 192.168.9.56:8080/ovirt-engine-webadmin-reports/GETCREATEDDATE/fee05fe7-9964-4794-8ddf-e564b8c864d6?entity=host\&period=MINUTE
+    ~~~
+    ~~~ bash
+    2015-11-18 00:00
+    ~~~
+
+    ~~~ bash
+    curl 192.168.9.56:8080/ovirt-engine-webadmin-reports/GETCREATEDDATE/fee05fe7-9964-4794-8ddf-e564b8c864d6?entity=host\&period=HOUR
+    ~~~
+    ~~~ bash
+    2015-11-18 00
+    ~~~
+    
+    ~~~ bash
+    curl 192.168.9.56:8080/ovirt-enginports/GETCREATEDDATE/fee05fe7-9964-4794-8ddf-e564b8c864d6?entity=host\&period=DAY
+    ~~~
