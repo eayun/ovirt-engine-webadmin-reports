@@ -18,7 +18,6 @@ public class GetVmStartTimeAndEndTime {
 	@GET
 	@Path("{vm_id}") // vm_id, host_id, storage domain id
 	public List<String> getCreatedDate(@PathParam("vm_id") UUID vmId, @QueryParam("period") String period) throws SQLException{
-		System.out.println(period + "==================================");
 		if (period.equals("MINUTE")){
 			return VmSampleHistoryDao.getInstance().queryVmStartTimeAndEndTimeByMinutes(vmId);
 		}

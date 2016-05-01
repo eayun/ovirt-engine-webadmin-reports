@@ -70,6 +70,7 @@ public class VmReports {
 			List<List<VmInterfaceDailyHistory>> llvidh = new ArrayList<List<VmInterfaceDailyHistory>>();
  			if (period.equals("MINUTE")) {
  				interfaceIdsOfOneVm = VmInterfaceSamplesHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
+ 				System.out.println(interfaceIdsOfOneVm.size() + "-----------网卡个数------------");
 				for (int i = 0; i < interfaceIdsOfOneVm.size(); i ++) {
 					llvish.add(VmInterfaceSamplesHistoryDao.getInstance().queryNetworkRateByMinutes(startingTime, terminalTime, interfaceIdsOfOneVm.get(i)));
 				}
@@ -83,7 +84,7 @@ public class VmReports {
 				return llvihh;
 			}
 			else if (period.equals("DAY")) {
-				interfaceIdsOfOneVm = VmInterfaceHourlyHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
+				interfaceIdsOfOneVm = VmInterfaceDailyHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
 				for (int i = 0; i < interfaceIdsOfOneVm.size(); i ++) {
 					 llvidh.add(VmInterfaceDailyHistoryDao.getInstance().queryNetworkRateByDays(startingTime, terminalTime, interfaceIdsOfOneVm.get(i)));
 				}

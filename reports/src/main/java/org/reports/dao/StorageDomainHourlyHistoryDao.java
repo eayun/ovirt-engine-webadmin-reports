@@ -3,9 +3,7 @@ package org.reports.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,8 +20,8 @@ public class StorageDomainHourlyHistoryDao extends BaseDao {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select available_disk_size_gb, used_disk_size_gb from storage_domain_hourly_history"
 				+ " where storage_domain_id = '" + storage_domain_id
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI:SS') < '" + endHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
 				+ "' order by history_datetime asc;");
 		
 		List<Double> lsdhh = new ArrayList<Double>();
@@ -47,20 +45,20 @@ public class StorageDomainHourlyHistoryDao extends BaseDao {
 	public List<String> queryStorageDomainStartTimeAndEndTimeByHours(UUID storage_domain_id) throws SQLException{
 		Statement stmt0 = Backend.conn.createStatement();
 		Statement stmt1 = Backend.conn.createStatement();
-		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24') from storage_domain_hourly_history where storage_domain_id = '" + storage_domain_id
+		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00') from storage_domain_hourly_history where storage_domain_id = '" + storage_domain_id
 				+ "' order by history_datetime asc limit 1;");
-		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24') from storage_domain_hourly_history where storage_domain_id = '" + storage_domain_id
+		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00') from storage_domain_hourly_history where storage_domain_id = '" + storage_domain_id
 				+ "' order by history_datetime desc limit 1;");
 		List<String> Time = new ArrayList<String>();
-		Date start_time = null;
-		Date end_time = null;
+		String start_time = null;
+		String end_time = null;
 		while(startTime.next()){
-			start_time = startTime.getDate("history_datetime");
-			Time.add((new SimpleDateFormat("yyyy-MM-dd HH")).format(start_time));
+			start_time = startTime.getString("to_char");
+			Time.add(start_time);
 		}
 		while(endTime.next()){
-			end_time = endTime.getDate("history_datetime");
-			Time.add((new SimpleDateFormat("yyyy-MM-dd HH")).format(end_time));
+			end_time = endTime.getString("to_char");
+			Time.add(end_time);
 		}
 		return Time;
 	}

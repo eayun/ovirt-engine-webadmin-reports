@@ -3,9 +3,7 @@ package org.reports.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,15 +52,15 @@ public class StorageDomainDailyHistoryDao extends BaseDao {
 		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD') from storage_domain_daily_history where storage_domain_id = '" + storage_domain_id
 				+ "' order by history_datetime desc limit 1;");
 		List<String> Time = new ArrayList<String>();
-		Date start_time = null;
-		Date end_time = null;
+		String start_time = null;
+		String end_time = null;
 		while(startTime.next()){
-			start_time = startTime.getDate("history_datetime");
-			Time.add((new SimpleDateFormat("yyyy-MM-dd")).format(start_time));
+			start_time = startTime.getString("to_char");
+			Time.add(start_time);
 		}
 		while(endTime.next()){
-			end_time = endTime.getDate("history_datetime");
-			Time.add((new SimpleDateFormat("yyyy-MM-dd")).format(end_time));
+			end_time = endTime.getString("to_char");
+			Time.add(end_time);
 		}
 		return Time;
 	}

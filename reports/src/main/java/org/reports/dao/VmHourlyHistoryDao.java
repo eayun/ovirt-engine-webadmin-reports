@@ -3,9 +3,7 @@ package org.reports.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +24,8 @@ public class VmHourlyHistoryDao extends BaseDao {
 	public List<VmHourlyHistory> queryCpuByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage from vm_hourly_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24') < '" + endHour + "' and vm_id = '" + vm_id
+				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;
@@ -43,8 +41,8 @@ public class VmHourlyHistoryDao extends BaseDao {
 	public List<VmHourlyHistory> queryMemoryByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage from vm_hourly_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24') < '" + endHour + "' and vm_id = '" + vm_id
+				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;
@@ -60,20 +58,22 @@ public class VmHourlyHistoryDao extends BaseDao {
 	public List<String> queryVmStartTimeAndEndTimeByHours(UUID vm_id) throws SQLException{
 		Statement stmt0 = Backend.conn.createStatement();
 		Statement stmt1 = Backend.conn.createStatement();
-		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24') from vm_hourly_history where vm_id = '" + vm_id
+		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00') from vm_hourly_history where vm_id = '" + vm_id
 				+ "' order by history_datetime asc limit 1;");
-		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24') from vm_hourly_history where vm_id = '" + vm_id
+		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00') from vm_hourly_history where vm_id = '" + vm_id
 				+ "' order by history_datetime desc limit 1;");
 		List<String> Time = new ArrayList<String>();
-		Date start_time = null;
-		Date end_time = null;
+		String start_time = null;
+		String end_time = null;
 		while(startTime.next()){
-			start_time = startTime.getDate("history_datetime");
-			Time.add((new SimpleDateFormat("yyyy-MM-dd HH")).format(start_time));
+			start_time = startTime.getString("to_char");
+			System.out.println(start_time + "e--------c--------l---------i---------p--------s");
+			Time.add(start_time);
 		}
 		while(endTime.next()){
-			end_time = endTime.getDate("history_datetime");
-			Time.add((new SimpleDateFormat("yyyy-MM-dd HH")).format(end_time));
+			end_time = endTime.getString("to_char");
+			System.out.println(end_time + "e--------c--------l---------i---------p--------s===========");
+			Time.add(end_time);
 		}
 		return Time;
 	}

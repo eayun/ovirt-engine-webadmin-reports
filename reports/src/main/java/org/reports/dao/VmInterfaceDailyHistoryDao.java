@@ -59,6 +59,7 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 			vidh.setMax_transmit_rate_percent(rs.getInt("max_transmit_rate_percent"));
 			vidh.setVm_interface_name(getVmInterfaceNameByVmInterfaceId(vm_interface_id));
 			lvidh.add(vidh);
+			System.out.println("-------------------- queryNetworkRateByDays 方法");
 		}
 		return lvidh;
 	}
