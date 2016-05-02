@@ -1,10 +1,18 @@
 package org.reports.model;
 
 public class VmSampleHistory {
-	
+	private String history_datetime;
 	private int cpu_usage_percent;
 	private int memory_usage_percent;
+	
+	public String getHistory_datetime() {
+		return history_datetime;
+	}
 
+	public void setHistory_datetime(String history_datetime) {
+		this.history_datetime = history_datetime;
+	}
+	
 	public int getCpu_usage_percent() {
 		return cpu_usage_percent;
 	}

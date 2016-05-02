@@ -1,9 +1,18 @@
 package org.reports.model;
 
 public class StorageDomainDailyHistory {
+	private String history_datetime;
 	private int available_disk_size_gb;
 	private int used_disk_size_gb;
 
+	public String getHistory_datetime() {
+		return history_datetime;
+	}
+
+	public void setHistory_datetime(String history_datetime) {
+		this.history_datetime = history_datetime;
+	}
+	
 	public int getAvailable_disk_size_gb() {
 		return available_disk_size_gb;
 	}

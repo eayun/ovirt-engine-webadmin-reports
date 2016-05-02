@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.reports.Backend;
@@ -16,19 +18,22 @@ public class StorageDomainHourlyHistoryDao extends BaseDao {
 //		super(conn);
 //	}
 	
-	public List<Double> queryStorageDomainByHours(String startHour, String endHour, UUID storage_domain_id) throws Exception {
+	public List<Map<String, Double>> queryStorageDomainByHours(String startHour, String endHour, UUID storage_domain_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select available_disk_size_gb, used_disk_size_gb from storage_domain_hourly_history"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), available_disk_size_gb, used_disk_size_gb from storage_domain_hourly_history"
 				+ " where storage_domain_id = '" + storage_domain_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
 				+ "' order by history_datetime asc;");
 		
-		List<Double> lsdhh = new ArrayList<Double>();
+		List<Map<String, Double>> lmsd = new ArrayList<Map<String, Double>>();
+		Map<String, Double> map = new LinkedHashMap<String, Double>();
+		String history_datetime = null;
 		int available_disk_size_gb = 0;
 		int used_disk_size_gb = 0;
 		double usage = 0.0;
 		while (rs.next()) {
+			history_datetime = rs.getString("to_char");
 			available_disk_size_gb = rs.getInt("available_disk_size_gb");
 			used_disk_size_gb = rs.getInt("used_disk_size_gb");
 			usage = 0.0;
@@ -37,9 +42,10 @@ public class StorageDomainHourlyHistoryDao extends BaseDao {
 			}else {
 				usage = ( used_disk_size_gb + 0.0 ) / ( used_disk_size_gb + available_disk_size_gb + 0.0);
 			}
-			lsdhh.add(usage);
+			map.put(history_datetime, usage);
+			lmsd.add(map);
 		}
-		return lsdhh;
+		return lmsd;
 	}
 	
 	public List<String> queryStorageDomainStartTimeAndEndTimeByHours(UUID storage_domain_id) throws SQLException{

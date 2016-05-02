@@ -23,7 +23,7 @@ public class VmSampleHistoryDao extends BaseDao {
 	// hourOfDay 格式是这样的 '2016-04-09 17:'，有年月日，具体的小时数，字符串。
 	public List<VmSampleHistory> queryCpuByMinutes(String startMinute, String endMinute, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select cpu_usage_percent from vm_samples_history where vm_id = '" + vm_id
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), cpu_usage_percent from vm_samples_history where vm_id = '" + vm_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
 				+ "' order by history_datetime asc;");
@@ -31,6 +31,7 @@ public class VmSampleHistoryDao extends BaseDao {
 		VmSampleHistory vsh = null;
 		while (rs.next()) {
 			vsh = new VmSampleHistory();
+			vsh.setHistory_datetime(rs.getString("to_char"));
 			vsh.setCpu_usage_percent(rs.getInt("cpu_usage_percent"));
 			lv.add(vsh);
 		}
@@ -39,7 +40,7 @@ public class VmSampleHistoryDao extends BaseDao {
 
 	public List<VmSampleHistory> queryMemoryByMinutes(String startMinute, String endMinute, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select memory_usage_percent from vm_samples_history where vm_id = '" + vm_id
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), memory_usage_percent from vm_samples_history where vm_id = '" + vm_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
 				+ "' order by history_datetime asc;");
@@ -47,6 +48,7 @@ public class VmSampleHistoryDao extends BaseDao {
 		VmSampleHistory vsh = null;
 		while (rs.next()) {
 			vsh = new VmSampleHistory();
+			vsh.setHistory_datetime(rs.getString("to_char"));
 			vsh.setMemory_usage_percent(rs.getInt("memory_usage_percent"));
 			lv.add(vsh);
 		}

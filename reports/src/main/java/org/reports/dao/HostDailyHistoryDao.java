@@ -19,7 +19,7 @@ public class HostDailyHistoryDao extends BaseDao {
 	
 	public List<HostDailyHistory> queryCpuByDays(String startDate, String endDate, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), cpu_usage_percent, max_cpu_usage"
 				+ " from host_daily_history where host_id = '" + host_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
@@ -28,6 +28,7 @@ public class HostDailyHistoryDao extends BaseDao {
 		HostDailyHistory hdh = null;
 		while (rs.next()) {
 			hdh = new HostDailyHistory();
+			hdh.setHistory_datetime(rs.getString("to_char"));
 			hdh.setCpu_usage_percent(rs.getInt("cpu_usage_percent"));
 			hdh.setMax_cpu_usage(rs.getInt("max_cpu_usage"));
 			lhdh.add(hdh);
@@ -38,7 +39,7 @@ public class HostDailyHistoryDao extends BaseDao {
 	// 获取虚拟机一周，一月，一个季度，一年的 Memory 使用率的数据
 	public List<HostDailyHistory> queryMemoryByDays(String startDate, String endDate, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), memory_usage_percent, max_memory_usage"
 				+ " from host_daily_history where host_id = '" + host_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
@@ -47,6 +48,7 @@ public class HostDailyHistoryDao extends BaseDao {
 		HostDailyHistory hdh = null;
 		while (rs.next()) {
 			hdh = new HostDailyHistory();
+			hdh.setHistory_datetime(rs.getString("to_char"));
 			hdh.setMemory_usage_percent(rs.getInt("memory_usage_percent"));
 			hdh.setMax_memory_usage(rs.getInt("max_memory_usage"));
 			lhdh.add(hdh);

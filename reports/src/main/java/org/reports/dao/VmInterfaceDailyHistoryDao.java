@@ -40,7 +40,7 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 			throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery(
-				"select receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
+				"select to_char(history_datetime, 'YYYY-MM-DD'), receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
 						+ " from vm_interface_daily_history"
 						+ " where vm_interface_id = '" + vm_interface_id
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
@@ -53,13 +53,13 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 
 		while (rs.next()) {
 			vidh = new VmInterfaceDailyHistory();
+			vidh.setHistory_datetime(rs.getString("to_char"));
 			vidh.setReceive_rate_percent(rs.getInt("receive_rate_percent"));
 			vidh.setMax_receive_rate_percent(rs.getInt("max_receive_rate_percent"));
 			vidh.setTransmit_rate_percent(rs.getInt("transmit_rate_percent"));
 			vidh.setMax_transmit_rate_percent(rs.getInt("max_transmit_rate_percent"));
 			vidh.setVm_interface_name(getVmInterfaceNameByVmInterfaceId(vm_interface_id));
 			lvidh.add(vidh);
-			System.out.println("-------------------- queryNetworkRateByDays 方法");
 		}
 		return lvidh;
 	}

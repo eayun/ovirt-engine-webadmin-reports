@@ -9,7 +9,7 @@ public class HostInterfaceConfiguration {
 	private Date create_date;
 	private Date update_date;
 	private Date delete_date;
-	
+
 	public UUID getVm_interface_id() {
 		return vm_interface_id;
 	}

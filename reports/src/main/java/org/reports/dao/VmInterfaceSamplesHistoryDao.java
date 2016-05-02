@@ -42,7 +42,7 @@ public class VmInterfaceSamplesHistoryDao extends BaseDao{
 			throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = null;
-		rs = stmt.executeQuery("select receive_rate_percent, transmit_rate_percent"
+		rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), receive_rate_percent, transmit_rate_percent"
 				+ " from vm_interface_samples_history"
 				+ " where vm_interface_id = '" + vm_interface_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
@@ -52,6 +52,7 @@ public class VmInterfaceSamplesHistoryDao extends BaseDao{
 		VmInterfaceSamplesHistory vish = null;
 		while (rs.next()) {
 			vish = new VmInterfaceSamplesHistory();
+			vish.setHistory_datetime(rs.getString("to_char"));
 			vish.setReceive_rate_percent(rs.getInt("receive_rate_percent"));
 			vish.setTransmit_rate_percent(rs.getInt("transmit_rate_percent"));
 			vish.setVm_interface_name(getVmInterfaceNameByVmInterfaceId(vm_interface_id)); //把接口的名字也传给该对象

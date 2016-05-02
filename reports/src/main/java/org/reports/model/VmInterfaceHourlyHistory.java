@@ -1,12 +1,21 @@
 package org.reports.model;
 
 public class VmInterfaceHourlyHistory {
+	private String history_datetime;
 	private String vm_interface_name;
 	private int receive_rate_percent;
 	private int max_receive_rate_percent;
 	private int transmit_rate_percent;
 	private int max_transmit_rate_percent;
 
+	public String getHistory_datetime() {
+		return history_datetime;
+	}
+
+	public void setHistory_datetime(String history_datetime) {
+		this.history_datetime = history_datetime;
+	}
+	
 	public String getVm_interface_name() {
 		return vm_interface_name;
 	}

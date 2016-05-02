@@ -1,9 +1,18 @@
 package org.reports.model;
 
 public class HostInterfaceSamplesHistory {
+	private String history_datetime;
 	private String host_interface_name;
 	private int receive_rate_percent;
 	private int transmit_rate_percent;
+	
+	public String getHistory_datetime() {
+		return history_datetime;
+	}
+
+	public void setHistory_datetime(String history_datetime) {
+		this.history_datetime = history_datetime;
+	}
 	
 	public String getHost_interface_name() {
 		return host_interface_name;

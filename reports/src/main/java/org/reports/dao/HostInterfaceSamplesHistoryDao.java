@@ -39,7 +39,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 			throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt
-				.executeQuery("select receive_rate_percent, transmit_rate_percent from host_interface_samples_history"
+				.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), receive_rate_percent, transmit_rate_percent from host_interface_samples_history"
 						+ " where host_interface_id = '" + host_interface_id
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
@@ -48,6 +48,7 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 		HostInterfaceSamplesHistory hish = null;
 		while (rs.next()) {
 			hish = new HostInterfaceSamplesHistory();
+			hish.setHistory_datetime(rs.getString("to_char"));
 			hish.setReceive_rate_percent(rs.getInt("receive_rate_percent"));
 			hish.setTransmit_rate_percent(rs.getInt("transmit_rate_percent"));
 			hish.setHost_interface_name(getHostInterfaceNameByHostInterfaceId(host_interface_id));

@@ -1,6 +1,7 @@
 package org.reports.model;
 
 public class HostHourlyHistory {
+	private String history_datetime;
 	private int memory_usage_percent;
 	private int max_memory_usage;
 	private int cpu_usage_percent;
@@ -8,6 +9,14 @@ public class HostHourlyHistory {
 	private int ksm_cpu_percent;
 	private int max_ksm_cpu_percent;
 
+	public String getHistory_datetime() {
+		return history_datetime;
+	}
+
+	public void setHistory_datetime(String history_datetime) {
+		this.history_datetime = history_datetime;
+	} 
+	
 	public int getMemory_usage_percent() {
 		return memory_usage_percent;
 	}

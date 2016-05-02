@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,8 +23,7 @@ public class BaseDao {
     
 	// disks_usage ：[{"path":"/","total":"51605344256","used":"3711524864","fs	":"ext4"}]
 	// 计算虚拟机磁盘使用率
-	public Map<String, Double> countDiskUsage(String disks_usage_from_db){
-		Map<String, Double> disks_usage = new HashMap<String, Double>();
+	public Map<String, Double> countDiskUsage(Map<String, Double> disks_usage_map, String disks_usage_from_db){
 		List<String> pathName = new ArrayList<String>();
 		List<Double> total = new ArrayList<Double>();
 		List<Double> used = new ArrayList<Double>();
@@ -51,9 +49,9 @@ public class BaseDao {
 			}else {
 				usage_percent = (used.get(i) / total.get(i)) * 100;
 			}
-			disks_usage.put(pathName.get(i), usage_percent);
+			disks_usage_map.put(pathName.get(i), usage_percent);
 		}
-		return disks_usage;
+		return disks_usage_map;
 	}
 	
 	// 通过虚拟机的 id 获取虚拟机的 name

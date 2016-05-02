@@ -19,7 +19,7 @@ public class HostHourlyHistoryDao extends BaseDao {
 	// 主机在一天的某几个小时内的 cpu & memory 的数据。
 	public List<HostHourlyHistory> queryCpuByHours(String startHour, String endHour, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage from host_hourly_history"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), cpu_usage_percent, max_cpu_usage from host_hourly_history"
 				+ " where host_id = '" + host_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
@@ -28,6 +28,7 @@ public class HostHourlyHistoryDao extends BaseDao {
 		HostHourlyHistory hhh = null;
 		while (rs.next()) {
 			hhh = new HostHourlyHistory();
+			hhh.setHistory_datetime(rs.getString("to_char"));
 			hhh.setCpu_usage_percent(rs.getInt("cpu_usage_percent"));
 			hhh.setMax_cpu_usage(rs.getInt("max_cpu_usage"));
 			lhhh.add(hhh);
@@ -37,15 +38,16 @@ public class HostHourlyHistoryDao extends BaseDao {
 
 	public List<HostHourlyHistory> queryMemoryByHours(String startHour, String endHour, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery(
-				"select memory_usage_percent, max_memory_usage" + " from host_hourly_history where host_id = '" + host_id
-						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
-						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
-						+ "' order by history_datetime asc;");
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), memory_usage_percent, max_memory_usage from host_hourly_history"
+				+ " where host_id = '" + host_id
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
+				+ "' order by history_datetime asc;");
 		List<HostHourlyHistory> lhhh = new ArrayList<HostHourlyHistory>();
 		HostHourlyHistory hhh = null;
 		while (rs.next()) {
 			hhh = new HostHourlyHistory();
+			hhh.setHistory_datetime(rs.getString("to_char"));
 			hhh.setMemory_usage_percent(rs.getInt("memory_usage_percent"));
 			hhh.setMax_memory_usage(rs.getInt("max_memory_usage"));
 			lhhh.add(hhh);

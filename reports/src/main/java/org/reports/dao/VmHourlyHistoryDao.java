@@ -23,7 +23,7 @@ public class VmHourlyHistoryDao extends BaseDao {
 	// 24:00:00+08"
 	public List<VmHourlyHistory> queryCpuByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select cpu_usage_percent, max_cpu_usage from vm_hourly_history"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), cpu_usage_percent, max_cpu_usage from vm_hourly_history"
 				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
@@ -31,6 +31,7 @@ public class VmHourlyHistoryDao extends BaseDao {
 		VmHourlyHistory vhh = null;
 		while (rs.next()) {
 			vhh = new VmHourlyHistory();
+			vhh.setHistory_datetime(rs.getString("to_char"));
 			vhh.setCpu_usage_percent(rs.getInt("cpu_usage_percent"));
 			vhh.setMax_cpu_usage(rs.getInt("max_cpu_usage"));
 			lvhh.add(vhh);
@@ -40,7 +41,7 @@ public class VmHourlyHistoryDao extends BaseDao {
 	
 	public List<VmHourlyHistory> queryMemoryByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select memory_usage_percent, max_memory_usage from vm_hourly_history"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), memory_usage_percent, max_memory_usage from vm_hourly_history"
 				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour + "' and vm_id = '" + vm_id
 				+ "' order by history_datetime asc;");
@@ -48,6 +49,7 @@ public class VmHourlyHistoryDao extends BaseDao {
 		VmHourlyHistory vhh = null;
 		while (rs.next()) {
 			vhh = new VmHourlyHistory();
+			vhh.setHistory_datetime(rs.getString("to_char"));
 			vhh.setMemory_usage_percent(rs.getInt("memory_usage_percent"));
 			vhh.setMax_memory_usage(rs.getInt("max_memory_usage"));
 			lvhh.add(vhh);
