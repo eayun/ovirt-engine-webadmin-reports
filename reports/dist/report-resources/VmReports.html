@@ -20,6 +20,8 @@
 
          <!--每当日期变化时，会调用如下函数-->
 	 $("#period").change(function(){
+            var data = {};
+            data["vm_id"] = window.location.href.split("#")[1];
 	    var checkIndex=$("#period").get(0).selectedIndex;
             for (var i = 0; i < 3; i ++){
 	       if (checkIndex == i){
@@ -36,11 +38,13 @@
 		  autoclose: 1,
 		  todayHighlight: 1,
 		  startView: 4,
+                  minView: 0,
 		  forceParse: 0,
-		  minuteStep: 1,
-		  startDate: "2015-10-20 12:00:02",
-		  endDate: "2016-04-25 10:00:00"
+		  minuteStep: 1
+		  //startDate: "2015-10-20 12:00:02",
+		  //endDate: "2016-04-25 10:00:00"
 	       });
+               data["period"] = "MINUTE";
 	    }
             if(checkIndex === 1){
                $('.form_date').datetimepicker({
@@ -51,25 +55,49 @@
 		  startView: 4,
 		  minView: 1,
 		  forceParse: 0,
-		  minuteStep: 1,
-		  startDate: "2015-10-20 12",
-		  endDate: "2016-04-25 10"
+		  minuteStep: 1
+		  //startDate: "2015-10-20 12",
+		  //endDate: "2016-04-25 10"
                });
+               data["period"] = "HOUR";
             }
 	    if(checkIndex === 2){
 	       $('#sandbox-container .input-group.date').datepicker({
 		  format: "yyyy-mm-dd",
 		  weekStart: 0,
-		  startDate: "2015-10-20",
-		  endDate: "2016-04-25",
+		  //startDate: "2015-10-20",
+		  //endDate: "2016-04-25",
 		  startView: 2,
 		  minViewMode: 0,
 		  todayBtn: "linked",
 		  orientation: "auto",
 	 	  autoclose: true
 	       });
+               data["period"] = "DAY";
 	    }
+            var url = "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME/" + data["vm_id"] + "?period=" + data["period"];
+	    $.ajax({
+	       type: "GET",
+	       url: url,
+	       headers: {"Content-Type":"application/json"},
+	       success: function(data) {
+		  var time = data.split("'");
+		  if(checkIndex === 0){
+		     $('.form_datetime').datetimepicker('setStartDate', time[1]);
+		     $('.form_datetime').datetimepicker('setEndDate', time[3]);
+		  }
+		  else if(checkIndex === 1){
+		     $('.form_date').datetimepicker('setStartDate', time[1]);
+		     $('.form_date').datetimepicker('setEndDate', time[3]);
+		  }  
+		  else{
+		     $('#sandbox-container .input-group.date').datepicker('setStartDate', time[1]);
+		     $('#sandbox-container .input-group.date').datepicker('setEndDate', time[3]);
+		  } 
+	       }
+	    })
          });
+
          // 用户在选择日期这个动作结束时，才触发该方法----------------------------------
 	 function valuechange(element,callback) {
 	    var timer = 0,
@@ -180,7 +208,7 @@
       }
       .container {
 	 padding-top: 0px;
-	 padding-left: 16px;
+	 padding-left: 2px;
          margin-left: 0px;
          margin-right: 0px;
       }
@@ -189,25 +217,67 @@
 <body>
    <div class="container">
       <div class="row">
-         <div class="col-xs-3" id="col-left">
+         <div class="col-xs-2" id="col-left">
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">选择查看对象</label>
+                  <label for="name">查看对象</label>
                </div>
-               <div class="col-xs-7">
+               <div class="col-xs-8">
                   <select id="contentViewed" class="form-control">
-                     <option>CPU</option>
-                     <option>内存</option>
-                     <option>磁盘空间</option>
-                     <option>网络</option>
                   </select>
                </div>
+               <script>
+	          $(document).ready(function(){
+		     var data = {};
+		     data["vm_id"] = window.location.href.split("#")[1];
+		     var url = "/ovirt-engine-webadmin-reports/IFVMINTERFACEANDDISKEXIST/" + data["vm_id"];
+                     $.ajax({
+		        type: "GET",
+			url: url,
+			headers: {"Content-Type":"application/json"},
+                        success: function(data) {
+		           if(data == 0){
+		              $("#contentViewed").html("<option>CPU</option><option>内存</option>");
+			   }
+		           else if(data == 1){
+			      $("#contentViewed").html("<option>CPU</option><option>内存</option><option>磁盘空间</option");
+			   }
+		           else if(data == 2){
+			      $("#contentViewed").html("<option>CPU</option><option>内存</option><option>网络</option>");
+			   }
+			   else{
+			      $("#contentViewed").html("<option>CPU</option><option>内存</option><option>磁盘空间</option><option>网络</option>");
+			   }
+			}
+		     })	     
+		     var url = "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME/" + data["vm_id"] + "?period=MINUTE"
+		     $('.form_datetime').datetimepicker({
+			weekStart: 0,
+			todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 4,
+			forceParse: 0,
+			minuteStep: 1,
+		     });
+		     $.ajax({
+			type: "GET",
+			url: url,
+			headers: {"Content-Type":"application/json"},
+			success: function(data) {
+			   var time = data.split("'");
+			   $('.form_datetime').datetimepicker('setStartDate', time[1]);
+			   $('.form_datetime').datetimepicker('setEndDate', time[3]);
+			}
+		     })
+		  });
+	       </script>
             </div>
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">选择日期范围</label>
+                  <label for="name">日期范围</label>
                </div>
-               <div class="col-xs-7">
+               <div class="col-xs-8">
                   <select id="period" class="form-control">
                      <option>按分</option>
                      <option>按时</option>
@@ -220,100 +290,47 @@
                   <label for="name">起始时间</label>
                </div>
                <!--按分钟-->
-	       <div class="col-xs-7 time0" style="display: inline">
+	       <div class="col-xs-8 time0" style="display: inline">
                   <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
                      <input class="form-control" id="startingToMinute" size="16" type="text" value="" readonly>
-                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                     <span class="input-group-addon startTimeSpan"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                </div>  
-               <script>
-		  $('.form_datetime').datetimepicker({
-		     weekStart: 0,
-		     todayBtn:  1,
-		     autoclose: 1,
-		     todayHighlight: 1,
-		     startView: 4,
-		     forceParse: 0,
-		     minuteStep: 1,
-		     startDate: "2015-10-20 12:00:02",
-		     endDate: "2016-05-25 10:00:00"
-		  });
-               </script>
  	       <!--按时-->
-               <div class="col-xs-7 time1" style="display: none">
-		  <div class="input-group date form_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
+               <div class="col-xs-8 time1" style="display: none">
+		  <div class="input-group date form_date" data-date="1979-09-16T05:00" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
 		     <input class="form-control" id="startingToHour" size="16" type="text" value="" readonly>
-		     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+		     <span class="input-group-addon startTimeSpan"><span class="glyphicon glyphicon-th"></span></span>
 		  </div>
 	       </div>
                <!--按日-->
-	       <div class="span5 col-xs-7 time2" id="sandbox-container" style="display: none">
+	       <div class="span5 col-xs-8 time2" id="sandbox-container" style="display: none">
 		  <div class="input-group date">
 		    <input type="text" id="startingToDate" class="form-control">
-	            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+	            <span class="input-group-addon startTimeSpan"><i class="glyphicon glyphicon-th"></i></span>
 		  </div>
 	       </div>
-               <script>
-                  $(".time0").change(function(){
-                     var data = {};
-                     data["vm_id"] = window.location.href.split("#")[1];
-                     var checkIndex = $("#period").get(0).selectedIndex;
-                     if(checkIndex === 0){
-			data["period"] = "MINUTE";
-		     }
-		     else if (checkIndex === 1){
-			data["period"] = "HOUR";
-		     }
-		     else{
-			data["period"] = "DAY";
-		     }
-
-		     $.ajax({
-			type: "POST",
-			url: "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME",
-			headers: {"Content-Type":"application/json"},
-			data: JSON.stringify(data),
-			success: function(data) {
-			   alert(data);
-			}
-                     })
-		  });
-	       </script>
             </div>
             <div class="row">
                <div class="col-xs-4" id="divLabel">
                   <label for="name">终止时间</label>
 	       </div>
                <!--按分钟-->
-               <div class="col-xs-7 time0" style="display: inline">
+               <div class="col-xs-8 time0" style="display: inline">
                   <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
                      <input class="form-control" id="endingToMinute" size="16" type="text" value="" readonly>
                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                </div>
-               <script>
-                  //var startingTimeEndDate = $("");
-                  $('.form_datetime').datetimepicker({
-                     weekStart: 0,
-                     todayBtn:  1,
-                     autoclose: 1,
-                     todayHighlight: 1,
-                     startView: 4,
-                     forceParse: 0,
-                     minuteStep: 1,
-                     startDate: "2015-10-20 12:00:02",
-                     endDate: "2016-05-25 10:00:00"
-                  });
-               </script>
                <!--按时-->
-               <div class="col-xs-7 time1" style="display: none">
-                  <div class="input-group date form_date terminal_date" data-date="1979-09-16T05" data-date-format="yyyy-mm-dd hh" data-link-field="dtp_input1">
+               <div class="col-xs-8 time1" style="display: none">
+                  <div class="input-group date form_date terminal_date" data-date="1979-09-16T05:00" data-date-format="yyyy-mm-dd hh:00" data-link-field="dtp_input1">
                      <input class="form-control" id="endingToHour" size="16" type="text" value="" readonly>
                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                </div>
                <!--按日-->
-               <div class="span5 col-xs-7 time2 terminal_date" id="sandbox-container" style="display: none">
+               <div class="span5 col-xs-8 time2 terminal_date" id="sandbox-container" style="display: none">
                   <div class="input-group date">
                     <input type="text" id="endingToDate" class="form-control">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
@@ -322,9 +339,9 @@
             </div>
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">选择查看方式</label>
+                  <label for="name">查看方式</label>
                </div>
-               <div class="col-xs-7">
+               <div class="col-xs-8">
                   <select id="method" class="form-control">
                      <option>曲线图</option>
                      <option>柱状图</option>
@@ -338,7 +355,7 @@
                </div>
             </div>
          </div>
-	 <div class="col-xs-7" id="col9">
+	 <div class="col-xs-10" id="col9">
 	    <canvas id="myLineChart"></canvas>
             <canvas id="myBarChart"></canvas>
             <canvas id="myRadarChart"></canvas>
@@ -353,7 +370,7 @@
       var ch = col_left.clientHeight;
       var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
       var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      var data = {
+      var Data = {
 	 labels: week,
 	 datasets: [
 	    {   
@@ -378,30 +395,12 @@
 	    }
 	 ]
       };
-      data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
-      data.datasets[1].data=[10,20,30,40,50,60,70]
+      //Data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
+      //Data.datasets[1].data=[10,20,30,40,50,60,70]
       var canvas = document.getElementsByTagName("canvas");
       var ctx = new Array();
       var myChart = new Array();
-      for (var i = 0; i < canvas.length; i ++){
-	 canvas[i].setAttribute('width', cw);
-	 canvas[i].setAttribute('height', ch);
-	 canvas[i].style.width = String(cw) + "px";
-	 canvas[i].style.height = String(ch) + "px";
-	 ctx[i] = canvas[i].getContext("2d");
-	 if (i === 0){
-	    myChart[i] = new Chart(ctx[i]).Line(data);
-	 }
-	 else if (i === 1){
-	    myChart[i] = new Chart(ctx[i]).Bar(data);
-	    canvas[i].style.display = "none";
-	 }
-	 else{
-	    myChart[i] = new Chart(ctx[i]).Radar(data);
-	    canvas[i].style.display = "none";
-	 }
-      }
-      
+            
       function submitSure(){
 	 var data = {};
 	 data["vm_id"] = window.location.href.split("#")[1];
@@ -414,10 +413,10 @@
 	    data["contentViewed"] = "Memory";
 	 }
 	 else if (contentViewed === 2){
-	    data["contentViewed"] = "Network";
+	    data["contentViewed"] = "Disks";
 	 }
 	 else {
-	    data["contentViewed"] = "Disks";
+	    data["contentViewed"] = "Network";
 	 }
 	 if(checkIndex === 0){
 	    data["period"] = "MINUTE";
@@ -435,21 +434,146 @@
 	    data["terminalTime"] = $("#endingToDate").val();
 	 }
 	 var method_selected = $("#method").get(0).selectedIndex;
-	 for (var i = 0; i < canvas.length; i ++){
-	    if (method_selected === i){
-	       canvas[i].style.display = "inline";
-	    }
-	    else {
-	       canvas[i].style.display = "none";
-	    }
-	 }
+         var url = "/ovirt-engine-webadmin-reports/VMREPORTS/" + data["vm_id"] + "?contentViewed=" + data["contentViewed"] + "&period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
 	 $.ajax({
-	    type: "POST",
-	    url: "/ovirt-engine-webadmin-reports/VMREPORTS",
-	    headers: {"Content-Type":"application/json"},
-	    data: JSON.stringify(data),
-	    success: function(data) {
-               alert(data + "------------");
+	    type: "GET",
+	    url: url,
+	    headers: {"Accept":"application/json"},
+	    success: function(result) {
+               var v0 = new Array();
+               var v1 = new Array();
+               var v_date = new Array();
+               if(checkIndex === 0){
+                  var hour = result[0].history_datetime.split(' ')[1].split(':')[0];
+               }
+               else if(checkIndex === 1){
+                  var day = result[0].history_datetime.split(' ')[0].split('-')[2];
+               }
+               else{
+                  var month = result[0].history_datetime.split('-')[1];
+               }
+	       for (var i = 0; i < result.length; i ++){
+		  if (contentViewed === 0){
+		     v0[i] = result[i].cpu_usage_percent;
+                     Data.datasets[0].label = 'cpu_usage_percent';
+                     if(result[i].max_cpu_usage != undefined){
+                        v1[i] = result[i].max_cpu_usage;
+                        Data.datasets[1].label = 'max_cpu_usage';
+                     }
+                     if (checkIndex === 0){
+                        var h = result[i].history_datetime.split(' ')[1].split(':')[0];
+                        if (i == 0 || hour != h){
+			   v_date[i] = result[i].history_datetime;
+                           hour = h;
+			}
+                        else{
+                           v_date[i] = "";
+			}
+                     }
+                     else if (checkIndex === 1){
+			var d = result[i].history_datetime.split(' ')[0].split('-')[2];
+                        if (i == 0 || day != d){
+                           v_date[i] = result[i].history_datetime;
+                           day = d;
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+		     }
+                     else{
+                        var m = result[i].history_datetime.split('-')[1];
+                        if (i == 0 || month != m){
+                           v_date[i] = result[i].history_datetime;
+                           month = m;
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+		     }
+                  }
+		  else if(contentViewed === 1){
+		     v0[i] = result[i].memory_usage_percent;
+                     Data.datasets[1].label = 'max_memory_usage';
+                     if(result[i].max_cpu_usage != undefined){
+			v1[i] = result[i].max_memory_usage;
+			Data.datasets[0].label = 'memory_usage_percent';
+                     }
+                     if (checkIndex === 0){
+                        var h = result[i].history_datetime.split(' ')[1].split(':')[0];
+                        if (i == 0 || hour != h){
+                           v_date[i] = result[i].history_datetime;
+                           hour = h;
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+                     }
+                     else if (checkIndex === 1){
+                        var d = result[i].history_datetime.split(' ')[0].split('-')[2];
+                        if (i == 0 || day != d){
+                           v_date[i] = result[i].history_datetime;
+                           day = d;
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+                     }
+                     else{
+                        var m = result[i].history_datetime.split('-')[1];
+                        if (i == 0 || month != m){
+                           v_date[i] = result[i].history_datetime;
+                           month = m;
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+                     }
+	          }
+                  else if(contentViewed === 2){
+                     alert(Object.keys(result));
+                  }
+                  else{
+		     alert(Data.datasets[0].data);
+                  }
+               }
+               Data.datasets[0].data = v0;
+               Data.datasets[1].data = v1;
+               Data.labels = v_date;
+ 
+               for (var i = 0; i < canvas.length; i ++){
+		  canvas[i].setAttribute('width', cw);
+		  canvas[i].setAttribute('height', ch);
+		  canvas[i].style.width = String(cw) + "px";
+		  canvas[i].style.height = String(ch) + "px";
+		  ctx[i] = canvas[i].getContext("2d");
+		  if (i === 0){
+		     myChart[i] = new Chart(ctx[i]).Line(Data);
+                     if (method_selected === 0){
+                        canvas[i].style.display = "inline";
+                     }
+                     else{
+                        canvas[i].style.display = "none";
+                     }
+		  }
+		  else if (i === 1){
+		     myChart[i] = new Chart(ctx[i]).Bar(Data);
+                     if (method_selected === 1){
+                        canvas[i].style.display = "inline";
+                     }
+                     else{
+                        canvas[i].style.display = "none";
+                     }
+		  }
+		  else{
+		     myChart[i] = new Chart(ctx[i]).Radar(Data);
+                     if (method_selected === 2){
+                        canvas[i].style.display = "inline";
+                     }
+                     else{
+                        canvas[i].style.display = "none";
+                     }
+                  }
+               }
 	    }
 	 });
       }
