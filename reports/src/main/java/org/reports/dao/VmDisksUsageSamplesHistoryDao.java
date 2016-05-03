@@ -27,10 +27,11 @@ public class VmDisksUsageSamplesHistoryDao extends BaseDao{
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
 				+ "' order by history_datetime asc;");
 		List<Map<String, Double>> lmsd = new ArrayList<Map<String, Double>>();
-		Map<String, Double> disks_usage_map = new LinkedHashMap<String, Double>();
+		Map<String, Double> disks_usage_map = null;
 		String history_datetime = null;
 		String disks_usage = null;
 		while (rs.next()) {
+			disks_usage_map = new LinkedHashMap<String, Double>();
 			history_datetime = rs.getString("to_char");
 			disks_usage = rs.getString("disks_usage");
 			disks_usage_map.put(history_datetime, 0.0);

@@ -1,6 +1,7 @@
 package org.reports;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -17,7 +18,7 @@ public class StorageDomainReports {
 	@GET
 	@Path("{storage_domain_id}")
 	// 最后用 List 接收所有的 List
-	public List<Double> getListOnHostInfo(@PathParam("storage_domain_id") UUID storageDomainId,
+	public List<Map<String, Double>> getListOnHostInfo(@PathParam("storage_domain_id") UUID storageDomainId,
 			@QueryParam("contentViewed") String contentViewed, @QueryParam("period") String period,
 			@QueryParam("startingTime") String startingTime, @QueryParam("terminalTime") String terminalTime)
 			throws Exception {
