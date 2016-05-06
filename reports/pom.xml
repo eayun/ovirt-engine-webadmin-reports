@@ -51,6 +51,11 @@
 	  <version>3.6.3.0</version>
     </dependency>
     <dependency>
+	  <groupId>commons-collections</groupId>
+	  <artifactId>commons-collections</artifactId>
+	  <version>3.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.jboss.spec.javax.ejb</groupId>
       <artifactId>jboss-ejb-api_3.1_spec</artifactId>
       <version>1.0.1.Final</version>

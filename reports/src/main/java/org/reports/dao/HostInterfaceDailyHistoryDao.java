@@ -37,7 +37,7 @@ public class HostInterfaceDailyHistoryDao extends BaseDao {
 	public List<HostInterfaceDailyHistory> queryNetworkRateByDays(String startDate, String endDate, UUID host_interface_id)
 			throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD') receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
 				+ " from host_interface_daily_history where host_interface_id = '" + host_interface_id
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
