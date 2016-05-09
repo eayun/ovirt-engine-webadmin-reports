@@ -10,12 +10,14 @@
    <script src="resource/bootstrap-datepicker/bootstrap-datepicker.js"></script>
    <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
    <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
-   <script src="resource/Chart.js"></script>
+   <script src="resource/Chart.js/Chart.js"></script>
+   <script src="resource/color.js"></script>
    <script type="text/javascript">
       window.onload=function(){
 	 var button = document.getElementById("sure");
-	 button.style.width = parseInt(col_left.clientWidth * 11 / 12 - 30) + "px";
-
+         $("body").width = document.body.scrollWidth;
+         var padding = $(".container").css('padding-right').split('p')[0];
+         $(".container").css("width", document.body.scrollWidth - padding);
          $(".container").css("height", $(window).height());
 
          <!--每当日期变化时，会调用如下函数-->
@@ -83,16 +85,33 @@
 	       success: function(data) {
 		  var time = data.split("'");
 		  if(checkIndex === 0){
-		     $('.form_datetime').datetimepicker('setStartDate', time[1]);
-		     $('.form_datetime').datetimepicker('setEndDate', time[3]);
+                     if (time.length == 1){
+                        $('.form_datetime').datetimepicker('setStartDate', '2016-01-01');
+                        $('.form_datetime').datetimepicker('setEndDate', '2015-01-01');
+                     }
+                     else {
+			$('.form_datetime').datetimepicker('setStartDate', time[1]);
+			$('.form_datetime').datetimepicker('setEndDate', time[3]);
+                     }
 		  }
 		  else if(checkIndex === 1){
+                     if (time.length == 1){
+                        $('.form_date').datetimepicker('setStartDate', '2016-01-01');
+                        $('.form_date').datetimepicker('setEndDate', '2015-01-01');
+                     }
 		     $('.form_date').datetimepicker('setStartDate', time[1]);
 		     $('.form_date').datetimepicker('setEndDate', time[3]);
 		  }  
 		  else{
-		     $('#sandbox-container .input-group.date').datepicker('setStartDate', time[1]);
-		     $('#sandbox-container .input-group.date').datepicker('setEndDate', time[3]);
+                     if (time.length == 1){
+                        $('#sandbox-container .input-group.date').datepicker('setStartDate', '2016-01-01');
+                        $('#sandbox-container .input-group.date').datepicker('setEndDate', '2015-01-01');
+
+                     }
+                     else {
+			$('#sandbox-container .input-group.date').datepicker('setStartDate', time[1]);
+			$('#sandbox-container .input-group.date').datepicker('setEndDate', time[3]);
+                     }
 		  } 
 	       }
 	    })
@@ -183,7 +202,6 @@
             }
          });
       }
-          
    </script>
    <style type="text/css">
       body .container{
@@ -196,28 +214,27 @@
       }
       label {
          color: #898989;
-      }
-      .btn {
-         margin-top: 7px;
-         float: right;
-         color: #898989;
+         text-align: center;
       }
       .row {
          margin-top: 2px;
-         margin-bottom: 8px;
       }
       .container {
 	 padding-top: 0px;
-	 padding-left: 2px;
+	 padding-left: 0px;
          margin-left: 0px;
          margin-right: 0px;
+      }
+      .col-xs-8 {
+         padding-right: 0px;
+         padding-left: 0px;
       }
    </style>
 </head>
 <body>
    <div class="container">
       <div class="row">
-         <div class="col-xs-2" id="col-left">
+         <div class="col-xs-2">
             <div class="row">
                <div class="col-xs-4" id="divLabel">
                   <label for="name">查看对象</label>
@@ -250,7 +267,7 @@
 			   }
 			}
 		     })	     
-		     var url = "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME/" + data["vm_id"] + "?period=MINUTE"
+		     /*var url = "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME/" + data["vm_id"] + "?period=MINUTE"
 		     $('.form_datetime').datetimepicker({
 			weekStart: 0,
 			todayBtn:  1,
@@ -269,10 +286,12 @@
 			   $('.form_datetime').datetimepicker('setStartDate', time[1]);
 			   $('.form_datetime').datetimepicker('setEndDate', time[3]);
 			}
-		     })
+		     })*/
 		  });
 	       </script>
             </div>
+         </div>
+	 <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
                   <label for="name">日期范围</label>
@@ -285,6 +304,8 @@
                   </select>
                </div>
             </div>
+         </div>
+         <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
                   <label for="name">起始时间</label>
@@ -311,6 +332,8 @@
 		  </div>
 	       </div>
             </div>
+         </div>
+         <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
                   <label for="name">终止时间</label>
@@ -337,25 +360,32 @@
                   </div>
                </div>
             </div>
+         </div>
+         <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
                   <label for="name">查看方式</label>
                </div>
                <div class="col-xs-8">
                   <select id="method" class="form-control">
+                     <option>--请选择显示方式--</option>
                      <option>曲线图</option>
                      <option>柱状图</option>
                      <option>雷达图</option>
                   </select>
                </div>
             </div>
+         </div>  
+	 <div class="col-xs-1">
             <div class="row">
-               <div class="col-xs-11">
-               	  <button id="sure" type="submit" class="btn btn-default" onclick="submitSure()">确定</button>
-               </div>
+	       <div class="col-xs-12">
+		  <button id="sure" type="submit" class="btn btn-default" onclick="submitSure()">确定</button>
+	       </div>
             </div>
-         </div>
-	 <div class="col-xs-10" id="col9">
+	 </div>
+      </div>
+      <div class="row">   
+	 <div class="col-xs-12" id="col9">
 	    <canvas id="myLineChart"></canvas>
             <canvas id="myBarChart"></canvas>
             <canvas id="myRadarChart"></canvas>
@@ -363,43 +393,75 @@
       </div>
    </div>
    <script>
+      // 在选择查看方式之前，前四个选择框内不可为空。
+      $('#method').click(function(){
+         var contentViewed = $("#contentViewed").get(0).selectedIndex;
+         var checkIndex = $("#period").get(0).selectedIndex;
+         var data = {};
+         data["vm_id"] = window.location.href.split("#")[1];
+         if (checkIndex === 0){
+            if ($("#startingToMinute").val().length === 0 || $("#endingToMinute").val().length === 0){
+               $('#method').get(0).selectedIndex = 0;
+               alert("请选择起始时间和终止时间！");
+            }
+            else {
+               data["period"] = "MINUTE";
+	       data["startingTime"] = $("#startingToMinute").val();
+	       data["terminalTime"] = $("#endingToMinute").val();
+            }
+         }
+         else if (checkIndex === 1){
+            if ($("#startingToHour").val().length === 0 || $("#endingToHour").val().length === 0){
+               alert("请选择起始时间和终止时间！");
+            }
+            else {
+	       data["period"] = "HOUR";
+	       data["startingTime"] = $("#startingToHour").val();
+	       data["terminalTime"] = $("#endingToHour").val();
+            }
+         }
+         else{
+            if ($("#startingToDate").val().length === 0 || $("#endingToDate").val().length === 0){
+               alert("请选择起始时间和终止时间！");
+            }
+            else {
+	       data["period"] = "DAY";
+	       data["startingTime"] = $("#startingToDate").val();
+	       data["terminalTime"] = $("#endingToDate").val();
+            }
+         }
+         if (contentViewed === 3){
+            var url = "/ovirt-engine-webadmin-reports/GETNUMOFVMINTERFACEINONEPERIOD/" + data["vm_id"] + "?period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
+            var networkCanvas = document.getElementsByClassName('networkCanvas');
+            if (networkCanvas.length != 0){
+               $('.networkCanvas').remove();
+            }
+            $.ajax({
+               type: "GET",
+               url: url,
+               headers: {"Content-Type":"application/json"},
+               success: function(data) {
+                  for (var i = 0; i < data; i ++){
+		     $("#col9").append("<canvas id='myLineChart" + i + "' class='networkCanvas'></canvas>");
+		     $("#col9").append("<canvas id='myBarChart" + i + "' class='networkCanvas'></canvas>");
+		     $("#col9").append("<canvas id='myRadarChart" + i + "' class='networkCanvas'></canvas>");
+                  }
+               }
+            });
+         }
+      });
+      window.onresize = function(){
+         ch = $(window).height();
+         $("body").width = document.body.scrollWidth;
+         var padding = $(".container").css('padding-right').split('p')[0];
+         $(".container").css("width", document.body.scrollWidth - padding);
+      }
       // 报表
-      var col_left = document.getElementById("col-left");
-      var col9 = document.getElementById("col9");
       var cw = col9.clientWidth; // number
-      var ch = col_left.clientHeight;
-      var week = ["Sun", "", "Mon", "", "Tues", "", "Wed", "", "Thu", "", "Fri", "", "Sat"];
-      var year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      var Data = {
-	 labels: week,
-	 datasets: [
-	    {   
-	       label: "My First dataset",
-	       fillColor: "rgba(220,220,220,0.2)",
-	       strokeColor: "rgba(220,220,220,1)",
-	       pointColor: "rgba(220,220,220,1)",
-	       pointStrokeColor: "#fff",
-	       pointHighlightFill: "#fff",
-	       pointHighlightStroke: "rgba(220,220,220,1)",
-	       data: [65, 59, 80, 81, 56, 55, 40]
-	    },
-	    {
-	       label: "My Second dataset",
-	       fillColor: "rgba(151,187,205,0.2)",
-	       strokeColor: "rgba(151,187,205,1)",
-	       pointColor: "rgba(151,187,205,1)",
-	       pointStrokeColor: "#fff",
-	       pointHighlightFill: "#fff",
-	       pointHighlightStroke: "rgba(151,187,205,1)",
-	       data: [28, 48, 40, 19, 86, 27, 90]
-	    }
-	 ]
-      };
-      //Data.datasets[0].data=[10,90,20,80,30,70,40,60,50,50,60,40,70,30]
-      //Data.datasets[1].data=[10,20,30,40,50,60,70]
+      var ch = $(window).height();
       var canvas = document.getElementsByTagName("canvas");
-      var ctx = new Array();
-      var myChart = new Array();
+      var ctx = null;
+      var myChart = new Array(3);
             
       function submitSure(){
 	 var data = {};
@@ -434,31 +496,102 @@
 	    data["terminalTime"] = $("#endingToDate").val();
 	 }
 	 var method_selected = $("#method").get(0).selectedIndex;
+         if (method_selected === 0){
+            alert("请选择查看方式！");
+         }
          var url = "/ovirt-engine-webadmin-reports/VMREPORTS/" + data["vm_id"] + "?contentViewed=" + data["contentViewed"] + "&period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
 	 $.ajax({
 	    type: "GET",
 	    url: url,
 	    headers: {"Accept":"application/json"},
 	    success: function(result) {
-               var v0 = new Array();
-               var v1 = new Array();
+               for (var k = 0; k < DATA.datasets.length; k ++){
+                  DATA.datasets[k].label = null;
+                  DATA.datasets[k].data = null;
+               }
+               // 需要多少条线
+               // 如果是 cpu 或 mem 的话，最多 2 个
+               if (contentViewed === 0) {
+                  var cv0 = new Array();
+                  if(result[0].max_cpu_usage != undefined){
+                     var cv1 = new Array();
+		  }
+               }
+               else if (contentViewed === 1) {
+                  var mv0 = new Array();
+                  if(result[0].max_memory_usage != undefined){
+                     var mv1 = new Array();
+                  }
+               }
+               // disk 的话，就是 max - 1 个
+               else if (contentViewed === 2) {
+                  var dv = new Array();
+                  var numOfVer = Object.keys(result[0]).length - 1;
+                  for (var i = 0; i < numOfVer; i ++){
+                     dv[i] = new Array();
+                  }
+	       }
+               // network 共有 result.length * 2 个。
+               else {
+                  var nv = new Array();
+                  for (var i = 0; i < result.length; i ++){
+                     nv[i] = new Array(2);
+                     for (var j = 0; j < 2; j ++){
+                        nv[i][j] = new Array(result[i].length);
+                     }
+                  }
+               }
+               // 获取用户选择的初始时间，目的是作为横坐标的第一个标示点。
                var v_date = new Array();
                if(checkIndex === 0){
-                  var hour = result[0].history_datetime.split(' ')[1].split(':')[0];
+                  if (contentViewed === 3){
+                     var hour = new Array();
+                     for (var i = 0; i < result.length; i ++) {
+                        hour[i] = result[i][0].history_datetime.split(' ')[1].split(':')[0];
+                     }
+                  }
+                  else if (contentViewed === 2){
+		     var hour = Object.keys(result[0])[0].split(' ')[1].split(':')[0];
+                  }
+                  else {
+                     var hour = result[0].history_datetime.split(' ')[1].split(':')[0];
+                  }
                }
                else if(checkIndex === 1){
-                  var day = result[0].history_datetime.split(' ')[0].split('-')[2];
+                  if (contentViewed === 3){
+                     var day = new Array();
+                     for (var i = 0; i < result.length; i ++) {
+                        day[i] = result[i][0].history_datetime.split(' ')[0].split('-')[2];
+                     }
+                  }
+                  else if (contentViewed === 2) {
+                     var day = Object.keys(result[0])[0].split(' ')[0].split('-')[2];
+                  }
+                  else {
+                     var day = result[0].history_datetime.split(' ')[0].split('-')[2];
+                  }
                }
                else{
-                  var month = result[0].history_datetime.split('-')[1];
+                  if (contentViewed === 3){
+                     var month = new Array();
+                     for (var i = 0; i < result.length; i ++) {
+                        month[i] = result[i][0].history_datetime.split('-')[1];   
+                     }
+                  }
+                  else if (contentViewed === 2) {
+                     var month = Object.keys(result[0])[0].split('-')[1];
+                  }
+                  else {
+                     var month = result[0].history_datetime.split('-')[1];
+                  }
                }
-	       for (var i = 0; i < result.length; i ++){
+               for (var i = 0; i < result.length; i ++){
 		  if (contentViewed === 0){
-		     v0[i] = result[i].cpu_usage_percent;
-                     Data.datasets[0].label = 'cpu_usage_percent';
+		     cv0[i] = result[i].cpu_usage_percent;
+                     DATA.datasets[0].label = 'cpu_usage_percent';
                      if(result[i].max_cpu_usage != undefined){
-                        v1[i] = result[i].max_cpu_usage;
-                        Data.datasets[1].label = 'max_cpu_usage';
+                        cv1[i] = result[i].max_cpu_usage;
+                        DATA.datasets[1].label = 'max_cpu_usage';
                      }
                      if (checkIndex === 0){
                         var h = result[i].history_datetime.split(' ')[1].split(':')[0];
@@ -491,12 +624,12 @@
                         }
 		     }
                   }
-		  else if(contentViewed === 1){
-		     v0[i] = result[i].memory_usage_percent;
-                     Data.datasets[1].label = 'max_memory_usage';
+		  else if (contentViewed === 1){
+		     mv0[i] = result[i].memory_usage_percent;
+                     DATA.datasets[0].label = 'memory_usage_percent';
                      if(result[i].max_cpu_usage != undefined){
-			v1[i] = result[i].max_memory_usage;
-			Data.datasets[0].label = 'memory_usage_percent';
+			mv1[i] = result[i].max_memory_usage;
+			DATA.datasets[1].label = 'max_memory_usage';
                      }
                      if (checkIndex === 0){
                         var h = result[i].history_datetime.split(' ')[1].split(':')[0];
@@ -530,52 +663,200 @@
                      }
 	          }
                   else if(contentViewed === 2){
-                     alert(Object.keys(result));
+                     for(var j = 0; j < numOfVer; j ++){
+                        // 由于每个map中的第一个是日期，真正的使用率是从1开始的
+                        var key_path = Object.keys(result[i])[j + 1];
+                        var key_path_obj = Object.getOwnPropertyDescriptor(result[i], key_path);
+                        dv[j][i] = key_path_obj.value;
+                        DATA.datasets[j].label = key_path;
+                     }
+		     if (checkIndex === 0){
+			var h = Object.keys(result[i])[0].split(' ')[1].split(':')[0];
+			if (i == 0 || hour != h){
+			   v_date[i] = Object.keys(result[i])[0];
+			   hour = h;
+			}
+			else{
+			   v_date[i] = "";
+			}
+		     }
+		     else if (checkIndex === 1){
+			var d = Object.keys(result[i])[0].split(' ')[0].split('-')[2];
+			if (i == 0 || day != d){
+			   v_date[i] = Object.keys(result[i])[0];
+			   day = d;
+			}
+			else{
+			   v_date[i] = "";
+			}
+		     }
+		     else{
+			var m = Object.keys(result[i])[0].split('-')[1];
+			if (i == 0 || month != m){
+			   v_date[i] = Object.keys(result[i])[0];
+			   month = m;
+			}
+			else{
+			   v_date[i] = "";
+			}
+		     }
                   }
-                  else{
-		     alert(Data.datasets[0].data);
+                  else {
+		     for (var j = 0; j < 2; j ++){
+			for (var k = 0; k < result[i].length; k ++){
+			   if (j == 0){
+			      nv[i][j][k] = result[i][k].receive_rate_percent > result[i][k].transmit_rate_percent ? result[i][k].receive_rate_percent : result[i][k].transmit_rate_percent;
+			   }
+			   else {
+			      nv[i][j][k] = result[i][k].max_receive_rate_percent > result[i][k].max_transmit_rate_percent ? result[i][k].max_receive_rate_percent : result[i][k].max_transmit_rate_percent;
+			   }
+			}
+		     } 
+                     if (checkIndex === 0){
+                        v_date[i] = new Array();
+                        for (var k = 0; k < result[i].length; k ++) {
+			   var h = result[i][k].history_datetime.split(' ')[1].split(':')[0];
+			   if (k == 0 || hour[i] != h){
+			      v_date[i][k] = result[i][k].history_datetime;
+			      hour[i] = h;
+			   }
+			   else{
+			      v_date[i][k] = "";
+			   }
+                        }
+                     }
+                     else if (checkIndex === 1){
+                        v_date[i] = new Array();
+                        for (var k = 0; k < result[i].length; k ++){
+			   var d = result[i][k].history_datetime.split(' ')[0].split('-')[2];
+			   if (k == 0 || day[i] != d){
+			      v_date[i][k] = result[i][k].history_datetime;
+			      day[i] = d;
+			   }
+			   else{
+			      v_date[i][k] = "";
+                           }
+                        }
+                     }
+                     else{
+                        v_date[i] = new Array();
+                        for (var k = 0; k < result[i].length; k ++){
+			   var m = result[i][k].history_datetime.split('-')[1];
+			   if (k == 0 || month[i] != m){
+			      v_date[i][k] = result[i][k].history_datetime;
+			      month[i] = m;
+			   }
+			   else{
+			      v_date[i][k] = "";
+			   }
+			}
+                     }
                   }
                }
-               Data.datasets[0].data = v0;
-               Data.datasets[1].data = v1;
-               Data.labels = v_date;
- 
-               for (var i = 0; i < canvas.length; i ++){
-		  canvas[i].setAttribute('width', cw);
-		  canvas[i].setAttribute('height', ch);
-		  canvas[i].style.width = String(cw) + "px";
-		  canvas[i].style.height = String(ch) + "px";
-		  ctx[i] = canvas[i].getContext("2d");
-		  if (i === 0){
-		     myChart[i] = new Chart(ctx[i]).Line(Data);
-                     if (method_selected === 0){
-                        canvas[i].style.display = "inline";
-                     }
-                     else{
-                        canvas[i].style.display = "none";
-                     }
-		  }
-		  else if (i === 1){
-		     myChart[i] = new Chart(ctx[i]).Bar(Data);
-                     if (method_selected === 1){
-                        canvas[i].style.display = "inline";
-                     }
-                     else{
-                        canvas[i].style.display = "none";
-                     }
-		  }
-		  else{
-		     myChart[i] = new Chart(ctx[i]).Radar(Data);
-                     if (method_selected === 2){
-                        canvas[i].style.display = "inline";
-                     }
-                     else{
-                        canvas[i].style.display = "none";
-                     }
+               // 给需要画的所有线赋予 data 值和 labels (横坐标)值
+               if (contentViewed === 0){
+		  DATA.datasets[0].data = cv0;
+                  if (cv1 != null){
+		     DATA.datasets[1].data = cv1;
                   }
                }
-	    }
-	 });
+	       else if (contentViewed === 1){
+                  DATA.datasets[0].data = mv0;
+                  if (mv1 != null){
+                     DATA.datasets[1].data = mv1;                  
+                  }
+               }
+               else if (contentViewed === 2){
+                  for (var i = 0; i < numOfVer; i ++){
+                     DATA.datasets[i].data = dv[i];
+                  } 
+               }
+               else{
+                  var DATA_COPY = new Array();
+                  for (var i = 0; i < result.length; i ++){
+                     DATA_COPY[i] = $.extend(true, {}, DATA); 
+                     for (var j = 0; j < 2; j ++){
+                        if (j == 0){
+			   DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_rate_percent";
+                        }
+                        else {
+			   DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_max_rate_percent";
+                        }
+                        DATA_COPY[i].datasets[j].data = nv[i][j];
+                     }
+                  }               
+               }
+               var canvas = document.getElementsByTagName('canvas');
+               var flag = 0;
+               for (var i = 0 ; i < canvas.length; i ++){
+                  canvas[i].style.display = "none";
+               }
+               if ($(".networkCanvas").size() != 0){
+                  var canvas = document.getElementsByClassName("networkCanvas");
+                  var numOfCanvasViewed = canvas.length / 3; // 其实就是网卡的数量
+                  for (var i = 0; i < numOfCanvasViewed; i ++){
+		     DATA_COPY[i].labels = v_date[i];
+                  }
+                  for (var i = 0; i < canvas.length; i ++){
+                     if(myChart[i] != null){                                                     
+                        myChart[i].destroy();                                                    
+                     }                                                                           
+                     canvas[i].setAttribute('width', cw);                                     
+                     canvas[i].setAttribute('height', ch);                                       
+                     canvas[i].style.width = String(cw) + "px";                                  
+                     canvas[i].style.height = String(ch) + "px";                                 
+                     canvas[i].style.display = "none";
+                     // 3 是个数：曲线图，柱形图，雷达图；so, 0:曲线图 ,1:柱状图 ,2: 雷达图.也是固定的
+		     if (method_selected == 1 && i % 3 == 0){                                                
+			ctx = canvas[i].getContext("2d");           
+			myChart[i] = new Chart(ctx).Line(DATA_COPY[flag]);                                                       
+			canvas[i].style.display = "inline";                                                           
+                        flag ++;
+		     }                                                                                                
+		     else if (method_selected == 2 && i % 3 == 1){                                                    
+			ctx = canvas[i].getContext("2d");                                                             
+			myChart[i] = new Chart(ctx).Bar(DATA_COPY[flag]);                                                        
+			canvas[i].style.display = "inline";                                                           
+                        flag ++;
+		     }                                                                                                
+		     else if (method_selected == 3 && i % 3 == 2){                                                    
+			ctx = canvas[i].getContext("2d");                                                             
+			myChart[i] = new Chart(ctx).Radar(DATA_COPY[flag]);                                                       
+			canvas[i].style.display = "inline";                                              
+                        flag ++;
+		     }                         
+                  }
+               }
+               else{
+                  DATA.labels = v_date;
+		  for (var i = 0; i < canvas.length; i ++){
+		     if(myChart[i] != null){
+			myChart[i].destroy();
+		     }
+		     canvas[i].setAttribute('width', cw);
+		     canvas[i].setAttribute('height', ch);
+		     canvas[i].style.width = String(cw) + "px";
+		     canvas[i].style.height = String(ch) + "px";
+		     canvas[i].style.display = "none";
+		     if (method_selected == 1 && i + 1 == 1){
+			ctx = canvas[i].getContext("2d");
+			myChart[i] = new Chart(ctx).Line(DATA);
+			canvas[i].style.display = "inline";
+		     }
+		     else if (method_selected == 2 && i + 1 == 2){
+			ctx = canvas[i].getContext("2d");
+			myChart[i] = new Chart(ctx).Bar(DATA);
+			canvas[i].style.display = "inline";
+		     }
+		     else if (method_selected == 3 && i + 1 == 3){
+			ctx = canvas[i].getContext("2d");      
+			myChart[i] = new Chart(ctx).Radar(DATA)
+			canvas[i].style.display = "inline";
+		     }
+                  }
+               }
+            }
+         });
       }
    </script>
 </body>

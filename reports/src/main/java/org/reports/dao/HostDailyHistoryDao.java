@@ -59,9 +59,9 @@ public class HostDailyHistoryDao extends BaseDao {
 	public List<String> queryHostStartTimeAndEndTimeByDays(UUID host_id) throws SQLException{
 		Statement stmt0 = Backend.conn.createStatement();
 		Statement stmt1 = Backend.conn.createStatement();
-		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD') from vm_daily_history where host_id = '" + host_id
+		ResultSet startTime = stmt0.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD') from host_daily_history where host_id = '" + host_id
 				+ "' order by history_datetime asc limit 1;");
-		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD') from vm_daily_history where host_id = '" + host_id
+		ResultSet endTime = stmt1.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD') from host_daily_history where host_id = '" + host_id
 				+ "' order by history_datetime desc limit 1;");
 		List<String> Time = new ArrayList<String>();
 		String start_time = null;
