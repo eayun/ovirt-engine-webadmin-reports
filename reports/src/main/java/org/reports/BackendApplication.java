@@ -24,5 +24,7 @@ public class BackendApplication extends Application {
         singletons.add(new GetHostStartTimeAndEndTime());
         singletons.add(new GetStorageDomainStartTimeAndEndTime());
         singletons.add(new IfVmInterfaceAndDiskExist());
+        singletons.add(new GetNumOfVmInterfaceInOnePeriod());
+        singletons.add(new GetNumOfHostInterfaceInOnePeriod());
     }
 }

@@ -70,7 +70,6 @@ public class VmReports {
 			List<List<VmInterfaceDailyHistory>> llvidh = new ArrayList<List<VmInterfaceDailyHistory>>();
  			if (period.equals("MINUTE")) {
  				interfaceIdsOfOneVm = VmInterfaceSamplesHistoryDao.getInstance().queryVmInterfaceIdsByVmIdAndPeriod(startingTime, terminalTime, vmId);
- 				System.out.println(interfaceIdsOfOneVm.size() + "-----------网卡个数------------");
 				for (int i = 0; i < interfaceIdsOfOneVm.size(); i ++) {
 					llvish.add(VmInterfaceSamplesHistoryDao.getInstance().queryNetworkRateByMinutes(startingTime, terminalTime, interfaceIdsOfOneVm.get(i)));
 				}
