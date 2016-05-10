@@ -42,7 +42,7 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 			} else {
 				usage = used_disk_size_gb / (used_disk_size_gb + available_disk_size_gb);
 			}
-			map.put(history_datetime, usage);
+			map.put(history_datetime, usage * 100);
 			lmsd.add(map);
 		}
 		return lmsd;
@@ -59,11 +59,11 @@ public class StorageDomainSamplesHistoryDao extends BaseDao {
 		String start_time = null;
 		String end_time = null;
 		while(startTime.next()){
-			start_time = startTime.getString("history_datetime");
+			start_time = startTime.getString("to_char");
 			Time.add(start_time);
 		}
 		while(endTime.next()){
-			end_time = endTime.getString("history_datetime");
+			end_time = endTime.getString("to_char");
 			Time.add(end_time);
 		}
 		return Time;

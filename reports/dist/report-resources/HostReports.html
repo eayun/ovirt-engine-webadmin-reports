@@ -20,10 +20,10 @@
          $(".container").css("width", document.body.scrollWidth - padding);
          $(".container").css("height", $(window).height());
 
-         <!--每当日期变化时，会调用如下函数-->
+         //每当日期变化时，会调用如下函数
 	 $("#period").change(function(){
             var data = {};
-            data["vm_id"] = window.location.href.split("#")[1];
+            data["host_id"] = window.location.href.split("#")[1];
 	    var checkIndex=$("#period").get(0).selectedIndex;
             for (var i = 0; i < 3; i ++){
 	       if (checkIndex == i){
@@ -77,7 +77,7 @@
 	       });
                data["period"] = "DAY";
 	    }
-            var url = "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME/" + data["vm_id"] + "?period=" + data["period"];
+            var url = "/ovirt-engine-webadmin-reports/GETHOSTSTARTTIMEANDENDTIME/" + data["host_id"] + "?period=" + data["period"];
 	    $.ajax({
 	       type: "GET",
 	       url: url,
@@ -241,55 +241,38 @@
                </div>
                <div class="col-xs-8">
                   <select id="contentViewed" class="form-control">
+                     <option>CPU</option>
+                     <option>内存</option>
+                     <option>网络</option>
                   </select>
                </div>
                <script>
-	          $(document).ready(function(){
-		     var data = {};
-		     data["vm_id"] = window.location.href.split("#")[1];
-		     var url = "/ovirt-engine-webadmin-reports/IFVMINTERFACEANDDISKEXIST/" + data["vm_id"];
-                     $.ajax({
-		        type: "GET",
-			url: url,
-			headers: {"Content-Type":"application/json"},
-                        success: function(data) {
-		           if(data == 0){
-		              $("#contentViewed").html("<option>CPU</option><option>内存</option>");
-			   }
-		           else if(data == 1){
-			      $("#contentViewed").html("<option>CPU</option><option>内存</option><option>磁盘空间</option");
-			   }
-		           else if(data == 2){
-			      $("#contentViewed").html("<option>CPU</option><option>内存</option><option>网络</option>");
-			   }
-			   else{
-			      $("#contentViewed").html("<option>CPU</option><option>内存</option><option>磁盘空间</option><option>网络</option>");
-			   }
-			}
-		     })	     
+                  $(document).ready(function(){
+                     var data = {};
+                     data["host_id"] = window.location.href.split("#")[1];
                      // 在初始状态下，也就是日期范围是分的时候，也可以选择起始时间和终止时间。
-		     var url = "/ovirt-engine-webadmin-reports/GETVMSTARTTIMEANDENDTIME/" + data["vm_id"] + "?period=MINUTE"
-		     $('.form_datetime').datetimepicker({
-			weekStart: 0,
-			todayBtn:  1,
-			autoclose: 1,
-			todayHighlight: 1,
-			startView: 4,
-			forceParse: 0,
-			minuteStep: 1,
-		     });
-		     $.ajax({
-			type: "GET",
-			url: url,
-			headers: {"Content-Type":"application/json"},
-			success: function(data) {
-			   var time = data.split("'");
-			   $('.form_datetime').datetimepicker('setStartDate', time[1]);
-			   $('.form_datetime').datetimepicker('setEndDate', time[3]);
-			}
-		     })
-		  });
-	       </script>
+                     var url = "/ovirt-engine-webadmin-reports/GETHOSTSTARTTIMEANDENDTIME/" + data["host_id"] + "?period=MINUTE"
+                     $('.form_datetime').datetimepicker({
+                        weekStart: 0,
+                        todayBtn:  1,
+                        autoclose: 1,
+                        todayHighlight: 1,
+                        startView: 4,
+                        forceParse: 0,
+                        minuteStep: 1,
+                     });
+                     $.ajax({
+                        type: "GET",
+                        url: url,
+                        headers: {"Content-Type":"application/json"},
+                        success: function(data) {
+                           var time = data.split("'");
+                           $('.form_datetime').datetimepicker('setStartDate', time[1]);
+                           $('.form_datetime').datetimepicker('setEndDate', time[3]);
+                        }
+                     })
+                  });
+               </script>
             </div>
          </div>
 	 <div class="col-xs-2">   
@@ -399,7 +382,7 @@
          var contentViewed = $("#contentViewed").get(0).selectedIndex;
          var checkIndex = $("#period").get(0).selectedIndex;
          var data = {};
-         data["vm_id"] = window.location.href.split("#")[1];
+         data["host_id"] = window.location.href.split("#")[1];
          if (checkIndex === 0){
             if ($("#startingToMinute").val().length === 0 || $("#endingToMinute").val().length === 0){
                $('#method').get(0).selectedIndex = 0;
@@ -431,8 +414,9 @@
 	       data["terminalTime"] = $("#endingToDate").val();
             }
          }
-         if (contentViewed === 3){
-            var url = "/ovirt-engine-webadmin-reports/GETNUMOFVMINTERFACEINONEPERIOD/" + data["vm_id"] + "?period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
+         // 虚拟机是 3，主机是 2
+         if (contentViewed === 2){
+            var url = "/ovirt-engine-webadmin-reports/GETNUMOFHOSTINTERFACEINONEPERIOD/" + data["host_id"] + "?period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
             var networkCanvas = document.getElementsByClassName('networkCanvas');
             if (networkCanvas.length != 0){
                $('.networkCanvas').remove();
@@ -466,7 +450,7 @@
             
       function submitSure(){
 	 var data = {};
-	 data["vm_id"] = window.location.href.split("#")[1];
+	 data["host_id"] = window.location.href.split("#")[1];
 	 var contentViewed = $("#contentViewed").get(0).selectedIndex;
 	 var checkIndex = $("#period").get(0).selectedIndex;
 	 if (contentViewed === 0){
@@ -474,9 +458,6 @@
 	 }
 	 else if (contentViewed === 1){
 	    data["contentViewed"] = "Memory";
-	 }
-	 else if (contentViewed === 2){
-	    data["contentViewed"] = "Disks";
 	 }
 	 else {
 	    data["contentViewed"] = "Network";
@@ -500,7 +481,7 @@
          if (method_selected === 0){
             alert("请选择查看方式！");
          }
-         var url = "/ovirt-engine-webadmin-reports/VMREPORTS/" + data["vm_id"] + "?contentViewed=" + data["contentViewed"] + "&period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
+         var url = "/ovirt-engine-webadmin-reports/HOSTREPORTS/" + data["host_id"] + "?contentViewed=" + data["contentViewed"] + "&period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
 	 $.ajax({
 	    type: "GET",
 	    url: url,
@@ -524,14 +505,6 @@
                      var mv1 = new Array();
                   }
                }
-               // disk 的话，就是 max - 1 个
-               else if (contentViewed === 2) {
-                  var dv = new Array();
-                  var numOfVer = Object.keys(result[0]).length - 1;
-                  for (var i = 0; i < numOfVer; i ++){
-                     dv[i] = new Array();
-                  }
-	       }
                // network 共有 result.length * 2 个。
                else {
                   var nv = new Array();
@@ -545,42 +518,33 @@
                // 获取用户选择的初始时间，目的是作为横坐标的第一个标示点。
                var v_date = new Array();
                if(checkIndex === 0){
-                  if (contentViewed === 3){
+                  if (contentViewed === 2){
                      var hour = new Array();
                      for (var i = 0; i < result.length; i ++) {
                         hour[i] = result[i][0].history_datetime.split(' ')[1].split(':')[0];
                      }
-                  }
-                  else if (contentViewed === 2){
-		     var hour = Object.keys(result[0])[0].split(' ')[1].split(':')[0];
                   }
                   else {
                      var hour = result[0].history_datetime.split(' ')[1].split(':')[0];
                   }
                }
                else if(checkIndex === 1){
-                  if (contentViewed === 3){
+                  if (contentViewed === 2){
                      var day = new Array();
                      for (var i = 0; i < result.length; i ++) {
                         day[i] = result[i][0].history_datetime.split(' ')[0].split('-')[2];
                      }
-                  }
-                  else if (contentViewed === 2) {
-                     var day = Object.keys(result[0])[0].split(' ')[0].split('-')[2];
                   }
                   else {
                      var day = result[0].history_datetime.split(' ')[0].split('-')[2];
                   }
                }
                else{
-                  if (contentViewed === 3){
+                  if (contentViewed === 2){
                      var month = new Array();
                      for (var i = 0; i < result.length; i ++) {
                         month[i] = result[i][0].history_datetime.split('-')[1];   
                      }
-                  }
-                  else if (contentViewed === 2) {
-                     var month = Object.keys(result[0])[0].split('-')[1];
                   }
                   else {
                      var month = result[0].history_datetime.split('-')[1];
@@ -663,45 +627,6 @@
                         }
                      }
 	          }
-                  else if(contentViewed === 2){
-                     for(var j = 0; j < numOfVer; j ++){
-                        // 由于每个map中的第一个是日期，真正的使用率是从1开始的
-                        var key_path = Object.keys(result[i])[j + 1];
-                        var key_path_obj = Object.getOwnPropertyDescriptor(result[i], key_path);
-                        dv[j][i] = key_path_obj.value;
-                        DATA.datasets[j].label = key_path;
-                     }
-		     if (checkIndex === 0){
-			var h = Object.keys(result[i])[0].split(' ')[1].split(':')[0];
-			if (i == 0 || hour != h){
-			   v_date[i] = Object.keys(result[i])[0];
-			   hour = h;
-			}
-			else{
-			   v_date[i] = "";
-			}
-		     }
-		     else if (checkIndex === 1){
-			var d = Object.keys(result[i])[0].split(' ')[0].split('-')[2];
-			if (i == 0 || day != d){
-			   v_date[i] = Object.keys(result[i])[0];
-			   day = d;
-			}
-			else{
-			   v_date[i] = "";
-			}
-		     }
-		     else{
-			var m = Object.keys(result[i])[0].split('-')[1];
-			if (i == 0 || month != m){
-			   v_date[i] = Object.keys(result[i])[0];
-			   month = m;
-			}
-			else{
-			   v_date[i] = "";
-			}
-		     }
-                  }
                   else {
 		     for (var j = 0; j < 2; j ++){
 			for (var k = 0; k < result[i].length; k ++){
@@ -767,21 +692,16 @@
                      DATA.datasets[1].data = mv1;                  
                   }
                }
-               else if (contentViewed === 2){
-                  for (var i = 0; i < numOfVer; i ++){
-                     DATA.datasets[i].data = dv[i];
-                  } 
-               }
                else{
                   var DATA_COPY = new Array();
                   for (var i = 0; i < result.length; i ++){
                      DATA_COPY[i] = $.extend(true, {}, DATA); 
                      for (var j = 0; j < 2; j ++){
                         if (j == 0){
-			   DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_rate_percent";
+			   DATA_COPY[i].datasets[j].label = result[i][j].host_interface_name + "_rate_percent";
                         }
                         else {
-			   DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_max_rate_percent";
+			   DATA_COPY[i].datasets[j].label = result[i][j].host_interface_name + "_max_rate_percent";
                         }
                         DATA_COPY[i].datasets[j].data = nv[i][j];
                      }

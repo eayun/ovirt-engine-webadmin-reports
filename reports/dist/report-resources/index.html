@@ -19,7 +19,7 @@
             api.setTabAccessible('vm-report', false);
          }
 	 else{
-	    api.setTabContentUrl('vm-report', 'plugin/report/VmReports.html#' + argument[0].id);
+	    api.setTabContentUrl('vm-report', 'plugin/report/VmReports.html#' + arguments[0].id);
 	    api.setTabAccessible('vm-report', true)
 	 }
       },
@@ -28,7 +28,7 @@
             api.setTabAccessible('host-report', false);
 	 }
 	 else {
-            api.setTabContentUrl('host-report', 'plugin/report/HostReports.html#' + argument[0].id);
+            api.setTabContentUrl('host-report', 'plugin/report/HostReports.html#' + arguments[0].id);
             api.setTabAccessible('host-report', true);
          }
       },
@@ -37,7 +37,7 @@
             api.setTabAccessible('storage-domain-report', false);
          }
          else {
-            api.setTabContentUrl('storage-domain-report', 'plugin/report/StorageDomainReports.html#' + argument[0].id);
+            api.setTabContentUrl('storage-domain-report', 'plugin/report/StorageDomainReports.html#' + arguments[0].id);
             api.setTabAccessible('storage-domain-report', true);
          }
       },
