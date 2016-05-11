@@ -29,6 +29,7 @@ public class HostSamplesHistoryDao extends BaseDao {
 		HostSamplesHistory hsh = null;
 		while (rs.next()) {
 			hsh = new HostSamplesHistory();
+			hsh.setHistory_datetime(rs.getString("to_char"));
 			hsh.setCpu_usage_percent(rs.getInt("cpu_usage_percent"));
 			lhsh.add(hsh);
 		}

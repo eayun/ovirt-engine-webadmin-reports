@@ -466,51 +466,22 @@
                var disks_usage = new Array();
                // 获取用户选择的初始时间，目的是作为横坐标的第一个标示点。
                var v_date = new Array();
-               if(checkIndex === 0){
-                  if (contentViewed === 0){
-		     var hour = Object.keys(result[0])[0].split(' ')[1].split(':')[0];
-                  }
-               }
-               else if(checkIndex === 1){
-                  if (contentViewed === 0) {
-                     var day = Object.keys(result[0])[0].split(' ')[0].split('-')[2];
-                  }
-               }
-               else{
-                  if (contentViewed === 0) {
-                     var month = Object.keys(result[0])[0].split('-')[1];
-                  }
-               }
-               var len = Object.keys(result[0]).length;
-               for (var i = 0; i < len; i ++){
-                  var datetime = Object.keys(result[0])[0];
+               var lenOfResult = Object.keys(result[0]).length;
+	       for (var i = 0; i < lenOfResult; i ++){
+                  var datetime = Object.keys(result[0])[i];
                   var datetime_obj = Object.getOwnPropertyDescriptor(result[0], datetime);
-                  disks_usage[i] = datetime_obj.value; 
-		  if (checkIndex === 0){
-		     var h = Object.keys(result[0])[i].split(' ')[1].split(':')[0];
-		     if (i == 0 || hour != h){
-			v_date[i] = Object.keys(result[0])[i];
-			hour = h;
-		     }
-		     else{
-			v_date[i] = "";
-		     }
+                  disks_usage[i] = datetime_obj.value;
+	       }
+	       if (lenOfResult <= 40){
+		  for (var i = 0; i < lenOfResult; i ++){
+		     v_date[i] = Object.keys(result[0])[i];
 		  }
-		  else if (checkIndex === 1){
-		     var d = Object.keys(result[0])[i].split(' ')[0].split('-')[2];
-		     if (i == 0 || day != d){
+	       }
+	       else{
+		  var divisor = Math.round(lenOfResult / 40);
+		  for (var i = 0; i < lenOfResult; i ++){
+		     if (i % divisor === 0){
 			v_date[i] = Object.keys(result[0])[i];
-			day = d;
-		     }
-		     else{
-			v_date[i] = "";
-		     }
-		  }
-		  else{
-		     var m = Object.keys(result[0])[1].split('-')[1];
-		     if (i == 0 || month != m){
-			v_date[i] = Object.keys(result[0])[i];
-			month = m;
 		     }
 		     else{
 			v_date[i] = "";

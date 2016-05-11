@@ -43,8 +43,8 @@ public class StorageDomainHourlyHistoryDao extends BaseDao {
 				usage = ( used_disk_size_gb + 0.0 ) / ( used_disk_size_gb + available_disk_size_gb + 0.0);
 			}
 			map.put(history_datetime, usage * 100);
-			lmsd.add(map);
 		}
+		lmsd.add(map);
 		return lmsd;
 	}
 	

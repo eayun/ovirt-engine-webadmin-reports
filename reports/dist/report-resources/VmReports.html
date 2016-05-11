@@ -395,7 +395,7 @@
    </div>
    <script>
       // 在选择查看方式之前，前四个选择框内不可为空。
-      $('#method').click(function(){
+      $('#sure').click(function(){
          var contentViewed = $("#contentViewed").get(0).selectedIndex;
          var checkIndex = $("#period").get(0).selectedIndex;
          var data = {};
@@ -544,126 +544,61 @@
                }
                // 获取用户选择的初始时间，目的是作为横坐标的第一个标示点。
                var v_date = new Array();
-               if(checkIndex === 0){
-                  if (contentViewed === 3){
-                     var hour = new Array();
-                     for (var i = 0; i < result.length; i ++) {
-                        hour[i] = result[i][0].history_datetime.split(' ')[1].split(':')[0];
-                     }
-                  }
-                  else if (contentViewed === 2){
-		     var hour = Object.keys(result[0])[0].split(' ')[1].split(':')[0];
-                  }
-                  else {
-                     var hour = result[0].history_datetime.split(' ')[1].split(':')[0];
-                  }
-               }
-               else if(checkIndex === 1){
-                  if (contentViewed === 3){
-                     var day = new Array();
-                     for (var i = 0; i < result.length; i ++) {
-                        day[i] = result[i][0].history_datetime.split(' ')[0].split('-')[2];
-                     }
-                  }
-                  else if (contentViewed === 2) {
-                     var day = Object.keys(result[0])[0].split(' ')[0].split('-')[2];
-                  }
-                  else {
-                     var day = result[0].history_datetime.split(' ')[0].split('-')[2];
-                  }
-               }
-               else{
-                  if (contentViewed === 3){
-                     var month = new Array();
-                     for (var i = 0; i < result.length; i ++) {
-                        month[i] = result[i][0].history_datetime.split('-')[1];   
-                     }
-                  }
-                  else if (contentViewed === 2) {
-                     var month = Object.keys(result[0])[0].split('-')[1];
-                  }
-                  else {
-                     var month = result[0].history_datetime.split('-')[1];
-                  }
-               }
-               for (var i = 0; i < result.length; i ++){
-		  if (contentViewed === 0){
+               var lenOfResult = result.length;
+	       if (contentViewed === 0){
+                  for (var i = 0; i < lenOfResult; i ++){
 		     cv0[i] = result[i].cpu_usage_percent;
                      DATA.datasets[0].label = 'cpu_usage_percent';
                      if(result[i].max_cpu_usage != undefined){
                         cv1[i] = result[i].max_cpu_usage;
                         DATA.datasets[1].label = 'max_cpu_usage';
                      }
-                     if (checkIndex === 0){
-                        var h = result[i].history_datetime.split(' ')[1].split(':')[0];
-                        if (i == 0 || hour != h){
-			   v_date[i] = result[i].history_datetime;
-                           hour = h;
-			}
-                        else{
-                           v_date[i] = "";
-			}
-                     }
-                     else if (checkIndex === 1){
-			var d = result[i].history_datetime.split(' ')[0].split('-')[2];
-                        if (i == 0 || day != d){
-                           v_date[i] = result[i].history_datetime;
-                           day = d;
-                        }
-                        else{
-                           v_date[i] = "";
-                        }
-		     }
-                     else{
-                        var m = result[i].history_datetime.split('-')[1];
-                        if (i == 0 || month != m){
-                           v_date[i] = result[i].history_datetime;
-                           month = m;
-                        }
-                        else{
-                           v_date[i] = "";
-                        }
-		     }
                   }
-		  else if (contentViewed === 1){
+		  if (lenOfResult <= 40){
+		     for (var i = 0; i < lenOfResult; i ++){
+			v_date[i] = result[i].history_datetime;
+		     }
+		  }
+		  else{
+		     var divisor = Math.round(lenOfResult / 40);
+		     for (var i = 0; i < lenOfResult; i ++){
+			if (i % divisor === 0){
+			   v_date[i] = result[i].history_datetime;
+			}
+			else{
+			   v_date[i] = "";
+			}
+		     }
+		  }
+               }
+	       else if (contentViewed === 1){
+                  for (var i = 0; i < lenOfResult; i ++){
 		     mv0[i] = result[i].memory_usage_percent;
                      DATA.datasets[0].label = 'memory_usage_percent';
                      if(result[i].max_cpu_usage != undefined){
 			mv1[i] = result[i].max_memory_usage;
 			DATA.datasets[1].label = 'max_memory_usage';
                      }
-                     if (checkIndex === 0){
-                        var h = result[i].history_datetime.split(' ')[1].split(':')[0];
-                        if (i == 0 || hour != h){
-                           v_date[i] = result[i].history_datetime;
-                           hour = h;
-                        }
-                        else{
-                           v_date[i] = "";
-                        }
-                     }
-                     else if (checkIndex === 1){
-                        var d = result[i].history_datetime.split(' ')[0].split('-')[2];
-                        if (i == 0 || day != d){
-                           v_date[i] = result[i].history_datetime;
-                           day = d;
-                        }
-                        else{
-                           v_date[i] = "";
-                        }
-                     }
-                     else{
-                        var m = result[i].history_datetime.split('-')[1];
-                        if (i == 0 || month != m){
-                           v_date[i] = result[i].history_datetime;
-                           month = m;
-                        }
-                        else{
-                           v_date[i] = "";
-                        }
-                     }
 	          }
-                  else if(contentViewed === 2){
+                  if (lenOfResult <= 40){
+                     for (var i = 0; i < lenOfResult; i ++){
+                        v_date[i] = result[i].history_datetime;
+                     }
+                  }
+                  else{
+                     var divisor = Math.round(lenOfResult / 40);
+                     for (var i = 0; i < lenOfResult; i ++){
+                        if (i % divisor === 0){
+                           v_date[i] = result[i].history_datetime;
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+                     }
+                  }
+               }
+               else if(contentViewed === 2){
+                  for (var i = 0; i < lenOfResult; i ++){
                      for(var j = 0; j < numOfVer; j ++){
                         // 由于每个map中的第一个是日期，真正的使用率是从1开始的
                         var key_path = Object.keys(result[i])[j + 1];
@@ -671,38 +606,28 @@
                         dv[j][i] = key_path_obj.value;
                         DATA.datasets[j].label = key_path;
                      }
-		     if (checkIndex === 0){
-			var h = Object.keys(result[i])[0].split(' ')[1].split(':')[0];
-			if (i == 0 || hour != h){
-			   v_date[i] = Object.keys(result[i])[0];
-			   hour = h;
-			}
-			else{
-			   v_date[i] = "";
-			}
-		     }
-		     else if (checkIndex === 1){
-			var d = Object.keys(result[i])[0].split(' ')[0].split('-')[2];
-			if (i == 0 || day != d){
-			   v_date[i] = Object.keys(result[i])[0];
-			   day = d;
-			}
-			else{
-			   v_date[i] = "";
-			}
-		     }
-		     else{
-			var m = Object.keys(result[i])[0].split('-')[1];
-			if (i == 0 || month != m){
-			   v_date[i] = Object.keys(result[i])[0];
-			   month = m;
-			}
-			else{
-			   v_date[i] = "";
-			}
-		     }
                   }
-                  else {
+                  if (lenOfResult <= 40){
+                     for (var i = 0; i < lenOfResult; i ++){
+                        v_date[i] = Object.keys(result[i])[0];
+                     }
+                  }
+                  else{
+                     var divisor = Math.round(lenOfResult / 40);
+                     for (var i = 0; i < lenOfResult; i ++){
+                        if (i % divisor === 0){
+                           v_date[i] = Object.keys(result[i])[0];
+                        }
+                        else{
+                           v_date[i] = "";
+                        }
+                     }
+                  }
+               }
+               else {
+                  var lenOfData = new Array();
+                  var divisor = new Array();
+                  for (var i = 0; i < lenOfResult; i ++){
 		     for (var j = 0; j < 2; j ++){
 			for (var k = 0; k < result[i].length; k ++){
 			   if (j == 0){
@@ -713,45 +638,26 @@
 			   }
 			}
 		     } 
-                     if (checkIndex === 0){
-                        v_date[i] = new Array();
-                        for (var k = 0; k < result[i].length; k ++) {
-			   var h = result[i][k].history_datetime.split(' ')[1].split(':')[0];
-			   if (k == 0 || hour[i] != h){
-			      v_date[i][k] = result[i][k].history_datetime;
-			      hour[i] = h;
+                     v_date[i] = new Array();
+                     lenOfData[i] = result[i].length;
+                  }
+                  for (var i = 0; i < lenOfResult; i ++){
+		     if (lenOfData[i] <= 40){
+			for (var j = 0; j < lenOfData[i]; j ++){
+			   v_date[i][j] = result[i][j].history_datetime;
+			}
+		     }
+		     else{
+			divisor[i] = Math.round(lenOfData[i] / 40);
+			for (var j = 0; j < lenOfData[i]; j ++){
+			   if (j % divisor[i] === 0){
+			      v_date[i][j] = result[i][j].history_datetime;
 			   }
 			   else{
-			      v_date[i][k] = "";
-			   }
-                        }
-                     }
-                     else if (checkIndex === 1){
-                        v_date[i] = new Array();
-                        for (var k = 0; k < result[i].length; k ++){
-			   var d = result[i][k].history_datetime.split(' ')[0].split('-')[2];
-			   if (k == 0 || day[i] != d){
-			      v_date[i][k] = result[i][k].history_datetime;
-			      day[i] = d;
-			   }
-			   else{
-			      v_date[i][k] = "";
-                           }
-                        }
-                     }
-                     else{
-                        v_date[i] = new Array();
-                        for (var k = 0; k < result[i].length; k ++){
-			   var m = result[i][k].history_datetime.split('-')[1];
-			   if (k == 0 || month[i] != m){
-			      v_date[i][k] = result[i][k].history_datetime;
-			      month[i] = m;
-			   }
-			   else{
-			      v_date[i][k] = "";
+			      v_date[i][j] = "";
 			   }
 			}
-                     }
+		     }
                   }
                }
                // 给需要画的所有线赋予 data 值和 labels (横坐标)值
@@ -792,11 +698,14 @@
                for (var i = 0 ; i < canvas.length; i ++){
                   canvas[i].style.display = "none";
                }
-               if ($(".networkCanvas").size() != 0){
+               //if ($(".networkCanvas").size() != 0){
+               if (contentViewed === 3){
                   var canvas = document.getElementsByClassName("networkCanvas");
                   var numOfCanvasViewed = canvas.length / 3; // 其实就是网卡的数量
                   for (var i = 0; i < numOfCanvasViewed; i ++){
+                     alert(v_date[i] + " --- == ");
 		     DATA_COPY[i].labels = v_date[i];
+                     alert(DATA_COPY[i].labels + "~~~~~~~~~~~~~~~~~~~");
                   }
                   for (var i = 0; i < canvas.length; i ++){
                      if(myChart[i] != null){                                                     
