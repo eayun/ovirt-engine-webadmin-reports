@@ -43,7 +43,9 @@ cp dist/bin/ovirt-engine-webadmin-reports-setup %{buildroot}/usr/sbin/
 cp dist/service/ovirt-engine-webadmin-reports %{buildroot}/etc/rc.d/init.d/
 cp dist/etc/ovirt-engine-webadmin-reports.properties %{buildroot}/etc/ovirt-engine-webadmin-reports/
 touch %{buildroot}/etc/ovirt-engine-webadmin-reports/mgmt-users.properties
+touch %{buildroot}/etc/ovirt-engine-webadmin-reports/mgmt-groups.properties
 touch %{buildroot}/etc/ovirt-engine-webadmin-reports/application-users.properties
+touch %{buildroot}/etc/ovirt-engine-webadmin-reports/application-roles.properties
 
 %clean
 rm -rf %{buildroot}
