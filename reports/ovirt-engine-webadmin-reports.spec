@@ -32,7 +32,7 @@ mkdir -p %{buildroot}/usr/share/ovirt-engine-webadmin-reports/deployments
 mkdir -p %{buildroot}/etc/httpd/conf.d/
 mkdir -p %{buildroot}/etc/ovirt-engine-webadmin-reports/
 mkdir -p %{buildroot}/usr/sbin/
-mkdir -p %{buildroot}/etc/rc.d/init.d/
+mkdir -p %{buildroot}/usr/lib/systemd/system
 mkdir -p %{buildroot}/var/log/ovirt-engine-webadmin-reports/
 cp dist/report.json %{buildroot}/usr/share/ovirt-engine/ui-plugins/
 cp -r dist/report-resources %{buildroot}/usr/share/ovirt-engine/ui-plugins/
@@ -40,7 +40,7 @@ cp dist/etc/z-ovirt-engine-webadmin-reports-proxy.conf %{buildroot}/etc/httpd/co
 cp dist/etc/ovirt-engine-webadmin-reports.xml %{buildroot}/etc/ovirt-engine-webadmin-reports/
 cp target/ovirt-engine-webadmin-reports.war %{buildroot}/usr/share/ovirt-engine-webadmin-reports/deployments/
 cp dist/bin/ovirt-engine-webadmin-reports-setup %{buildroot}/usr/sbin/
-cp dist/service/ovirt-engine-webadmin-reports %{buildroot}/etc/rc.d/init.d/
+cp dist/service/ovirt-engine-webadmin-reports.service %{buildroot}/usr/lib/systemd/system
 cp dist/etc/ovirt-engine-webadmin-reports.properties %{buildroot}/etc/ovirt-engine-webadmin-reports/
 touch %{buildroot}/etc/ovirt-engine-webadmin-reports/mgmt-users.properties
 touch %{buildroot}/etc/ovirt-engine-webadmin-reports/mgmt-groups.properties
@@ -56,7 +56,7 @@ rm -rf %{buildroot}
 %dir /etc/httpd/conf.d/
 %config /etc/httpd/conf.d/z-ovirt-engine-webadmin-reports-proxy.conf
 %attr(0755,root,root) /usr/sbin/ovirt-engine-webadmin-reports-setup
-%attr(0755,root,root) /etc/rc.d/init.d/ovirt-engine-webadmin-reports
+%attr(0644,root,root) /usr/lib/systemd/system/ovirt-engine-webadmin-reports.service
 /usr/share/ovirt-engine/ui-plugins/
 /usr/share/ovirt-engine-webadmin-reports/
 /etc/ovirt-engine-webadmin-reports/

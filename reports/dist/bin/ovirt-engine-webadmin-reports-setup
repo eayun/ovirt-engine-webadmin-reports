@@ -44,9 +44,9 @@ setup() {
     chkconfig --add ovirt-engine-webadmin-reports
     chkconfig ovirt-engine-webadmin-reports on
     echo "Restarting httpd"
-    /etc/init.d/httpd restart
+    systemctl restart httpd
     echo "Staring ovirt-engine-webadmin-reports service..."
-    /etc/rc.d/init.d/ovirt-engine-webadmin-reports start
+    systemctl start ovirt-engine-webadmin-reports
     echo "Setup proccess completed."
 }
 
