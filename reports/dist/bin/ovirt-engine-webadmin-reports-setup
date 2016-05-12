@@ -31,7 +31,7 @@ case "${x}" in
 esac
 
 setup() {
-    echo "Updating db password to vm-backup.xml..."
+    echo "Updating db password to ovirt-engine-webadmin-reports.xml..."
     . /etc/ovirt-engine-dwh/ovirt-engine-dwhd.conf.d/10-setup-database.conf
     sed -i "s/<password>.*<\/password>/<password>$DWH_DB_PASSWORD<\/password>/"\
      /etc/ovirt-engine-webadmin-reports/ovirt-engine-webadmin-reports.xml
