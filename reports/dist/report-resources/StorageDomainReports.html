@@ -83,34 +83,33 @@
 	       url: url,
 	       headers: {"Accept":"application/json"},
 	       success: function(data) {
-		  var time = data.split("'");
 		  if(checkIndex === 0){
-                     if (time.length == 1){
+                     if (data.length == 1){
                         $('.form_datetime').datetimepicker('setStartDate', '2016-01-01');
                         $('.form_datetime').datetimepicker('setEndDate', '2015-01-01');
                      }
                      else {
-			$('.form_datetime').datetimepicker('setStartDate', time[1]);
-			$('.form_datetime').datetimepicker('setEndDate', time[3]);
+			$('.form_datetime').datetimepicker('setStartDate', data[0]);
+			$('.form_datetime').datetimepicker('setEndDate', data[1]);
                      }
 		  }
 		  else if(checkIndex === 1){
-                     if (time.length == 1){
+                     if (data.length == 1){
                         $('.form_date').datetimepicker('setStartDate', '2016-01-01');
                         $('.form_date').datetimepicker('setEndDate', '2015-01-01');
                      }
-		     $('.form_date').datetimepicker('setStartDate', time[1]);
-		     $('.form_date').datetimepicker('setEndDate', time[3]);
+		     $('.form_date').datetimepicker('setStartDate', data[0]);
+		     $('.form_date').datetimepicker('setEndDate', data[1]);
 		  }  
 		  else{
-                     if (time.length == 1){
+                     if (data.length == 1){
                         $('#sandbox-container .input-group.date').datepicker('setStartDate', '2016-01-01');
                         $('#sandbox-container .input-group.date').datepicker('setEndDate', '2015-01-01');
 
                      }
                      else {
-			$('#sandbox-container .input-group.date').datepicker('setStartDate', time[1]);
-			$('#sandbox-container .input-group.date').datepicker('setEndDate', time[3]);
+			$('#sandbox-container .input-group.date').datepicker('setStartDate', data[0]);
+			$('#sandbox-container .input-group.date').datepicker('setEndDate', data[1]);
                      }
 		  } 
 	       }
@@ -263,9 +262,8 @@
                         url: url,
                         headers: {"Accept":"application/json"},
                         success: function(data) {
-                           var time = data.split("'");
-                           $('.form_datetime').datetimepicker('setStartDate', time[1]);
-                           $('.form_datetime').datetimepicker('setEndDate', time[3]);
+                           $('.form_datetime').datetimepicker('setStartDate', data[0]);
+                           $('.form_datetime').datetimepicker('setEndDate', data[1]);
                         }
                      })
                   });
