@@ -703,9 +703,7 @@
                   var canvas = document.getElementsByClassName("networkCanvas");
                   var numOfCanvasViewed = canvas.length / 3; // 其实就是网卡的数量
                   for (var i = 0; i < numOfCanvasViewed; i ++){
-                     alert(v_date[i] + " --- == ");
-		     DATA_COPY[i].labels = v_date[i];
-                     alert(DATA_COPY[i].labels + "~~~~~~~~~~~~~~~~~~~");
+		               DATA_COPY[i].labels = v_date[i];
                   }
                   for (var i = 0; i < canvas.length; i ++){
                      if(myChart[i] != null){                                                     
