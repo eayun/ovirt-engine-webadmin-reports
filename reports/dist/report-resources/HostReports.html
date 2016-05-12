@@ -81,7 +81,7 @@
 	    $.ajax({
 	       type: "GET",
 	       url: url,
-	       headers: {"Content-Type":"application/json"},
+	       headers: {"Accept":"application/json"},
 	       success: function(data) {
 		  var time = data.split("'");
 		  if(checkIndex === 0){
@@ -264,7 +264,7 @@
                      $.ajax({
                         type: "GET",
                         url: url,
-                        headers: {"Content-Type":"application/json"},
+                        headers: {"Accept":"application/json"},
                         success: function(data) {
                            var time = data.split("'");
                            $('.form_datetime').datetimepicker('setStartDate', time[1]);
@@ -424,7 +424,7 @@
             $.ajax({
                type: "GET",
                url: url,
-               headers: {"Content-Type":"application/json"},
+               headers: {"Accept":"application/json"},
                success: function(data) {
                   for (var i = 0; i < data; i ++){
 		     $("#col9").append("<canvas id='myLineChart" + i + "' class='networkCanvas'></canvas>");
