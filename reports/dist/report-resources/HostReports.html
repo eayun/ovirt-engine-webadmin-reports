@@ -382,64 +382,6 @@
       </div>
    </div>
    <script>
-      // 在选择查看方式之前，前四个选择框内不可为空。
-      $('#sure').click(function(){
-         var contentViewed = $("#contentViewed").get(0).selectedIndex;
-         var checkIndex = $("#period").get(0).selectedIndex;
-         var data = {};
-         data["host_id"] = window.location.href.split("#")[1];
-         if (checkIndex === 0){
-            if ($("#startingToMinute").val().length === 0 || $("#endingToMinute").val().length === 0){
-               $('#method').get(0).selectedIndex = 0;
-               alert("请选择起始时间和终止时间！");
-            }
-            else {
-               data["period"] = "MINUTE";
-	       data["startingTime"] = $("#startingToMinute").val();
-	       data["terminalTime"] = $("#endingToMinute").val();
-            }
-         }
-         else if (checkIndex === 1){
-            if ($("#startingToHour").val().length === 0 || $("#endingToHour").val().length === 0){
-               alert("请选择起始时间和终止时间！");
-            }
-            else {
-	       data["period"] = "HOUR";
-	       data["startingTime"] = $("#startingToHour").val();
-	       data["terminalTime"] = $("#endingToHour").val();
-            }
-         }
-         else{
-            if ($("#startingToDate").val().length === 0 || $("#endingToDate").val().length === 0){
-               alert("请选择起始时间和终止时间！");
-            }
-            else {
-	       data["period"] = "DAY";
-	       data["startingTime"] = $("#startingToDate").val();
-	       data["terminalTime"] = $("#endingToDate").val();
-            }
-         }
-         // 虚拟机是 3，主机是 2
-         if (contentViewed === 2){
-            var url = "/ovirt-engine-webadmin-reports/GETNUMOFHOSTINTERFACEINONEPERIOD/" + data["host_id"] + "?period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
-            var networkCanvas = document.getElementsByClassName('networkCanvas');
-            if (networkCanvas.length != 0){
-               $('.networkCanvas').remove();
-            }
-            $.ajax({
-               type: "GET",
-               url: url,
-               headers: {"Accept":"application/json"},
-               success: function(data) {
-                  for (var i = 0; i < data; i ++){
-		     $("#col9").append("<canvas id='myLineChart" + i + "' class='networkCanvas'></canvas>");
-		     $("#col9").append("<canvas id='myBarChart" + i + "' class='networkCanvas'></canvas>");
-		     $("#col9").append("<canvas id='myRadarChart" + i + "' class='networkCanvas'></canvas>");
-                  }
-               }
-            });
-         }
-      });
       window.onresize = function(){
          ch = $(window).height();
          $("body").width = document.body.scrollWidth;
@@ -458,6 +400,45 @@
 	 data["host_id"] = window.location.href.split("#")[1];
 	 var contentViewed = $("#contentViewed").get(0).selectedIndex;
 	 var checkIndex = $("#period").get(0).selectedIndex;
+	 if(checkIndex === 0){
+            if ($("#startingToMinute").val().length === 0 || $("#endingToMinute").val().length === 0){
+               $('#method').get(0).selectedIndex = 0;
+               alert("请选择起始时间和终止时间！");
+               return;
+            }
+            else {
+	       data["period"] = "MINUTE";
+	       data["startingTime"] = $("#startingToMinute").val();
+	       data["terminalTime"] = $("#endingToMinute").val();
+            }
+	 }
+	 else if (checkIndex === 1) {
+            if ($("#startingToHour").val().length === 0 || $("#endingToHour").val().length === 0){
+               alert("请选择起始时间和终止时间！");
+               return;
+            }
+            else {
+	       data["period"] = "HOUR";
+	       data["startingTime"] = $("#startingToHour").val();
+	       data["terminalTime"] = $("#endingToHour").val();
+            }
+	 }
+	 else {
+            if ($("#startingToDate").val().length === 0 || $("#endingToDate").val().length === 0){
+               alert("请选择起始时间和终止时间！");
+               return;
+            }
+            else {
+	       data["period"] = "DAY";
+	       data["startingTime"] = $("#startingToDate").val();
+	       data["terminalTime"] = $("#endingToDate").val();
+            }
+	 }
+	 var method_selected = $("#method").get(0).selectedIndex;
+         if (method_selected === 0){
+            alert("请选择查看方式！");
+            return;
+         }
 	 if (contentViewed === 0){
 	    data["contentViewed"] = "CPU";
 	 }
@@ -465,27 +446,25 @@
 	    data["contentViewed"] = "Memory";
 	 }
 	 else {
+            var url = "/ovirt-engine-webadmin-reports/GETNUMOFHOSTINTERFACEINONEPERIOD/" + data["host_id"] + "?period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
+            var networkCanvas = document.getElementsByClassName('networkCanvas');
+            if (networkCanvas.length != 0){
+               $('.networkCanvas').remove();
+            }
+            $.ajax({
+               type: "GET",
+               url: url,
+               headers: {"Accept":"application/json"},
+               success: function(data) {
+                  for (var i = 0; i < data; i ++){
+                     $("#col9").append("<canvas id='myLineChart" + i + "' class='networkCanvas'></canvas>");
+                     $("#col9").append("<canvas id='myBarChart" + i + "' class='networkCanvas'></canvas>");
+                     $("#col9").append("<canvas id='myRadarChart" + i + "' class='networkCanvas'></canvas>");
+                  }
+               }
+            });
 	    data["contentViewed"] = "Network";
 	 }
-	 if(checkIndex === 0){
-	    data["period"] = "MINUTE";
-	    data["startingTime"] = $("#startingToMinute").val();
-	    data["terminalTime"] = $("#endingToMinute").val();
-	 }
-	 else if (checkIndex === 1){
-	    data["period"] = "HOUR";
-	    data["startingTime"] = $("#startingToHour").val();
-	    data["terminalTime"] = $("#endingToHour").val();
-	 }
-	 else{
-	    data["period"] = "DAY";
-	    data["startingTime"] = $("#startingToDate").val();
-	    data["terminalTime"] = $("#endingToDate").val();
-	 }
-	 var method_selected = $("#method").get(0).selectedIndex;
-         if (method_selected === 0){
-            alert("请选择查看方式！");
-         }
          var url = "/ovirt-engine-webadmin-reports/HOSTREPORTS/" + data["host_id"] + "?contentViewed=" + data["contentViewed"] + "&period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
 	 $.ajax({
 	    type: "GET",
