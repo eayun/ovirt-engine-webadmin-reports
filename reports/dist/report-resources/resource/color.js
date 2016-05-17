@@ -2,7 +2,7 @@ var DATA = {
     datasets: [
          {
             label: null,
-            fillColor: "rgba(151,187,205,0.3)",
+            fillColor: "rgba(151,187,205,0.5)",
             strokeColor: "rgba(151,187,205,1)",
             pointColor: "rgba(151,187,205,1)",
             pointStrokeColor: "#fff",
@@ -12,7 +12,7 @@ var DATA = {
          },
          {
             label: null,
-            fillColor: "rgba(255,130,77,0.2)",
+            fillColor: "rgba(255,130,77,0.1)",
             strokeColor: "rgba(255,130,77,1)",
             pointColor: "rgba(255,130,77,1)",
             pointStrokeColor: "#fff",
