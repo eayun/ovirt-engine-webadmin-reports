@@ -15,11 +15,6 @@
    <script type="text/javascript">
       window.onload=function(){
 	 var button = document.getElementById("sure");
-         $("body").width = document.body.scrollWidth;
-         var padding = $(".container").css('padding-right').split('p')[0];
-         $(".container").css("width", document.body.scrollWidth - padding);
-         $(".container").css("height", $(window).height());
-
          <!--每当日期变化时，会调用如下函数-->
 	 $("#period").change(function(){
             var data = {};
@@ -234,7 +229,7 @@
 </head>
 <body>
    <div class="container">
-      <div class="row">
+      <div class="row" id="firstRow">
          <div class="col-xs-2">
             <div class="row">
                <div class="col-xs-4" id="divLabel">
@@ -418,15 +413,20 @@
             }
          }
       });
+      $("body").width = document.body.scrollWidth;
+      var padding = $(".container").css('padding-right').split('p')[0];
+      $(".container").css("width", document.body.scrollWidth - padding);
+      $(".container").css("height", $(window).height() - 25);
       window.onresize = function(){
-         ch = $(window).height();
          $("body").width = document.body.scrollWidth;
          var padding = $(".container").css('padding-right').split('p')[0];
          $(".container").css("width", document.body.scrollWidth - padding);
+         $(".container").css("height", $(window).height() - 25);
+         ch = $(".container").css('height').split('p')[0] - $("#firstRow").css('height').split('p')[0] + "px";
       }
       // 报表
-      var cw = col9.clientWidth; // number
-      var ch = $(window).height();
+      var cw = $(".container").css('width');//$(window).width(); // number
+      var ch = $(".container").css('height').split('p')[0] - $("#firstRow").css('height').split('p')[0] + "px";
       var canvas = document.getElementsByTagName("canvas");
       var ctx = null;
       var myChart = new Array(3);
