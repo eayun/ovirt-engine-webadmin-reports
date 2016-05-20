@@ -6,6 +6,7 @@
    <link href="resource/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
    <link href="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
    <script src="resource/jquery-2.2.2.js"></script>
+   <script src="resource/jquery.localize.min.js"></script>
    <script src="resource/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
    <script src="resource/bootstrap-datepicker/bootstrap-datepicker.js"></script>
    <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
@@ -13,6 +14,7 @@
    <script src="resource/Chart.js/Chart.js"></script>
    <script src="resource/color.js"></script>
    <script type="text/javascript">
+      var lang = top.location.href.split("=")[1].split("#")[0];
       window.onload=function(){
 	 var button = document.getElementById("sure");
          <!--每当日期变化时，会调用如下函数-->
@@ -146,7 +148,12 @@
 	    var checkIndex=$("#period").get(0).selectedIndex;
 	    if (checkIndex === 0 && $("#startingToMinute").val().length != 0) {
                if ($("#startingToMinute").val() > $("#endingToMinute").val()){
-		  alert("起始时间不能晚于终止时间");
+                  if (lang == "zh_CN"){
+                     alert("起始时间不能晚于终止时间");
+                  }
+                  else{
+                     alert("Starting time should be earlier than terminal time!");
+                  }
                   $("#endingToMinute").val("");
                }
 	    }
@@ -155,7 +162,12 @@
             var checkIndex=$("#period").get(0).selectedIndex;
             if (checkIndex === 1 && $("#startingToHour").val().length != 0) {
                if ($("#startingToHour").val() > $("#endingToHour").val()){
-                  alert("起始时间不能晚于终止时间");
+                  if (lang == "zh_CN"){
+                     alert("起始时间不能晚于终止时间");
+                  }
+                  else{
+                     alert("Starting time should be earlier than terminal time!");
+                  }
                   $("#endingToHour").val("");
                }
             }
@@ -164,7 +176,12 @@
             var checkIndex=$("#period").get(0).selectedIndex;
             if (checkIndex === 2 && $("#startingToDate").val().length != 0) {
                if ($("#startingToDate").val() > $("#endingToDate").val()){
-                  alert("起始时间不能晚于终止时间");
+                  if (lang == "zh_CN"){
+                     alert("起始时间不能晚于终止时间");
+                  }
+                  else{
+                     alert("Starting time should be earlier than terminal time!");
+                  }
                   $("#endingToDate").val("");
                }
             }
@@ -174,7 +191,12 @@
             var checkIndex=$("#period").get(0).selectedIndex;
             if (checkIndex === 0 && $("#endingToMinute").val().length != 0) {
                if ($("#startingToMinute").val() > $("#endingToMinute").val()){
-                  alert("起始时间不能晚于终止时间");
+                  if (lang == "zh_CN"){
+                     alert("起始时间不能晚于终止时间");
+                  }
+                  else{
+                     alert("Starting time should be earlier than terminal time!");
+                  }
                   $("#startingToMinute").val("");
                }
             }
@@ -183,7 +205,12 @@
             var checkIndex=$("#period").get(0).selectedIndex;
             if (checkIndex === 1 && $("#endingToHour").val().length != 0) {
                if ($("#startingToHour").val() > $("#endingToHour").val()){
-                  alert("起始时间不能晚于终止时间");
+                  if (lang == "zh_CN"){
+                     alert("起始时间不能晚于终止时间");
+                  }
+                  else{
+                     alert("Starting time should be earlier than terminal time!");
+                  }
                   $("#startingToHour").val("");
                }
             }
@@ -192,7 +219,12 @@
             var checkIndex=$("#period").get(0).selectedIndex;
             if (checkIndex === 2 && $("#endingToDate").val().length != 0) {
                if ($("#startingToDate").val() > $("#endingToDate").val()){
-                  alert("起始时间不能晚于终止时间");
+                  if (lang == "zh_CN"){
+                     alert("起始时间不能晚于终止时间");
+                  }
+                  else{
+                     alert("Starting time should be earlier than terminal time!");
+                  }
                   $("#startingToDate").val("");
                }
             }
@@ -233,11 +265,11 @@
          <div class="col-xs-2">
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">查看对象</label>
+                  <label for="name" data-localize="objectViewed">查看对象</label>
                </div>
                <div class="col-xs-8">
                   <select id="contentViewed" class="form-control">
-                     <option>磁盘空间</option>
+                     <option data-localize='disk'>磁盘空间</option>
                   </select>
                </div>
                <script>
@@ -276,13 +308,13 @@
 	 <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">日期范围</label>
+                  <label for="name" data-localize="dateRange">日期范围</label>
                </div>
                <div class="col-xs-8">
                   <select id="period" class="form-control">
-                     <option>按分</option>
-                     <option>按时</option>
-                     <option>按日</option>
+                     <option data-localize="minute">按分</option>
+                     <option data-localize="hour">按时</option>
+                     <option data-localize="day">按日</option>
                   </select>
                </div>
             </div>
@@ -290,7 +322,7 @@
          <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">起始时间</label>
+                  <label for="name" data-localize="startingTime">起始时间</label>
                </div>
                <!--按分钟-->
 	       <div class="col-xs-8 time0" style="display: inline">
@@ -318,7 +350,7 @@
          <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">终止时间</label>
+                  <label for="name" data-localize="terminalTime">终止时间</label>
 	       </div>
                <!--按分钟-->
                <div class="col-xs-8 time0" style="display: inline">
@@ -346,14 +378,14 @@
          <div class="col-xs-2">   
             <div class="row">
                <div class="col-xs-4" id="divLabel">
-                  <label for="name">查看方式</label>
+                  <label for="name" data-localize="method">查看方式</label>
                </div>
                <div class="col-xs-8">
                   <select id="method" class="form-control">
-                     <option>--请选择显示方式--</option>
-                     <option>曲线图</option>
-                     <option>柱状图</option>
-                     <option>雷达图</option>
+                     <option data-localize="selectMethod">--请选择显示方式--</option>
+                     <option data-localize="line">曲线图</option>
+                     <option data-localize="bar">柱状图</option>
+                     <option data-localize="radar">雷达图</option>
                   </select>
                </div>
             </div>
@@ -384,7 +416,12 @@
          if (checkIndex === 0){
             if ($("#startingToMinute").val().length === 0 || $("#endingToMinute").val().length === 0){
                $('#method').get(0).selectedIndex = 0;
-               alert("请选择起始时间和终止时间！");
+               if (lang == "zh_CN"){
+                  alert("请选择起始时间和终止时间！");
+               }
+               else {
+                  alert("please select starting time and terminal time!");
+               }
             }
             else {
                data["period"] = "MINUTE";
@@ -394,7 +431,12 @@
          }
          else if (checkIndex === 1){
             if ($("#startingToHour").val().length === 0 || $("#endingToHour").val().length === 0){
-               alert("请选择起始时间和终止时间！");
+               if (lang == "zh_CN"){
+                  alert("请选择起始时间和终止时间！");
+               }
+               else {
+                  alert("please select starting time and terminal time!");
+               }
             }
             else {
 	       data["period"] = "HOUR";
@@ -404,7 +446,12 @@
          }
          else{
             if ($("#startingToDate").val().length === 0 || $("#endingToDate").val().length === 0){
-               alert("请选择起始时间和终止时间！");
+               if (lang == "zh_CN"){
+                  alert("请选择起始时间和终止时间！");
+               }
+               else {
+                  alert("please select starting time and terminal time!");
+               }
             }
             else {
 	       data["period"] = "DAY";
@@ -456,7 +503,12 @@
 	 }
 	 var method_selected = $("#method").get(0).selectedIndex;
          if (method_selected === 0){
-            alert("请选择查看方式！");
+            if (lang == "zh_CN"){
+               alert("请选择查看方式！");
+            }
+            else {
+               alert("please select method to view!");
+            }
          }
          var url = "/ovirt-engine-webadmin-reports/STORAGEDOMAINREPORTS/" + data["storage_domain_id"] + "?contentViewed=" + data["contentViewed"] + "&period=" + data["period"] + "&startingTime=" + data["startingTime"] + "&terminalTime=" + data["terminalTime"];
 	 $.ajax({
@@ -532,4 +584,11 @@
       }
    </script>
 </body>
+<script>
+   $(function(){
+      if (lang != 'zh_CN') {
+         $("[data-localize]").localize("example", { language: "en" })
+      }
+   });
+</script>
 </html>
