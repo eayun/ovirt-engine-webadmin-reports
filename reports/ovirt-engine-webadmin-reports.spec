@@ -28,6 +28,7 @@ mvn clean package war:war
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/ovirt-engine/ui-plugins/
+mkdir -p %{buildroot}/usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine-webadmin-reports-plugin/
 mkdir -p %{buildroot}/usr/share/ovirt-engine-webadmin-reports/deployments
 mkdir -p %{buildroot}/etc/httpd/conf.d/
 mkdir -p %{buildroot}/etc/ovirt-engine-webadmin-reports/
@@ -36,6 +37,7 @@ mkdir -p %{buildroot}/usr/lib/systemd/system
 mkdir -p %{buildroot}/var/log/ovirt-engine-webadmin-reports/
 cp dist/report.json %{buildroot}/usr/share/ovirt-engine/ui-plugins/
 cp -r dist/report-resources %{buildroot}/usr/share/ovirt-engine/ui-plugins/
+cp -r dist/otopi/* %{buildroot}/usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine-webadmin-reports-plugin/
 cp dist/etc/z-ovirt-engine-webadmin-reports-proxy.conf %{buildroot}/etc/httpd/conf.d/
 cp dist/etc/ovirt-engine-webadmin-reports.xml %{buildroot}/etc/ovirt-engine-webadmin-reports/
 cp target/ovirt-engine-webadmin-reports.war %{buildroot}/usr/share/ovirt-engine-webadmin-reports/deployments/
@@ -58,6 +60,7 @@ rm -rf %{buildroot}
 %attr(0755,root,root) /usr/sbin/ovirt-engine-webadmin-reports-setup
 %attr(0644,root,root) /usr/lib/systemd/system/ovirt-engine-webadmin-reports.service
 /usr/share/ovirt-engine/ui-plugins/
+/usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine-webadmin-reports-plugin/
 /usr/share/ovirt-engine-webadmin-reports/
 /etc/ovirt-engine-webadmin-reports/
 /var/log/ovirt-engine-webadmin-reports/
