@@ -1,6 +1,6 @@
 [Unit]
 Description=ovirt-engine-webadmin-reports
-After=ovirt-engine.target
+After=postgresql.service
 
 [Service]
 Type=simple
