@@ -21,7 +21,7 @@ class Plugin(plugin.PluginBase):
     def enable_ovirt_engine_webadmin_reports_plugin(self):
         os.system("ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime")
         # workaround for timezone setup:
-        os.system("sed -i '/^timezone =/c\timezone = 8' /var/lib/pgsql/data/postgresql.conf")
+        os.system("sed -i '/^timezone =/c\ timezone = 8' /var/lib/pgsql/data/postgresql.conf")
         os.system("sed -i '/^log_timezone =/c\log_timezone = 8' /var/lib/pgsql/data/postgresql.conf")
         os.system("ovirt-engine-webadmin-reports-setup --password=%s"
             % self.environment[oenginecons.ConfigEnv.ADMIN_PASSWORD])
