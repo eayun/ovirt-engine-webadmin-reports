@@ -591,10 +591,20 @@
 	       if (contentViewed === 0){
                   for (var i = 0; i < lenOfResult; i ++){
 		     cv0[i] = result[i].cpu_usage_percent;
-                     DATA.datasets[0].label = 'cpu_usage_percent';
+                     if (lang != "zh_CN") {
+                        DATA.datasets[0].label = 'cpu_usage_percent';
+                     }
+                     else {
+                        DATA.datasets[0].label = 'CPU 平均使用率（单位：%）';//'cpu_usage_percent';
+                     }
                      if(result[i].max_cpu_usage != undefined){
                         cv1[i] = result[i].max_cpu_usage;
-                        DATA.datasets[1].label = 'max_cpu_usage';
+                        if (lang != "zh_CN") {
+                           DATA.datasets[1].label = 'max_cpu_usage';
+                        }
+                        else {
+                           DATA.datasets[1].label = 'CPU 使用率峰值（单位：%）';//'max_cpu_usage';
+                        }
                      }
                   }
 		  if (lenOfResult <= 40){
@@ -617,10 +627,20 @@
 	       else if (contentViewed === 1){
                   for (var i = 0; i < lenOfResult; i ++){
 		     mv0[i] = result[i].memory_usage_percent;
-                     DATA.datasets[0].label = 'memory_usage_percent';
+                     if (lang != "zh_CN") {
+                        DATA.datasets[0].label = 'memory_usage_percent';
+                     }
+                     else {
+                        DATA.datasets[0].label = '内存平均使用率（单位：%）';//'memory_usage_percent';
+                     }
                      if(result[i].max_cpu_usage != undefined){
 			mv1[i] = result[i].max_memory_usage;
-			DATA.datasets[1].label = 'max_memory_usage';
+                        if (lang != "zh_CN") {
+                           DATA.datasets[1].label = 'max_memory_usage';
+                        }
+                        else {
+			   DATA.datasets[1].label = '内存使用率峰值（单位：%）';
+                        }
                      }
 	          }
                   if (lenOfResult <= 40){
@@ -695,6 +715,7 @@
 			for (var j = 0; j < lenOfData[i]; j ++){
 			   if (j % divisor[i] === 0){
 			      v_date[i][j] = result[i][j].history_datetime;
+                              alert(v_date[i][j]);
 			   }
 			   else{
 			      v_date[i][j] = "";

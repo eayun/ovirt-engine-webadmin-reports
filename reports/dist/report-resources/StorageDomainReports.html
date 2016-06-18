@@ -547,7 +547,12 @@
 		  }
                }
                // 给需要画的所有线赋予 data 值和 labels (横坐标)值
-               DATA.datasets[0].label = "disks_usage";
+               if (lang == "zh_CN"){
+                  DATA.datasets[0].label = "磁盘平均使用率（单位：%）";
+               }
+               else {
+                  DATA.datasets[0].label = "disks_usage";
+               }
                DATA.datasets[0].data = disks_usage;
 	       DATA.labels = v_date;
                var canvas = document.getElementsByTagName('canvas');

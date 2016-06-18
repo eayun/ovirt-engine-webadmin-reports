@@ -4,7 +4,7 @@
 <body>
 <script type='text/javascript'>
    var api = parent.pluginApi('report');
-   var lang = top.location.href.split("=")[1];
+   var lang = top.location.href.split("=")[1].split("#")[0];
    api.register({
       UiInit: function() {
          if (lang != "zh_CN"){
