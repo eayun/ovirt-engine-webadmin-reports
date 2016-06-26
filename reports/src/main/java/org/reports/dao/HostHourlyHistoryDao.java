@@ -19,11 +19,13 @@ public class HostHourlyHistoryDao extends BaseDao {
 	// 主机在一天的某几个小时内的 cpu & memory 的数据。
 	public List<HostHourlyHistory> queryCpuByHours(String startHour, String endHour, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), cpu_usage_percent, max_cpu_usage from host_hourly_history"
-				+ " where host_id = '" + host_id
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), cpu_usage_percent, max_cpu_usage"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from host_hourly_history where host_id = '"
+				+ "' host_id) as rows"
+			    + " where row_number = 1"
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
-				+ "' order by history_datetime asc;");
+				+ "';");
 		List<HostHourlyHistory> lhhh = new ArrayList<HostHourlyHistory>();
 		HostHourlyHistory hhh = null;
 		while (rs.next()) {
@@ -38,11 +40,13 @@ public class HostHourlyHistoryDao extends BaseDao {
 
 	public List<HostHourlyHistory> queryMemoryByHours(String startHour, String endHour, UUID host_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), memory_usage_percent, max_memory_usage from host_hourly_history"
-				+ " where host_id = '" + host_id
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), memory_usage_percent, max_memory_usage"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from host_hourly_history where host_id = '"
+				+ "' host_id) as rows"
+			    + " where row_number = 1"
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
-				+ "' order by history_datetime asc;");
+				+ "';");
 		List<HostHourlyHistory> lhhh = new ArrayList<HostHourlyHistory>();
 		HostHourlyHistory hhh = null;
 		while (rs.next()) {

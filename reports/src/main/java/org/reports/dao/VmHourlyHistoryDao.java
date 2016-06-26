@@ -23,10 +23,13 @@ public class VmHourlyHistoryDao extends BaseDao {
 	// 24:00:00+08"
 	public List<VmHourlyHistory> queryCpuByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), cpu_usage_percent, max_cpu_usage from vm_hourly_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour + "' and vm_id = '" + vm_id
-				+ "' order by history_datetime asc;");
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), cpu_usage_percent, max_cpu_usage"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_hourly_history where vm_id = '"
+				+ "'vm_id) as rows"
+			    + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
+				+ "';");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;
 		while (rs.next()) {
@@ -41,10 +44,13 @@ public class VmHourlyHistoryDao extends BaseDao {
 	
 	public List<VmHourlyHistory> queryMemoryByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), memory_usage_percent, max_memory_usage from vm_hourly_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour + "' and vm_id = '" + vm_id
-				+ "' order by history_datetime asc;");
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), memory_usage_percent, max_memory_usage"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_hourly_history where vm_id = '"
+				+ "'vm_id) as rows"
+			    + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
+				+ "';");
 		List<VmHourlyHistory> lvhh = new ArrayList<VmHourlyHistory>();
 		VmHourlyHistory vhh = null;
 		while (rs.next()) {
@@ -69,12 +75,10 @@ public class VmHourlyHistoryDao extends BaseDao {
 		String end_time = null;
 		while(startTime.next()){
 			start_time = startTime.getString("to_char");
-			System.out.println(start_time + "e--------c--------l---------i---------p--------s");
 			Time.add(start_time);
 		}
 		while(endTime.next()){
 			end_time = endTime.getString("to_char");
-			System.out.println(end_time + "e--------c--------l---------i---------p--------s===========");
 			Time.add(end_time);
 		}
 		return Time;

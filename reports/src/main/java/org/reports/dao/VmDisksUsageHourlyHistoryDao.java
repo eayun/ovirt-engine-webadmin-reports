@@ -28,11 +28,12 @@ public class VmDisksUsageHourlyHistoryDao extends BaseDao{
 	public List<Map<String, Object>> queryDisksByHours(String startHour, String endHour, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), disks_usage"
-				+ " from vm_disks_usage_hourly_history"
-				+ " where vm_id = '" + vm_id
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_disks_usage_hourly_history where vm_id = '"
+				+ vm_id + "') as rows"
+			    + " where row_number = 1"
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
-				+ "' order by history_datetime asc;");
+				+ "';");
 		List<Map<String, Object>> lmsd = new ArrayList<Map<String, Object>>();
 		Map<String, Object> disks_usage_map = null;
 		String history_datetime = null;

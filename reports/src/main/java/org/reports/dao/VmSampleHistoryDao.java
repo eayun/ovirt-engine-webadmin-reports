@@ -23,10 +23,13 @@ public class VmSampleHistoryDao extends BaseDao {
 	// hourOfDay 格式是这样的 '2016-04-09 17:'，有年月日，具体的小时数，字符串。
 	public List<VmSampleHistory> queryCpuByMinutes(String startMinute, String endMinute, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), cpu_usage_percent from vm_samples_history where vm_id = '" + vm_id
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), cpu_usage_percent"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_samples_history where vm_id = '"
+				+ "' vm_id) as rows"
+			    + " where row_number = 1"
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
-				+ "' order by history_datetime asc;");
+				+ "';");
 		List<VmSampleHistory> lv = new ArrayList<VmSampleHistory>();
 		VmSampleHistory vsh = null;
 		while (rs.next()) {
@@ -40,10 +43,13 @@ public class VmSampleHistoryDao extends BaseDao {
 
 	public List<VmSampleHistory> queryMemoryByMinutes(String startMinute, String endMinute, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), memory_usage_percent from vm_samples_history where vm_id = '" + vm_id
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), memory_usage_percent"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_samples_history where vm_id = '"
+				+ "' vm_id) as rows"
+			    + " where row_number = 1"
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
-				+ "' order by history_datetime asc;");
+				+ "';");
 		List<VmSampleHistory> lv = new ArrayList<VmSampleHistory>();
 		VmSampleHistory vsh = null;
 		while (rs.next()) {

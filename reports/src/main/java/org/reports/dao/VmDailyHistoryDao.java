@@ -21,10 +21,13 @@ public class VmDailyHistoryDao extends BaseDao {
 	// 获取虚拟机一周，一月，一个季度，一年的 CPU 使用率的数据
 	public List<VmDailyHistory> queryCpuByDays(String startDate, String endDate, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), cpu_usage_percent, max_cpu_usage from vm_daily_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate + "' and vm_id = '" + vm_id
-				+ "' order by history_datetime asc;");
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), cpu_usage_percent, max_cpu_usage"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_daily_history where vm_id = '"
+				+ vm_id + "') as rows"
+			    + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
+				+ "';");
 		List<VmDailyHistory> lvdh = new ArrayList<VmDailyHistory>();
 		VmDailyHistory vdh = null;
 		while (rs.next()) {
@@ -40,10 +43,13 @@ public class VmDailyHistoryDao extends BaseDao {
 	// 获取虚拟机一周，一月，一个季度，一年的 Memory 使用率的数据
 	public List<VmDailyHistory> queryMemoryByDays(String startDate, String endDate, UUID vm_id) throws Exception {
 		Statement stmt = Backend.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), memory_usage_percent, max_memory_usage from vm_daily_history"
-				+ " where to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate + "' and vm_id = '" + vm_id
-				+ "' order by history_datetime asc;");
+		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), memory_usage_percent, max_memory_usage"
+				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_daily_history where vm_id = '"
+				+ vm_id + "') as rows"
+			    + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
+				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
+				+ "';");
 		List<VmDailyHistory> lvdh = new ArrayList<VmDailyHistory>();
 		VmDailyHistory vdh = null;
 		while (rs.next()) {

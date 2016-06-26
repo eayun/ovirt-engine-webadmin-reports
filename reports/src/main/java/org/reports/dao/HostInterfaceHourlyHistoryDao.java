@@ -28,6 +28,7 @@ public class HostInterfaceHourlyHistoryDao extends BaseDao{
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
 				+ "' group by hihh.host_interface_id;");
+		
 		while (rs.next()) {
 			hostInterfaceIdsOfOneHost.add(UUID.fromString(rs.getString("host_interface_id")));
 		}
@@ -40,10 +41,13 @@ public class HostInterfaceHourlyHistoryDao extends BaseDao{
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery(
 				"select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
-						+ " from host_interface_hourly_history where host_interface_id = '" + host_interface_id
+						+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from host_interface_hourly_history where host_interface_id = '"
+						+ "' host_interface_id) as rows"
+					    + " where row_number = 1"
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
-						+ "' order by history_datetime asc;");
+						+ "';");
+		
 		List<HostInterfaceHourlyHistory> lhihh = new ArrayList<HostInterfaceHourlyHistory>();
 		HostInterfaceHourlyHistory hihh = null;
 		while (rs.next()) {

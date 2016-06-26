@@ -40,11 +40,12 @@ public class VmInterfaceHourlyHistoryDao extends BaseDao{
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery(
 				"select to_char(history_datetime, 'YYYY-MM-DD HH24:00'), receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
-						+ " from vm_interface_hourly_history"
-						+ " where vm_interface_id = '" + vm_interface_id
+						+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_interface_hourly_history where vm_interface_id = '"
+						+ "' vm_interface_id) as rows"
+					    + " where row_number = 1"
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') >= '" + startHour
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:00') <= '" + endHour
-						+ "' order by history_datetime asc;");
+						+ "';");
 		List<VmInterfaceHourlyHistory> lvihh = new ArrayList<VmInterfaceHourlyHistory>();
 		VmInterfaceHourlyHistory vihh = null;
 		while (rs.next()) {
