@@ -21,9 +21,9 @@ public class HostDailyHistoryDao extends BaseDao {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), cpu_usage_percent, max_cpu_usage"
 				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from host_daily_history where host_id = '"
-				+ "' host_id) as rows"
-			    + " where row_number = 1"
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
+				+ host_id + "') as rows"
+			   + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
 				+ "';");
 		List<HostDailyHistory> lhdh = new ArrayList<HostDailyHistory>();
@@ -43,9 +43,9 @@ public class HostDailyHistoryDao extends BaseDao {
 		Statement stmt = Backend.conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), memory_usage_percent, max_memory_usage"
 				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from host_daily_history where host_id = '"
-				+ "' host_id) as rows"
-			    + " where row_number = 1"
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
+				+ host_id + "') as rows"
+			   + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
 				+ "';");
 		List<HostDailyHistory> lhdh = new ArrayList<HostDailyHistory>();

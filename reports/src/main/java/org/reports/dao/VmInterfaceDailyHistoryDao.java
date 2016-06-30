@@ -42,9 +42,9 @@ public class VmInterfaceDailyHistoryDao extends BaseDao {
 		ResultSet rs = stmt.executeQuery(
 				"select to_char(history_datetime, 'YYYY-MM-DD'), receive_rate_percent, max_receive_rate_percent, transmit_rate_percent, max_transmit_rate_percent"
 						+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_interface_daily_history where vm_interface_id = '"
-						+ "' vm_interface_id) as rows"
-					    + " where row_number = 1"
-						+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
+						+ vm_interface_id + "') as rows"
+					   + " where row_number = 1"
+						+ " and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 						+ "';");
 

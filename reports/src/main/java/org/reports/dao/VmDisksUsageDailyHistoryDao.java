@@ -30,8 +30,8 @@ public class VmDisksUsageDailyHistoryDao extends BaseDao {
 		ResultSet rs = stmt.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD'), disks_usage"
 				+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from vm_disks_usage_daily_history where vm_id = '"
 				+ vm_id + "') as rows"
-			    + " where row_number = 1"
-				+ "' and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
+			   + " where row_number = 1"
+				+ " and to_char(history_datetime, 'YYYY-MM-DD') >= '" + startDate
 				+ "' and to_char(history_datetime, 'YYYY-MM-DD') <= '" + endDate
 				+ "';");
 		List<Map<String, Object>> lmsd = new ArrayList<Map<String, Object>>();

@@ -41,9 +41,9 @@ public class HostInterfaceSamplesHistoryDao extends BaseDao{
 		ResultSet rs = stmt
 				.executeQuery("select to_char(history_datetime, 'YYYY-MM-DD HH24:MI'), receive_rate_percent, transmit_rate_percent"
 						+ " from (select *, row_number() over(partition by history_datetime order by history_datetime) as row_number from host_interface_samples_history where host_interface_id = '"
-						+ "' host_interface_id) as rows"
-					    + " where row_number = 1"
-						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
+						+ host_interface_id + "') as rows"
+					   + " where row_number = 1"
+						+ " and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') >= '" + startMinute
 						+ "' and to_char(history_datetime, 'YYYY-MM-DD HH24:MI') <= '" + endMinute
 						+ "';");
 		
