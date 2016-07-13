@@ -585,202 +585,14 @@
                      }
                   }
                }
-               var lenOfResult = result.length;
-               var history_datetime_array = new Array();
-               var year_array = new Array();
-               var date_array = new Array();
-               var hour = new Array();
-               function getLabelID(array, type){
-                  var datetime_ID = "";
-                  if (type == "year") {
-                     var flag = "0000";
-                  }
-                  else if (type == "date") {
-                     var flag = "00-00";
-                  }
-		  for(var i = 0; i < array.length; i ++) {
-		     if (flag == array[i]) {
-			continue;
-		     }
-		     else {
-			flag = array[i];
-			if (i == 0) {
-			   datetime_ID += i;
-			}
-			else {
-			   datetime_ID += "-" + i;
-			}
-		     }
-                  }
-                  return datetime_ID;
-               }
-               // 数组的减法，A 数组中的每个下标和值都相等
-               function array_substraction(A, B) {
-                  for (var i = 0; i < A.length; i ++) {
-                     for (var j = 0; j < B.length; j ++) {
-                         if (i == B[j]) {
-                            break;
-                         }
-                         else 
-                     }
-                  }
-               }
-               // 设置
-	       for (var i = 0; i < result.length; i ++) {
-                  if (contentViewed == 0 || contentViewed == 1) {
-		     history_datetime_array[i] = result[i].history_datetime;
-                  }
-                  else if (contentViewed == 2) {
-                     history_datetime_array[i] = Object.keys(result[i])[0]
-                  }
-                  else {
-		     history_datetime_array[i] = new Array();
-                     year_array[i] = new Array();
-                     date_array[i] = new Array();
-		     for (var j = 0; j < result[i].length; j ++) {
-			history_datetime_array[i][j] = result[i][j].history_datetime;
-		     }
-                  }
-                  // 日：只 omit 掉年就可以了。
-		  if (checkIndex == 2) {
-                     if (contentViewed != 3) {
-			year_array[i] = history_datetime_array[i].split('-')[0];
-			date_array[i] = history_datetime_array[i].split('-')[1] + history_datetime_array[i].split('-')[2];
-                     }
-                     else {
-                        for (var j = 0; j < result[i].length; j ++) {
-                           year_array[i][j] = history_datetime_array[i][j].split('-')[0];
-                           date_array[i][j] = history_datetime_array[i][j].split('-')[1] + history_datetime_array[i][j].split('-')[2];
-                        }   
-                     }
-		  }
-                  // 时|分：可以 omit 掉年月日
-		  else {
-                     if (contentViewed != 3) {
-			year_array[i] = history_datetime_array[i].split(' ')[0].split('-')[0];
-			date_array[i] = history_datetime_array[i].split(' ')[0].split('-')[1] + '-' + history_datetime_array[i].split(' ')[0].split('-')[2];
-                     }
-                     else {
-                        year_array[i] = new Array();
-                        for (var j = 0; j < result[i].length; j ++) {
-                           year_array[i][j] = history_datetime_array[i][j].split(' ')[0].split('-')[0];
-                           date_array[i][j] = history_datetime_array[i][j].split(' ')[0].split('-')[1] + '-' + history_datetime_array[i][j].split(' ')[0].split('-')[2];
-                        }
-                     }
-		  }
-               }
-               var datatimeID = "";
-               var separateID_string_array = new Array(); 
-               var separateID_number_array = new Array();
-               // 分
-	       if (checkIndex == 0 || checkIndex == 1){
-		  // 分：年和日都需要判断是否全部相同，只有全部相同的情况下年和日期才可以都不显示；
-		  // 首先判断年是否都相同，这里定义一个 flag = "0000"，如果有与 flag 不相同的就记下它的 ID，然后将该值赋给 flag，查询出的 ID 用 '-' 来联接。
-		  // 年都相同，结果赋"0"，然后判断日子是否都相同，如果日子也都相同在"0" 的基础上用空格(' ')联接另一个"0"；也就是说如果返回"0 0"，那么最后只显示 hour:minute 即可。
-		  // 年都相同，结果赋"0"，然后判断日子是否都相同。这里定义一个 flag = "00-00"，如果日子有不相同的情况，结果赋"不相同的日子的ID"，flag 新值就是前面说到的 ID。返回的 ID 用 "-" 来连接。
-		  // 例如：结果为 "0-1 0-1-5"，也就是说第一个和第二个出现的年月日时分都要显示，其他的除了第六个的月日时分要都显示以为，其余的只显示时分即可。
-		  // 结果为 "0 0" 的时候说明全部显示时分即可。
-                  // ****** 非网络 ******
-                  if (contentViewed != 3) {
-		     // -------- 年都相同 --------
-		     if (getLabelID(year_array, "year") == "0") {
-			for (var i = 0; i < result.length; i ++) {
-                           history_datetime_array[i] = history_datetime_array[i].slice(5); // 首先年都相同，omit 年
-                        }
-			// -------- 月日都相同 --------
-			if (getLabelID(date_array, "date") == "0") {
-                           alert("年相同，月日也相同，非网络");
-			   for (var i = 0; i < result.length; i ++) {
-			      history_datetime_array[i] = history_datetime_array[i].split(' ')[1];
-			   }
-			}
-			// -------- 月日不都相同 --------
-			else {
-                           var flag = 0;
-                           var D = new Array(); // 这里的值才可以 omit 年，月日
-                           alert("年相同，月日不同，非网络");
-			   separateID_string_array = getLabelID(date_array, "date").split('-');
-                           for (var i = 0; i < result.length; i ++) {
-			      for (var j = 0; j < separateID_string_array.length; j ++) {
-				 separateID_number_array[j] = parseInt(separateID_string_array[j]);
-				 if (i == separateID_number_array[j]) {
-                                    break;
-				 }
-                                 else {
-                                    if (j == separateID_string_array.length - 1) {
-                                       D[flag] = i;
-                                       flag ++;
-                                    }
-                                    else {
-                                       continue;
-                                    }
-                                 }
-			      }
-			   }
-                           for (var i = 0; i < D.length; i ++) {
-			      history_datetime_array[D[i]] = history_datetime_array[D[i]].slice(6); // omit 月日，进留下时&分
-                           }
-			}
-		     }
-		     // 年份不都相同
-		     else {
-                        //取出 separateID_string_array ，转换成 separateID_number_array
-			for (var i = 0; i < result.length; i ++) {
-                           for (var j = 0; j < separateID_string_array.length; j ++) {
-                              separateID_number_array[j] = parseInt(separateID_string_array[j]);
-                              if (i != separateID_number_array[j]) {
-                              }
-                           }
-			}
-		     }
-                  }	
-                  // ****** 网络（三维数组，较特殊）******
-		  else {
-		     // ------ 年相同 ------
-		     for (var i = 0; i < result.length; i ++) {
-			if (getLabelID(year_array[i], "year") == "0") {
-			   // ------ 年相同的情况下，月日也相同 ------
-			   if (getLabelID(date_array[i], "date") == "0") {
-			      for (var j = 0; j < result[i].length; j ++) {
-				 history_datetime_array[i][j] = history_datetime_array[i][j].split(' ')[1];
-			      }
-			   }
-			   // ------ 年相同的情况下，月日不相同 -------
-			   else {
-                              separateID_number_array[i] = new Array();
-                              separateID_string_array[i] = new Array();
-			      separateID_string_array[i] = getLabelID(date_array[i], "date").split('-');
-			      for (var j = 0; j < result[i].length; j ++) {
-			         for (var k = 0; k < separateID_string_array[i].length; k ++) {
-				    separateID_number_array[i][k] = parseInt(separateID_string_array[i][k]);            
-				    if (separateID_number_array[i][k] != j) {
-				       history_datetime_array[i][j] = history_datetime_array[i][j].slice(5);
-				    }
-				 }
-			      }
-			   }
-			}
-		     }
-		     // ------ 年不相同 -----
-                     else {
-                        for (var i = 0; i < result.length; i ++) {
-                           
-                        }
-                     }
-                  }
-               }
-	       /*else if (checkIndex == 1){
-		     year_array = 
-		  }
-               }*/
-               //alert(d + d.getMonth() + d.getDate() + "--" + typeof(d.getDate()));
                // 获取用户选择的初始时间，目的是作为横坐标的第一个标示点。
                var v_date = new Array();
+               var lenOfResult = result.length;
 	       if (contentViewed === 0){
                   for (var i = 0; i < lenOfResult; i ++){
 		     cv0[i] = result[i].cpu_usage_percent;
                      if (lang != "zh_CN") {
-                        DATA.datasets[0].label = 'cpu usage percent(UNIT:%)';
+                        DATA.datasets[0].label = 'cpu_usage_percent';
                      }
                      else {
                         DATA.datasets[0].label = 'CPU 平均使用率（单位：%）';//'cpu_usage_percent';
@@ -788,7 +600,7 @@
                      if(result[i].max_cpu_usage != undefined){
                         cv1[i] = result[i].max_cpu_usage;
                         if (lang != "zh_CN") {
-                           DATA.datasets[1].label = 'max cpu usage(UNIT:%)';
+                           DATA.datasets[1].label = 'max_cpu_usage';
                         }
                         else {
                            DATA.datasets[1].label = 'CPU 使用率峰值（单位：%）';//'max_cpu_usage';
@@ -797,29 +609,18 @@
                   }
 		  if (lenOfResult <= 40){
 		     for (var i = 0; i < lenOfResult; i ++){
-			v_date[i] = history_datetime_array[i];
+			v_date[i] = result[i].history_datetime;
 		     }
 		  }
 		  else{
 		     var divisor = Math.round(lenOfResult / 40);
 		     for (var i = 0; i < lenOfResult; i ++){
-                        if (checkIndex != 2) {
-                           // 第一个条件的意思是：不管日还是月日，只要有年，就一定保留。第二个条件的意思：用空格分割后，仍等于自己的，就是有没有月日的数据。
-                           if (history_datetime_array[i].split(' ')[0].split('-')[0].length == 4 || history_datetime_array[i].split(' ')[0] != history_datetime_array[i] || i % divisor === 0) {
-                              v_date[i] = history_datetime_array[i];
-                           } 
-			   else{
-			      v_date[i] = "";
-			   }
-                        }
-                        else if (checkIndex == 2) {
-                           if (history_datetime_array[i].split(' ')[0].split('-')[0].length == 4 || i % divisor === 0) {
-                              v_date[i] = history_datetime_array[i];
-                           } 
-                           else{
-                              v_date[i] = "";
-                           }
-                        }
+			if (i % divisor === 0){
+			   v_date[i] = result[i].history_datetime;
+			}
+			else{
+			   v_date[i] = "";
+			}
 		     }
 		  }
                }
@@ -827,7 +628,7 @@
                   for (var i = 0; i < lenOfResult; i ++){
 		     mv0[i] = result[i].memory_usage_percent;
                      if (lang != "zh_CN") {
-                        DATA.datasets[0].label = 'memory_usage_percent(UNIT:%)';
+                        DATA.datasets[0].label = 'memory_usage_percent';
                      }
                      else {
                         DATA.datasets[0].label = '内存平均使用率（单位：%）';//'memory_usage_percent';
@@ -835,7 +636,7 @@
                      if(result[i].max_cpu_usage != undefined){
 			mv1[i] = result[i].max_memory_usage;
                         if (lang != "zh_CN") {
-                           DATA.datasets[1].label = 'max_memory_usage(UNIT:%)';
+                           DATA.datasets[1].label = 'max_memory_usage';
                         }
                         else {
 			   DATA.datasets[1].label = '内存使用率峰值（单位：%）';
@@ -844,14 +645,14 @@
 	          }
                   if (lenOfResult <= 40){
                      for (var i = 0; i < lenOfResult; i ++){
-                        v_date[i] = history_datetime_array[i];
+                        v_date[i] = result[i].history_datetime;
                      }
                   }
                   else{
                      var divisor = Math.round(lenOfResult / 40);
                      for (var i = 0; i < lenOfResult; i ++){
                         if (i % divisor === 0){
-                           v_date[i] = history_datetime_array[i];
+                           v_date[i] = result[i].history_datetime;
                         }
                         else{
                            v_date[i] = "";
@@ -866,26 +667,19 @@
                         var key_path = Object.keys(result[i])[j + 1];
                         var key_path_obj = Object.getOwnPropertyDescriptor(result[i], key_path);
                         dv[j][i] = key_path_obj.value;
-			if (lang != "zh_CN"){
- 			   DATA.datasets[j].label = key_path + "（UNIT:%）";
-                        }
-                        else {
-                           DATA.datasets[j].label = key_path + "（单位：%）";
-                        }
+                        DATA.datasets[j].label = key_path;
                      }
                   }
                   if (lenOfResult <= 40){
                      for (var i = 0; i < lenOfResult; i ++){
-                        v_date[i] = history_datetime_array[i]
-//Object.keys(result[i])[0];
+                        v_date[i] = Object.keys(result[i])[0];
                      }
                   }
                   else{
                      var divisor = Math.round(lenOfResult / 40);
                      for (var i = 0; i < lenOfResult; i ++){
                         if (i % divisor === 0){
-                           v_date[i] = history_datetime_array[i];
-//Object.keys(result[i])[0];
+                           v_date[i] = Object.keys(result[i])[0];
                         }
                         else{
                            v_date[i] = "";
@@ -894,8 +688,6 @@
                   }
                }
                else {
-                  // result.length 代表网卡的数量
-                  // result[i].length)  代表各个网卡的数据条数
                   var lenOfData = new Array();
                   var divisor = new Array();
                   for (var i = 0; i < lenOfResult; i ++){
@@ -915,14 +707,15 @@
                   for (var i = 0; i < lenOfResult; i ++){
 		     if (lenOfData[i] <= 40){
 			for (var j = 0; j < lenOfData[i]; j ++){
-			   v_date[i][j] = history_datetime_array[i][j];//result[i][j].history_datetime;
+			   v_date[i][j] = result[i][j].history_datetime;
 			}
 		     }
 		     else{
 			divisor[i] = Math.round(lenOfData[i] / 40);
 			for (var j = 0; j < lenOfData[i]; j ++){
 			   if (j % divisor[i] === 0){
-			      v_date[i][j] = history_datetime_array[i][j];//result[i][j].history_datetime;
+			      v_date[i][j] = result[i][j].history_datetime;
+                              alert(v_date[i][j]);
 			   }
 			   else{
 			      v_date[i][j] = "";
@@ -955,20 +748,10 @@
                      DATA_COPY[i] = $.extend(true, {}, DATA); 
                      for (var j = 0; j < 2; j ++){
                         if (j == 0){
-                           if (lang != "zh_CN"){
-			      DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_rate_percent(UNIT:%)";
-                           }
-                           else {
-                              DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "使用率（单位：%）";
-                           }
+			   DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_rate_percent";
                         }
                         else {
-                           if (lang != "zh_CN"){
-			      DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_max_rate_percent(UNIT:%)";
-                           }
-                           else {
-                              DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "使用率峰值（单位：%）";
-                           }
+			   DATA_COPY[i].datasets[j].label = result[i][j].vm_interface_name + "_max_rate_percent";
                         }
                         DATA_COPY[i].datasets[j].data = nv[i][j];
                      }
