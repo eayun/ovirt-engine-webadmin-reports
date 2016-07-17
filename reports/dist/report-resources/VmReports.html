@@ -614,6 +614,14 @@
                   }
                   return datetime_ID;
                }
+               // 下标组成的数组
+               function make_array_by_id(len) {
+                  var I = new Array();
+                  for (var i = 0; i < len; i ++) {
+                     I[i] = i;
+                  }
+                  return I;
+               }
                // 数组的减法，A - B
                function array_substraction(A, B) {
                   var flag = 0;
@@ -694,11 +702,11 @@
 	       if (contentViewed != 3) {
 		  // -------- 年都相同 --------
 		  if (getLabelID(year_array, "year") == "0") {
+                     for (var i = 0; i < result.length; i ++) {
+                        history_datetime_array[i] = history_datetime_array[i].slice(5); // 首先年都相同，omit 年
+                     }
                      // 查看方式是否是：时分
 		     if (checkIndex == 0 || checkIndex == 1) {
-			for (var i = 0; i < result.length; i ++) {
-			   history_datetime_array[i] = history_datetime_array[i].slice(5); // 首先年都相同，omit 年
-			}
 			// -------- 月日都相同 --------
 			if (getLabelID(date_array, "date") == "0") {
 			   alert("年相同，月日也相同，非网络");
@@ -708,29 +716,18 @@
 			}
 			// -------- 月日不都相同 --------
 			else {
-			   var I = new Array();
+                           var I = make_array_by_id(result.length);
 			   var D = new Array();
 			   alert("年相同，月日不同，非网络");
-			   for (var i = 0; i < result.length; i ++) {
-			      I[i] = i;
-			   }
 			   separateID_string_array = getLabelID(date_array, "date").split('-');
 			   for (var i = 0; i < result.length; i ++) {
 			      separateID_number_array[i] = parseInt(separateID_string_array[i]);
 			   }
 			   D = array_substraction(I, separateID_number_array);
-			   alert(separateID_number_array);
-			   alert(D);
 			   for (var i = 0; i < D.length; i ++) {
 			      history_datetime_array[D[i]] = history_datetime_array[D[i]].slice(6); // omit 月日，进留下时&分
 			   }
 			}
-                     }
-                     // 查看方式是：日
-                     else {
-                        for (var i = 0; i < result.length; i ++) {
-                          history_datetime_array[i] = history_datetime_array[i].slice(5); // 首先年都相同，omit 年
-                        }
                      }
 		  }
 		  // 年份不都相同
@@ -738,7 +735,8 @@
                      var flag = 0;
                      var I = new Array();
                      var D = new Array();
-                     var separate_year_by_array = new Array();
+                     var separate_by_year_array = new Array();
+                     date_array = [];
 		     //取出 separateID_string_array ，转换成 separateID_number_array
 		     for (var i = 0; i < result.length; i ++) {
                         I[i] = i;
@@ -747,72 +745,97 @@
 		     for (var i = 0; i < separateID_string_array.length; i ++) {
 			separateID_number_array[i] = parseInt(separateID_string_array[i]);
 		     }
-                     alert("year_array" + "--" + year_array);
-                     alert(I);
-                     alert(separateID_number_array);
                      D = array_substraction(I, separateID_number_array);
                      // omit 年
                      for (var i = 0; i < D.length; i ++) {
-                        history_datetime_array[i] = history_datetime_array[i].slice(5);
+                        history_datetime_array[D[i]] = history_datetime_array[D[i]].slice(5);
                      }
                      // 下面这个语句的意义：给 separateID_number_array 这个数组的末尾加上获取到的所有数据的个数，在为 history_datetime_array 分组时，separateID_number_array[j+1] 最后一个位置会用到。
                      separateID_number_array[separateID_number_array.length] = result.length;
-		     for (var i = 0; i < separateID_number_array.length; i ++) {
-			separate_year_by_array[i] = new Array();
+		     for (var i = 0; i < separateID_number_array.length - 1; i ++) {
+			separate_by_year_array[i] = new Array();
 			for (var k = 0; k < separateID_number_array[i+1] - separateID_number_array[i]; k ++) {
-			   separate_year_array[i][k] = result[flag];
+			   separate_by_year_array[i][k] = history_datetime_array[flag];
 			   flag ++;
 			}
 		     }
+                     // 跨了一年 separate_by_year_array.length 就是 2
                      for (var i = 0; i < separate_by_year_array.length; i ++) {
                         date_array[i] = new Array();
-                        for (var j = 0; j < separate_year_array[i].length; j ++) {
+                        for (var j = 0; j < separate_by_year_array[i].length; j ++) {
                            if (j == 0) {
-                              date_array[i][j] = separate_by_year_array[j].split(' ')[0].split('-')[1] + separate_by_year_array[j].split(' ')[0].split('-')[2];
+                              date_array[i][j] = separate_by_year_array[i][j].split(' ')[0].split('-')[1] + separate_by_year_array[i][j].split(' ')[0].split('-')[2];
                            }
                            else {
-                              date_array[i][j] = separate_by_year_array[j].split(' ')[0].split('-')[0] + separate_by_year_array[j].split(' ')[0].split('-')[1];
+                              date_array[i][j] = separate_by_year_array[i][j].split(' ')[0].split('-')[0] + separate_by_year_array[i][j].split(' ')[0].split('-')[1];
                            }
                         }
                      }
+                     flag = 1;
+                     alert(separate_by_year_array[0] + "--0000000000000");
                      for (var i = 0; i < date_array.length; i ++) {
                         // 月日都相同
                         if (getLabelID(date_array[i], "date") == "0") {
                            for (var j = 0; j < separate_by_year_array[i].length; j ++) {
-                              separate_by_year_array[i][j] = separate_by_year_array[i][j].split(' ')[1];
+                              if (j != 0) {
+                                 separate_by_year_array[i][j] = separate_by_year_array[i][j].split(' ')[1];
+                                 history_datetime_array[flag] = separate_by_year_array[i][j];
+                                 flag ++;
+                              }
                            }
+                           flag ++;
                         }
-                        else {
-                           
-                        }
+                        // 月日不都相同
+                        /*else {
+                           for (var j = 0; j < separate_by_year_array[i].length; j ++) {
+                              alert(separate_by_year_array[i]);
+                           }                              
+                        }*/
                      }
 		  }
                }
 	       // ****** 网络（三维数组，较特殊）******
 	       else {
-		  // ------ 年相同 ------
-		  for (var i = 0; i < result.length; i ++) {
-		     if (getLabelID(year_array[i], "year") == "0") {
-			// ------ 年相同的情况下，月日也相同 ------
-			if (getLabelID(date_array[i], "date") == "0") {
-			   for (var j = 0; j < result[i].length; j ++) {
-			      history_datetime_array[i][j] = history_datetime_array[i][j].split(' ')[1];
-			   }
-			}
-			// ------ 年相同的情况下，月日不相同 -------
-			else {
-			   separateID_number_array[i] = new Array();
-			   separateID_string_array[i] = new Array();
-			   separateID_string_array[i] = getLabelID(date_array[i], "date").split('-');
-			   for (var j = 0; j < result[i].length; j ++) {
-			      for (var k = 0; k < separateID_string_array[i].length; k ++) {
-				 separateID_number_array[i][k] = parseInt(separateID_string_array[i][k]);            
-				 if (separateID_number_array[i][k] != j) {
-				    history_datetime_array[i][j] = history_datetime_array[i][j].slice(5);
+                  if (result.length != 0) {
+		     // ------ 年相同，由于所有网卡都相同所以判断年月日是否相同，利用第0个数据即可 -----
+		     if (getLabelID(year_array[0], "year") == "0") {
+		        for (var i = 0; i < result.length; i ++) {
+                           for ( var j = 0; j < result[i].length; j ++) {
+                              history_datetime_array[i][j] = history_datetime_array[i][j].slice(5);
+                           }
+                        }
+                        // 时间格式是年:月:日 时:分的情况下
+                        if (checkIndex == 0 || checkIndex == 1) {
+			   // ------ 月日也相同 ------
+			   if (getLabelID(date_array[0], "date") == "0") {
+                              for (var i = 0; i < result; i ++) {
+				 for (var j = 0; j < result[i].length; j ++) {
+				    history_datetime_array[i][j] = history_datetime_array[i][j].split(' ')[1];
 				 }
-			      }
+                              }
 			   }
-			}
+			   // ------ 月日不相同 -------
+			   else {
+			      var I = make_array_by_id(result[0].length);
+                              for (var i = 0; i < result.length; i ++) {
+				 separateID_number_array[i] = new Array();
+				 separateID_string_array[i] = new Array();
+				 separateID_string_array[i] = getLabelID(date_array[i], "date").split('-');
+				 for (var j = 0; j < result[i].length; j ++) {
+				    for (var k = 0; k < separateID_string_array[i].length; k ++) {
+				       separateID_number_array[i][k] = parseInt(separateID_string_array[i][k]); 
+				    }
+				 }
+                              }
+                              var D = new Array();
+                              D = array_substraction(I, separateID_number_array[0]);
+                              for (var i = 0; i < result.length; i ++) {
+                                 for (var j = 0; j < D.length; j ++) {
+				    history_datetime_array[i][D[j]] = history_datetime_array[i][D[j]].slice(6);
+                                 }
+                              }
+			   }
+                        }
 		     }
 		  }
 		  // ------ 年不相同 -----
@@ -844,16 +867,17 @@
                         }
                      }
                   }
-		  if (lenOfResult <= 40){
+		  if (lenOfResult <= 35){
 		     for (var i = 0; i < lenOfResult; i ++){
 			v_date[i] = history_datetime_array[i];
 		     }
 		  }
 		  else{
-		     var divisor = Math.round(lenOfResult / 40);
+		     var divisor = Math.round(lenOfResult / 35);
 		     for (var i = 0; i < lenOfResult; i ++){
                         if (checkIndex != 2) {
                            // 第一个条件的意思是：不管日还是月日，只要有年，就一定保留。第二个条件的意思：用空格分割后，仍等于自己的，就是有没有月日的数据。
+                           alert(history_datetime_array[separate_by_year_array[0].length] + "-----------------");
                            if (history_datetime_array[i].split(' ')[0].split('-')[0].length == 4 || history_datetime_array[i].split(' ')[0] != history_datetime_array[i] || i % divisor === 0) {
                               v_date[i] = history_datetime_array[i];
                            } 
@@ -891,13 +915,13 @@
                         }
                      }
 	          }
-                  if (lenOfResult <= 40){
+                  if (lenOfResult <= 35){
                      for (var i = 0; i < lenOfResult; i ++){
                         v_date[i] = history_datetime_array[i];
                      }
                   }
                   else{
-                     var divisor = Math.round(lenOfResult / 40);
+                     var divisor = Math.round(lenOfResult / 35);
                      for (var i = 0; i < lenOfResult; i ++){
                         if (i % divisor === 0){
                            v_date[i] = history_datetime_array[i];
@@ -923,14 +947,14 @@
                         }
                      }
                   }
-                  if (lenOfResult <= 40){
+                  if (lenOfResult <= 35){
                      for (var i = 0; i < lenOfResult; i ++){
                         v_date[i] = history_datetime_array[i]
 //Object.keys(result[i])[0];
                      }
                   }
                   else{
-                     var divisor = Math.round(lenOfResult / 40);
+                     var divisor = Math.round(lenOfResult / 35);
                      for (var i = 0; i < lenOfResult; i ++){
                         if (i % divisor === 0){
                            v_date[i] = history_datetime_array[i];
@@ -962,13 +986,13 @@
                      lenOfData[i] = result[i].length;
                   }
                   for (var i = 0; i < lenOfResult; i ++){
-		     if (lenOfData[i] <= 40){
+		     if (lenOfData[i] <= 35){
 			for (var j = 0; j < lenOfData[i]; j ++){
 			   v_date[i][j] = history_datetime_array[i][j];//result[i][j].history_datetime;
 			}
 		     }
 		     else{
-			divisor[i] = Math.round(lenOfData[i] / 40);
+			divisor[i] = Math.round(lenOfData[i] / 35);
 			for (var j = 0; j < lenOfData[i]; j ++){
 			   if (j % divisor[i] === 0){
 			      v_date[i][j] = history_datetime_array[i][j];//result[i][j].history_datetime;
