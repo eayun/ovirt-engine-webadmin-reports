@@ -12,6 +12,7 @@
    <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
    <script src="resource/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
    <script src="resource/Chart.js/Chart.js"></script>
+   <script src="resource/func.js"></script>
    <script src="resource/color.js"></script>
    <script type="text/javascript">
       var lang = top.location.href.split("=")[1].split("#")[0];
@@ -525,27 +526,132 @@
                // 获取用户选择的初始时间，目的是作为横坐标的第一个标示点。
                var v_date = new Array();
                var lenOfResult = Object.keys(result[0]).length;
+               var history_datetime_array = new Array();
+               var year_array = new Array();
+               var date_array = new Array();
 	       for (var i = 0; i < lenOfResult; i ++){
+                  history_datetime_array[i] = Object.keys(result[0])[i];
                   var datetime = Object.keys(result[0])[i];
                   var datetime_obj = Object.getOwnPropertyDescriptor(result[0], datetime);
-                  disks_usage[i] = datetime_obj.value;
+                  disks_usage[i] = datetime_obj.value.toFixed(2);
 	       }
-	       if (lenOfResult <= 40){
-		  for (var i = 0; i < lenOfResult; i ++){
-		     v_date[i] = Object.keys(result[0])[i];
+               for (var i = 0; i < history_datetime_array.length; i ++) {
+		  if (checkIndex == 2) {
+		     year_array[i] = history_datetime_array[i].split('-')[0];
+		     date_array[i] = history_datetime_array[i].split('-')[1] + history_datetime_array[i].split('-')[2];
+		  }
+		  else {
+		     year_array[i] = history_datetime_array[i].split(' ')[0].split('-')[0];
+		     date_array[i] = history_datetime_array[i].split(' ')[0].split('-')[1] + '-' + history_datetime_array[i].split(' ')[0].split('-')[2];
+		  }
+               }
+	       if (checkIndex != 2) {
+		  // -------- 年，月日都相同 --------
+		  if (getLabelID(year_array, "year").length == 1 && getLabelID(date_array, "date").length == 1 && history_datetime_array.length != 0) {
+		     SameYearSameDate(history_datetime_array, history_datetime_array);
+		  }
+		  // -------- 年相同，月日不同 -------
+		  else if (getLabelID(year_array, "year").length == 1 && getLabelID(date_array, "date").length != 1 && history_datetime_array.length != 0) {
+		     SameYearDiffDate(history_datetime_array, history_datetime_array, date_array);
+		  }
+		  // -------- 年不相同 ---------
+		  else if (getLabelID(year_array, "year").length != 1) {
+		     DiffYearDiffDate(history_datetime_array, history_datetime_array, year_array, date_array);
+		  }
+		  else {
+		     alert("时分——遗留的函数");
+		  }
+	       }
+	       else {
+		  // ---------- 年相同 ----------
+		  if (getLabelID(year_array, "year").length == 1 && history_datetime_array.length != 0) {
+		     SameYear(history_datetime_array, history_datetime_array); // 该函数中的 result 是用于获取长度（result.length）的，所以在这里第一个参数不能是 result（存储的只返回1个大数组，这里想要获取长度，使用 history_datetime_array 本身即可。）
+		  }
+		  // ---------- 年不相同 ---------
+		  else {
+		     DiffYear(history_datetime_array, history_datetime_array, year_array);
+		  }
+	       }
+               var number_rule = 1;
+               var total_number_rule = 1;
+               if (checkIndex == 0) {
+                  number_rule = 60; // 只能显示 60 个。
+                  total_number_rule = 180;
+                  if (method_selected == 3) {
+                     number_rule = 20;
+                     total_number_rule = 20;
+                  }
+               }
+               else if (checkIndex == 1) {
+                  number_rule = 1;
+                  total_number_rule = 188; // 7 * 24
+                  if (method_selected == 3) {
+                     number_rule = 12;
+                     total_number_rule = 60;
+                  }
+               }
+               else {
+                  number_rule = 60;
+                  total_number_rule = 150;
+                  if (method_selected == 3) {
+                     number_rule = 20;
+                     total_number_rule = 20;
+                  }
+               }
+
+	       if (lenOfResult <= total_number_rule){
+		  for (var i = 0; i < lenOfResult; i ++) {
+		     v_date[i] = history_datetime_array[i];
 		  }
 	       }
 	       else{
-		  var divisor = Math.round(lenOfResult / 40);
+		  var divisor = Math.round(lenOfResult / number_rule);
+                  var first = 0;
 		  for (var i = 0; i < lenOfResult; i ++){
-		     if (i % divisor === 0){
-			v_date[i] = Object.keys(result[0])[i];
+		     if (checkIndex == 0) {
+			if (history_datetime_array[i].split(' ')[0].split('-')[0].length == 4 || i % divisor === 0) {
+			   v_date[i] = history_datetime_array[i];
+			}
+			else {
+			   v_date[i] = "";
+			}
 		     }
-		     else{
-			v_date[i] = "";
+		     else if (checkIndex == 1) {
+			// 第一个条件的意思是：不管日还是月日，只要有年，就一定保留。第二个条件的意思：用空格分割后，仍等于自己的，就是有没有月日的数据。
+			if (history_datetime_array[i].split(' ')[0].split('-')[0].length == 4 || history_datetime_array[i].split(' ')[0] != history_datetime_array[i]) {
+			   if (method_selected == 3) {
+			      if (first % 2 == 0) {
+				 v_date[i] = history_datetime_array[i];
+			      }
+			      else {
+				 v_date[i] = "";
+			      }
+			   }
+			   else {
+			      if (first != 0) {
+				 v_date[i] = history_datetime_array[i];
+			      }
+			      else {
+				 v_date[i] = "";
+			      }
+			   }
+			   first ++;
+			}
+			else {
+			   v_date[i] = "";
+			}
 		     }
-		  }
+		     else {
+			if (history_datetime_array[i].split(' ')[0].split('-')[0].length == 4 || i % divisor === 0) {
+			   v_date[i] = history_datetime_array[i];
+			}
+			else {
+			   v_date[i] = "";
+			}
+                     }
+                  }
                }
+
                // 给需要画的所有线赋予 data 值和 labels (横坐标)值
                if (lang == "zh_CN"){
                   DATA.datasets[0].label = "磁盘平均使用率（单位：%）";
