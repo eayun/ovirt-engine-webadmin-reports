@@ -62,7 +62,7 @@ rm -rf %{buildroot}
 /usr/share/ovirt-engine/ui-plugins/
 /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine-webadmin-reports-plugin/
 /usr/share/ovirt-engine-webadmin-reports/
-/etc/ovirt-engine-webadmin-reports/
+%config /etc/ovirt-engine-webadmin-reports/*
 /var/log/ovirt-engine-webadmin-reports/
 
 
