@@ -17,6 +17,9 @@ class Plugin(plugin.PluginBase):
         after=(
             osetupcons.Stages.DIALOG_TITLES_E_SUMMARY,
         ),
+        condition=lambda self: (
+            self.environment[oenginecons.EngineDBEnv.NEW_DATABASE]
+        ),
     )
     def enable_ovirt_engine_webadmin_reports_plugin(self):
         os.system("ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime")
@@ -26,3 +29,15 @@ class Plugin(plugin.PluginBase):
         os.system("ovirt-engine-webadmin-reports-setup --password=%s"
             % self.environment[oenginecons.ConfigEnv.ADMIN_PASSWORD])
         self.dialog.note(text="ovirt engine webadmin reports enabled.")
+
+    @plugin.event(
+        stage=plugin.Stages.STAGE_CLOSEUP,
+        after=(
+            osetupcons.Stages.DIALOG_TITLES_E_SUMMARY,
+        ),
+        condition=lambda self: (
+            not self.environment[oenginecons.EngineDBEnv.NEW_DATABASE]
+        ),
+    )
+    def restart_ovirt_engine_webadmin_reports_plugin(self):
+        os.system("service ovirt-engine-webadmin-reports restart")
