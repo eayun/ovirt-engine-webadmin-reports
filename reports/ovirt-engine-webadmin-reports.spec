@@ -1,5 +1,5 @@
 %define _version 1.0
-%define _release 0
+%define _release 1
 
 Name:		ovirt-engine-webadmin-reports
 Version:	%{_version}
